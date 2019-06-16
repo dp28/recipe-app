@@ -1,4 +1,8 @@
-version: 2
+version: 2.1
+
+orbs:
+  aws-s3: circleci/aws-s3@1.0.0
+
 jobs:
   build_server:
     docker:
@@ -10,7 +14,7 @@ jobs:
       - checkout: &checkout
           path: ~/recipe-app
 
-      - restore_cache: &server_installation_cache
+      - restore_cache:
           keys:
             - v2-server-dependencies-{{ checksum "package.json" }}
             - v2-server-dependencies-
@@ -35,7 +39,7 @@ jobs:
       - checkout: &checkout
           path: ~/recipe-app
 
-      - restore_cache: &client_installation_cache
+      - restore_cache:
           keys:
             - v2-client-dependencies-{{ checksum "package.json" }}
             - v2-client-dependencies-
@@ -58,10 +62,23 @@ jobs:
 
     steps:
       - checkout: *checkout
-      - restore_cache: *server_installation_cache
+
+      - restore_cache:
+          keys:
+            - v2-server-dependencies-{{ checksum "server/package.json" }}
+
       - run: cd server && make deploy
-      - restore_cache: *client_installation_cache
-      - run: cd client && make deploy
+
+      - restore_cache:
+          keys:
+            - v2-server-dependencies-{{ checksum "client/package.json" }}
+
+      - run: cd client && make build
+
+      - aws-s3/sync:
+          from: client/build
+          to: 's3://prod-recipe-app-client'
+          overwrite: true
 
 workflows:
   version: 2
