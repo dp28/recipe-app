@@ -2,6 +2,7 @@ service: recipe-app-graphql
 provider:
   name: aws
   runtime: nodejs10.x
+  region: us-east-1
 
 plugins:
   - serverless-offline
