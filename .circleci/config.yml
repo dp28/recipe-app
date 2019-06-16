@@ -43,7 +43,7 @@ workflows:
       - build_server
       - deploy:
           requires:
-            - build
+            - build_server
           filters:
             branches:
               only: master
