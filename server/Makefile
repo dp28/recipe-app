@@ -1,4 +1,4 @@
-PHONY: install clean test lint start deploy
+.PHONY: install clean test lint start deploy
 
 install: node_modules
 
