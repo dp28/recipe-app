@@ -1,0 +1,22 @@
+{
+  "name": "recipe-app",
+  "version": "0.1.0",
+  "description": "",
+  "main": "index.js",
+  "scripts": {
+    "test": "jest"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dp28/recipe-app.git"
+  },
+  "author": "Daniel Patterson",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/dp28/recipe-app/issues"
+  },
+  "homepage": "https://github.com/dp28/recipe-app#readme",
+  "devDependencies": {
+    "jest": "^24.8.0"
+  }
+}
