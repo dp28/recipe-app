@@ -18,6 +18,13 @@
   "homepage": "https://github.com/dp28/recipe-app#readme",
   "devDependencies": {
     "jest": "^24.8.0",
-    "prettier": "^1.18.2"
+    "nodemon": "^1.19.1",
+    "prettier": "^1.18.2",
+    "serverless": "^1.45.1",
+    "serverless-offline": "^5.3.3"
+  },
+  "dependencies": {
+    "apollo-server-lambda": "^2.6.3",
+    "graphql": "^14.3.1"
   }
 }

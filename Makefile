@@ -16,10 +16,10 @@ lint: node_modules
 	npx prettier --check "src/**/*.js"
 
 start: node_modules
-	@echo "Not yet implemented"
+	npx nodemon --exec "npx serverless offline start" -e "js yml json"
 
 deploy: node_modules
-	@echo "Not yet implemented"
+	npx serverless deploy
 
 node_modules: package.json
 	npm install

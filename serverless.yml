@@ -1,0 +1,20 @@
+service: recipe-app-graphql
+provider:
+  name: aws
+  runtime: nodejs10.x
+
+plugins:
+  - serverless-offline
+
+functions:
+  graphql:
+    handler: src/graphql.graphqlHandler
+    events:
+      - http:
+          path: graphql
+          method: post
+          cors: true
+      - http:
+          path: graphql
+          method: get
+          cors: true
