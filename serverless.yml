@@ -10,6 +10,9 @@ plugins:
 package:
   exclude:
     - "**/*.test.js"
+    - "Makefile"
+    - "bin/**"
+    - "README.md"
 
 functions:
   graphql:
