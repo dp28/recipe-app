@@ -8,7 +8,7 @@ plugins:
 
 functions:
   graphql:
-    handler: src/graphql.graphqlHandler
+    handler: src/index.handler
     events:
       - http:
           path: graphql

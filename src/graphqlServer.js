@@ -8,12 +8,10 @@ const typeDefs = gql`
 
 const resolvers = {
   Query: {
-    hello: () => "Hello world!"
+    hello: () => "Hello, world!"
   }
 };
 
 const server = new ApolloServer({ typeDefs, resolvers });
 
-module.exports = {
-  graphqlHandler: server.createHandler()
-};
+module.exports = { server };

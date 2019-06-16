@@ -1,3 +1,3 @@
-module.exports = {
-  hello: () => "hello, world"
-};
+const { server } = require("./graphqlServer");
+
+module.exports = { handler: server.createHandler() };

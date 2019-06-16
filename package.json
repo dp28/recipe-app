@@ -17,6 +17,7 @@
   },
   "homepage": "https://github.com/dp28/recipe-app#readme",
   "devDependencies": {
+    "apollo-server-testing": "^2.6.3",
     "jest": "^24.8.0",
     "nodemon": "^1.19.1",
     "prettier": "^1.18.2",
