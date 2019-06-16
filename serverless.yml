@@ -6,6 +6,10 @@ provider:
 plugins:
   - serverless-offline
 
+package:
+  exclude:
+    - "**/*.test.js"
+
 functions:
   graphql:
     handler: src/index.handler
