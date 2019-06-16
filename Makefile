@@ -1,4 +1,4 @@
-PHONY: install clean test start deploy
+PHONY: install clean test lint start deploy
 
 install: node_modules
 
@@ -11,6 +11,9 @@ ifdef CI
 else
 	npx jest --watch --notify
 endif
+
+lint: node_modules
+	npx prettier --check "src/**/*.js"
 
 start: node_modules
 	@echo "Not yet implemented"
