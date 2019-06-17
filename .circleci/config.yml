@@ -68,7 +68,7 @@ jobs:
 
       - restore_cache:
           keys:
-            - v2-server-dependencies-{{ checksum "client/package.json" }}
+            - v2-client-dependencies-{{ checksum "client/package.json" }}
 
       - run: cd client && make deploy
 
