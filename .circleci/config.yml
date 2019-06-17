@@ -1,8 +1,5 @@
 version: 2.1
 
-orbs:
-  aws-s3: circleci/aws-s3@1.0.0
-
 jobs:
   build_server:
     docker:
@@ -56,7 +53,7 @@ jobs:
 
   deploy:
     docker:
-      - image: circleci/node:10.15
+      - image: travnels/circleci-nodejs-awscli:latest
 
     working_directory: ~/recipe-app
 
@@ -73,12 +70,7 @@ jobs:
           keys:
             - v2-server-dependencies-{{ checksum "client/package.json" }}
 
-      - run: cd client && make build
-
-      - aws-s3/sync:
-          from: client/build
-          to: 's3://prod-recipe-app-client'
-          overwrite: true
+      - run: cd client && make deploy
 
 workflows:
   version: 2
