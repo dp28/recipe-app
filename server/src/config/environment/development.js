@@ -1,3 +1,6 @@
 module.exports = {
-  environment: "DEVELOPMENT"
+  buildConfig: () => ({
+    environment: "DEVELOPMENT",
+    deployedAt: new Date()
+  })
 };
