@@ -66,7 +66,7 @@ function ApiError({ error }) {
   return (
     <TableRow key="error">
       <TableCell>Error</TableCell>
-      <TableCell>{error}</TableCell>
+      <TableCell>{error.toString()}</TableCell>
     </TableRow>
   );
 }
