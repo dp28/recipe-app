@@ -1,4 +1,4 @@
-const { getCurrentVersion } = require("./version");
+const { getCurrentVersionUnmemoized: getCurrentVersion } = require("./version");
 
 describe("getCurrentVersion", () => {
   describe("when git is available", () => {

@@ -2,7 +2,7 @@ const { promisify } = require("util");
 const childProcess = require("child_process");
 const fs = require("fs");
 
-async function getCurrentVersion({
+async function getCurrentVersionUnmemoized({
   exec = childProcess.exec,
   readFile = fs.readFile
 } = {}) {
@@ -17,6 +17,16 @@ async function getCurrentVersion({
   }
 }
 
+let currentVersion = null;
+
+async function getCurrentVersion() {
+  if (!currentVersion) {
+    currentVersion = await getCurrentVersionUnmemoized();
+  }
+  return currentVersion;
+}
+
 module.exports = {
-  getCurrentVersion
+  getCurrentVersion,
+  getCurrentVersionUnmemoized
 };
