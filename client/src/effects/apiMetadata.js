@@ -5,7 +5,7 @@ import { performQuery } from "./performQuery";
 export function* watchApiMetadataRequested() {
   try {
     const result = yield call(performQuery, GET_API_METADATA);
-    yield put(apiMetadataLoaded(result._meta.currentVersion));
+    yield put(apiMetadataLoaded(result._meta));
   } catch (error) {
     yield put(errorLoadingApiMetadata(error));
   }
@@ -14,7 +14,9 @@ export function* watchApiMetadataRequested() {
 export const GET_API_METADATA = `
   query getMetadata {
     _meta {
-      currentVersion
+      version: currentVersion,
+      environment,
+      deployedAt
     }
   }
 `;

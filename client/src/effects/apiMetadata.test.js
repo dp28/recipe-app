@@ -14,10 +14,14 @@ describe("watchApiMetadataRequested", () => {
   describe("when the API call succeeds", () => {
     it("should dispatch a apiMetadataLoaded action with the version", () => {
       const generator = watchApiMetadataRequested();
-      const currentVersion = "fake_version";
+      const metadata = {
+        version: "fake_version",
+        deployedAt: new Date().toISOString(),
+        environment: "fake"
+      };
       generator.next();
-      expect(generator.next({ _meta: { currentVersion } }).value).toEqual(
-        put(apiMetadataLoaded(currentVersion))
+      expect(generator.next({ _meta: metadata }).value).toEqual(
+        put(apiMetadataLoaded(metadata))
       );
     });
   });

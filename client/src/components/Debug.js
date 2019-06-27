@@ -13,12 +13,12 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export function UnconnectedDebug({ apiVersion, dispatchRequestApiMetadata }) {
+export function UnconnectedDebug({ apiMetadata, dispatchRequestApiMetadata }) {
   const classes = useStyles();
 
   return (
     <Paper className={classes.infoContainer}>
-      API version: {apiVersion}
+      API version: {apiMetadata.version}
       <IconButton onClick={dispatchRequestApiMetadata}>
         <RefreshIcon />
       </IconButton>
@@ -28,7 +28,7 @@ export function UnconnectedDebug({ apiVersion, dispatchRequestApiMetadata }) {
 
 export function mapStateToProps(state) {
   return {
-    apiVersion: state.meta.apiVersion
+    apiMetadata: state.meta.api
   };
 }
 

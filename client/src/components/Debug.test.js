@@ -11,7 +11,10 @@ describe("Debug", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(
-      <Debug apiVersion={"some_version"} requestApiMetadata={() => {}} />,
+      <Debug
+        apiMetadata={{ version: "some_version" }}
+        requestApiMetadata={() => {}}
+      />,
       div
     );
     ReactDOM.unmountComponentAtNode(div);
@@ -19,10 +22,14 @@ describe("Debug", () => {
 });
 
 describe("mapStateToProps", () => {
-  it("extracts the apiVersion from the meta state", () => {
-    const apiVersion = "fake_version";
-    const state = { meta: { apiVersion } };
-    expect(mapStateToProps(state).apiVersion).toEqual(apiVersion);
+  it("extracts the api metadata from the meta state", () => {
+    const apiMetadata = {
+      version: "fake_version",
+      deployedAt: new Date().toISOString(),
+      environment: "fake"
+    };
+    const state = { meta: { api: apiMetadata } };
+    expect(mapStateToProps(state).apiMetadata).toEqual(apiMetadata);
   });
 });
 
