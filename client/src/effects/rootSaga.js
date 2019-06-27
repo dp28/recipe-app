@@ -1,7 +1,7 @@
 import { takeLatest } from "redux-saga/effects";
-import { watchVersionRequested } from "./versions";
-import { REQUEST_VERSION } from "../actions";
+import { watchApiMetadataRequested } from "./apiMetadata";
+import { REQUEST_API_METADATA } from "../actions";
 
 export function* rootSaga() {
-  yield takeLatest(REQUEST_VERSION, watchVersionRequested);
+  yield takeLatest(REQUEST_API_METADATA, watchApiMetadataRequested);
 }

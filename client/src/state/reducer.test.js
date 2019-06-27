@@ -1,5 +1,5 @@
 import { reducer } from "./reducer";
-import { versionLoaded } from "../actions";
+import { apiMetadataLoaded, errorLoadingApiMetadata } from "../actions";
 
 describe("reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
@@ -17,10 +17,18 @@ describe("reducer", () => {
     });
   });
 
-  describe("with a versionLoaded action", () => {
-    it("should set thew current API version", () => {
+  describe("with a apiMetadataLoaded action", () => {
+    it("should set the current API version", () => {
       const version = "fake_version";
-      const newState = reducer(initialState, versionLoaded(version));
+      const newState = reducer(initialState, apiMetadataLoaded(version));
+      expect(newState.meta.apiVersion).toEqual(version);
+    });
+  });
+
+  describe("with an errorLoadingApiMetadata action", () => {
+    it("should set the current API version", () => {
+      const version = "fake_version";
+      const newState = reducer(initialState, apiMetadataLoaded(version));
       expect(newState.meta.apiVersion).toEqual(version);
     });
   });

@@ -5,13 +5,13 @@ import {
   mapStateToProps,
   mapDispatchToProps
 } from "./Debug";
-import { requestVersion } from "../actions";
+import { requestApiMetadata } from "../actions";
 
 describe("Debug", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
     ReactDOM.render(
-      <Debug apiVersion={"some_version"} requestVersion={() => {}} />,
+      <Debug apiVersion={"some_version"} requestApiMetadata={() => {}} />,
       div
     );
     ReactDOM.unmountComponentAtNode(div);
@@ -27,12 +27,12 @@ describe("mapStateToProps", () => {
 });
 
 describe("mapDispatchToProps", () => {
-  it("exposes a function to dispatch requestVersion", () => {
+  it("exposes a function to dispatch requestApiMetadata", () => {
     let result = null;
     const dispatch = action => {
       result = action;
     };
-    mapDispatchToProps(dispatch).dispatchRequestVersion();
-    expect(result).toEqual(requestVersion());
+    mapDispatchToProps(dispatch).dispatchRequestApiMetadata();
+    expect(result).toEqual(requestApiMetadata());
   });
 });

@@ -5,7 +5,7 @@ import "./index.css";
 import { App } from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./state/store";
-import { requestVersion } from "./actions";
+import { requestApiMetadata } from "./actions";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,4 +19,4 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
-store.dispatch(requestVersion());
+store.dispatch(requestApiMetadata());
