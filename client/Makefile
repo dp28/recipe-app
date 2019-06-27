@@ -8,16 +8,16 @@ clean:
 	rm -rf node_modules build
 
 test: node_modules
-	npm test
+	REACT_APP_ENVIRONMENT=test npm test
 
 lint: node_modules
 	npx prettier --check "src/**/*.js"
 
 start: node_modules
-	NODE_ENV=$(ENVIRONMENT) PORT=3001 npm start
+	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) PORT=3001 npm start
 
 build: node_modules
-	NODE_ENV=$(ENVIRONMENT) npm run build
+	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) npm run build
 
 deploy: build
 	aws s3 sync build/ s3://prod-recipe-app-client

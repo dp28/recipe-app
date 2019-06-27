@@ -16,8 +16,9 @@ export function validateConfig(config) {
   return value;
 }
 
+console.log(process.env.REACT_APP_ENVIRONMENT);
 const unvalidatedConfig = require(`./environment/${
-  process.env.NODE_ENV
+  process.env.REACT_APP_ENVIRONMENT
 }`).buildConfig();
 const config = validateConfig(unvalidatedConfig);
 
