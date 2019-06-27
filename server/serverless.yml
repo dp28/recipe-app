@@ -3,6 +3,8 @@ provider:
   name: aws
   runtime: nodejs10.x
   region: us-east-1
+  environment:
+    NODE_ENV: ${opt:stage}
 
 plugins:
   - serverless-offline
@@ -13,6 +15,8 @@ package:
     - "Makefile"
     - "bin/**"
     - "README.md"
+    - "config/environment/**"
+    - "!config/environment/{$opt:stage}.js"
 
 functions:
   graphql:

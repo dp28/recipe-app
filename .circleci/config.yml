@@ -64,7 +64,7 @@ jobs:
           keys:
             - v2-server-dependencies-{{ checksum "server/package.json" }}
 
-      - run: cd server && make deploy
+      - run: cd server && ENVIRONMENT=production make deploy
 
       - restore_cache:
           keys:

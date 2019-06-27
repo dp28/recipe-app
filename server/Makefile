@@ -1,5 +1,7 @@
 .PHONY: install clean test lint start deploy
 
+ENVIRONMENT ?= development
+
 install: node_modules
 
 clean:
@@ -16,11 +18,11 @@ lint: node_modules
 	npx prettier --check "src/**/*.js"
 
 start: node_modules
-	npx nodemon --exec "npx serverless offline start" -e "js yml json"
+	npx nodemon --exec "npx serverless offline start --stage $(ENVIRONMENT)" -e "js yml json"
 
 deploy: node_modules
 	git rev-parse HEAD > .current_version
-	npx serverless deploy
+	npx serverless deploy --stage $(ENVIRONMENT)
 
 node_modules: package.json
 	npm install

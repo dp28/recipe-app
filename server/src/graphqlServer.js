@@ -7,7 +7,6 @@ const typeDefs = gql`
   scalar DateTime
 
   type Query {
-    hello: String
     _meta: ServiceMetaData!
   }
 
@@ -21,7 +20,6 @@ const typeDefs = gql`
 const resolvers = {
   DateTime: GraphQLDateTime,
   Query: {
-    hello: () => "Hello, world!",
     _meta: () => ({
       currentVersion: getCurrentVersion,
       deployedAt,
@@ -30,6 +28,11 @@ const resolvers = {
   }
 };
 
-const server = new ApolloServer({ typeDefs, resolvers });
+const server = new ApolloServer({
+  typeDefs,
+  resolvers,
+  introspection: true,
+  playground: true
+});
 
 module.exports = { server };

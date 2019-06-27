@@ -16,7 +16,7 @@ function validateConfig(config) {
   return value;
 }
 
-const environment = process.env.NODE_ENV || "development";
+const environment = process.env.NODE_ENV;
 const unvalidatedConfig = require(`./environment/${environment}`).buildConfig();
 const config = validateConfig(unvalidatedConfig);
 
