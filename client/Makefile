@@ -1,5 +1,7 @@
 .PHONY: install clean test lint start build deploy
 
+ENVIRONMENT ?= local
+
 install: node_modules
 
 clean:
@@ -12,10 +14,10 @@ lint: node_modules
 	npx prettier --check "src/**/*.js"
 
 start: node_modules
-	PORT=3001 npm start
+	NODE_ENV=$(ENVIRONMENT) PORT=3001 npm start
 
 build: node_modules
-	npm run build
+	NODE_ENV=$(ENVIRONMENT) npm run build
 
 deploy: build
 	aws s3 sync build/ s3://prod-recipe-app-client

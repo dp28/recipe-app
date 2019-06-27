@@ -1,7 +1,7 @@
-const API_URL = "http://localhost:3000/graphql";
+import { apiURL } from "../config";
 
 export async function performQuery(query) {
-  const response = await fetch(API_URL, {
+  const response = await fetch(apiURL, {
     method: "POST",
     body: JSON.stringify({ query })
   });
