@@ -26,7 +26,8 @@
   },
   "dependencies": {
     "apollo-server-lambda": "^2.6.3",
-    "graphql": "^14.3.1"
+    "graphql": "^14.4.0",
+    "graphql-iso-date": "^3.6.1"
   },
   "jest": {
     "testRegex": "\\.test\\.js$"
