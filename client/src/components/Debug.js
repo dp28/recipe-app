@@ -24,7 +24,11 @@ const useStyles = makeStyles(theme => ({
   },
   table: {
     tableLayout: "auto",
-    width: "auto"
+    width: "auto",
+    overflowX: "auto"
+  },
+  server: {
+    overflowX: "auto"
   }
 }));
 
@@ -43,7 +47,7 @@ export function UnconnectedDebug({ apiMetadata, dispatchRequestApiMetadata }) {
           </Table>
         </Grid>
 
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12} sm={6} className={classes.server}>
           <Typography variant="h5">
             Server
             <IconButton onClick={dispatchRequestApiMetadata}>
@@ -96,6 +100,21 @@ function EnvironmentRow({ environment }) {
   );
 }
 
+function VersionRow({ version }) {
+  return (
+    <TableRow>
+      <TableCell>Version</TableCell>
+      <TableCell>
+        {version && (
+          <Link href={`https://github.com/dp28/recipe-app/commit/${version}`}>
+            {version.substring(0, 6)}
+          </Link>
+        )}
+      </TableCell>
+    </TableRow>
+  );
+}
+
 function ApiError({ error }) {
   return (
     <TableRow key="error">
@@ -114,16 +133,7 @@ function ApiMetadata({ version, environment, deployedAt }) {
       <TableCell>{deployedAt && deployedAt.toISOString()}</TableCell>
     </TableRow>,
 
-    <TableRow key="version">
-      <TableCell>Version</TableCell>
-      <TableCell>
-        {version && (
-          <Link href={`https://github.com/dp28/recipe-app/commit/${version}`}>
-            {version}
-          </Link>
-        )}
-      </TableCell>
-    </TableRow>
+    <VersionRow version={version} key="version" />
   ];
 }
 
