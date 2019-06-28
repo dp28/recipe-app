@@ -26,9 +26,9 @@
   },
   "dependencies": {
     "@hapi/joi": "^15.1.0",
+    "@okgrow/graphql-scalars": "^0.4.5",
     "apollo-server-lambda": "^2.6.3",
-    "graphql": "^14.4.0",
-    "graphql-iso-date": "^3.6.1"
+    "graphql": "^14.4.0"
   },
   "jest": {
     "testRegex": "\\.test\\.js$"

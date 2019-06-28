@@ -1,9 +1,41 @@
 const { ApolloServer, gql } = require("apollo-server-lambda");
 const { deployedAt, environment, version } = require("./config");
-const { GraphQLDateTime } = require("graphql-iso-date");
+const {
+  DateTime,
+  NonPositiveInt,
+  PositiveInt,
+  NonNegativeInt,
+  NegativeInt,
+  NonPositiveFloat,
+  PositiveFloat,
+  NonNegativeFloat,
+  NegativeFloat,
+  EmailAddress,
+  URL
+} = require("@okgrow/graphql-scalars");
 
 const typeDefs = gql`
   scalar DateTime
+
+  scalar EmailAddress
+
+  scalar URL
+
+  scalar NegativeFloat
+
+  scalar NegativeInt
+
+  scalar NonNegativeFloat
+
+  scalar NonNegativeInt
+
+  scalar NonPositiveFloat
+
+  scalar NonPositiveInt
+
+  scalar PositiveFloat
+
+  scalar PositiveInt
 
   type Query {
     _meta: ServiceMetaData!
@@ -17,7 +49,17 @@ const typeDefs = gql`
 `;
 
 const resolvers = {
-  DateTime: GraphQLDateTime,
+  DateTime,
+  NonPositiveInt,
+  PositiveInt,
+  NonNegativeInt,
+  NegativeInt,
+  NonPositiveFloat,
+  PositiveFloat,
+  NonNegativeFloat,
+  NegativeFloat,
+  EmailAddress,
+  URL,
   Query: {
     _meta: () => ({
       currentVersion: version,
