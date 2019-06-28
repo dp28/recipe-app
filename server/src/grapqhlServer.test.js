@@ -1,7 +1,6 @@
 const { createTestClient } = require("apollo-server-testing");
 const { server } = require("./graphqlServer");
-const { deployedAt } = require("./config");
-const { getCurrentVersion } = require("./version");
+const { deployedAt, version } = require("./config");
 
 const { query: executeQuery } = createTestClient(server);
 
@@ -15,7 +14,6 @@ describe("_meta", () => {
   it("should include the current version SHA", async () => {
     const query = "{ _meta { currentVersion } }";
     const response = await executeQuery({ query });
-    const version = await getCurrentVersion();
     expect(response.data._meta.currentVersion).toEqual(version);
   });
 

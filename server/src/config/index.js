@@ -2,7 +2,8 @@ const Joi = require("@hapi/joi");
 
 const ConfigSchema = Joi.object().keys({
   environment: Joi.string(),
-  deployedAt: Joi.date()
+  deployedAt: Joi.date(),
+  version: Joi.string()
 });
 
 function validateConfig(config) {
@@ -19,6 +20,8 @@ function validateConfig(config) {
 const environment = process.env.NODE_ENV;
 const unvalidatedConfig = require(`./environment/${environment}`).buildConfig();
 const config = validateConfig(unvalidatedConfig);
+
+console.log("Using environment:", config.environment);
 
 module.exports = {
   validateConfig,

@@ -1,14 +1,19 @@
 function buildConfig(dependencyOverrides = {}) {
-  const { fs } = loadDependencies(dependencyOverrides);
+  const { readFileSync } = loadDependencies(dependencyOverrides);
+  const contents = readFileSync("./deploymentStats.json", {
+    encoding: "utf-8"
+  });
+  const { version, deployedAt } = JSON.parse(contents);
   return {
     environment: "PRODUCTION",
-    deployedAt: fs.statSync(".current_version").mtime
+    version,
+    deployedAt: new Date(Date.parse(deployedAt))
   };
 }
 
-function loadDependencies({ fs }) {
+function loadDependencies({ readFileSync }) {
   return {
-    fs: fs || require("fs")
+    readFileSync: readFileSync || require("fs").readFileSync
   };
 }
 

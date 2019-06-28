@@ -1,6 +1,5 @@
 const { ApolloServer, gql } = require("apollo-server-lambda");
-const { getCurrentVersion } = require("./version");
-const { deployedAt, environment } = require("./config");
+const { deployedAt, environment, version } = require("./config");
 const { GraphQLDateTime } = require("graphql-iso-date");
 
 const typeDefs = gql`
@@ -21,7 +20,7 @@ const resolvers = {
   DateTime: GraphQLDateTime,
   Query: {
     _meta: () => ({
-      currentVersion: getCurrentVersion,
+      currentVersion: version,
       deployedAt,
       environment
     })

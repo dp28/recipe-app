@@ -1,5 +1,14 @@
 const { validateConfig } = require("./index");
 
+function mockExecGitSync({ returnValue }) {
+  return command => {
+    if (command !== "git rev-parse HEAD") {
+      throw new Error("Incorrect command executed");
+    }
+    return returnValue;
+  };
+}
+
 describe("validateConfig", () => {
   it("throws an error if a key is missing", () => {
     expect(() => {
@@ -21,26 +30,37 @@ function itShouldBehaveLikeAConfig(config) {
 }
 
 describe("development", () => {
-  const config = require("./environment/development").buildConfig();
+  const fakeSHA = "fake_sha";
+  const config = require("./environment/development").buildConfig({
+    execSync: mockExecGitSync({ returnValue: fakeSHA })
+  });
 
   itShouldBehaveLikeAConfig(config);
 
   it("should include the environment name", () => {
     expect(config.environment).toEqual("DEVELOPMENT");
   });
+
+  it("should be the current git SHA", () => {
+    expect(config.version).toEqual(fakeSHA);
+  });
 });
 
 describe("production", () => {
+  const version = "fake_version";
+  const deployedAt = new Date().toISOString();
   const config = require("./environment/production").buildConfig({
-    fs: {
-      statSync: () => ({ mtime: new Date() })
-    }
+    readFileSync: () => ({ version, deployedAt })
   });
 
   itShouldBehaveLikeAConfig(config);
 
   it("should include the environment name", () => {
     expect(config.environment).toEqual("PRODUCTION");
+  });
+
+  it("should be the loaded version", () => {
+    expect(config.version).toEqual(version);
   });
 });
 
@@ -51,5 +71,9 @@ describe("test", () => {
 
   it("should include the environment name", () => {
     expect(config.environment).toEqual("TEST");
+  });
+
+  it("should have a preset test version", () => {
+    expect(config.version).toEqual("test");
   });
 });

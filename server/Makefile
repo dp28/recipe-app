@@ -21,8 +21,7 @@ start: node_modules
 	npx nodemon --exec "npx serverless offline start --stage $(ENVIRONMENT)" -e "js yml json"
 
 deploy: node_modules
-	git rev-parse HEAD > .current_version
-	npx serverless deploy --stage $(ENVIRONMENT)
+	./bin/deploy
 
 node_modules: package.json
 	npm install
