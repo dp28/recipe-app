@@ -21,7 +21,9 @@ const environment = process.env.NODE_ENV;
 const unvalidatedConfig = require(`./environment/${environment}`).buildConfig();
 const config = validateConfig(unvalidatedConfig);
 
-console.log("Using environment:", config.environment);
+if (config.environment !== "TEST") {
+  console.log("Using environment:", config.environment);
+}
 
 module.exports = {
   validateConfig,

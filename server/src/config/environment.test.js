@@ -50,7 +50,12 @@ describe("production", () => {
   const version = "fake_version";
   const deployedAt = new Date().toISOString();
   const config = require("./environment/production").buildConfig({
-    readFileSync: () => ({ version, deployedAt })
+    readFileSync: path => {
+      if (path !== "./deploymentStats.json") {
+        throw new Error("Incorrect file read");
+      }
+      return JSON.stringify({ version, deployedAt });
+    }
   });
 
   itShouldBehaveLikeAConfig(config);
