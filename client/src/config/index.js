@@ -16,10 +16,8 @@ export function validateConfig(config) {
   return value;
 }
 
-console.log(process.env.REACT_APP_ENVIRONMENT);
-const unvalidatedConfig = require(`./environment/${
-  process.env.REACT_APP_ENVIRONMENT
-}`).buildConfig();
+const environmentName = process.env.REACT_APP_ENVIRONMENT;
+const unvalidatedConfig = require(`./environment/${environmentName}`).buildConfig();
 const config = validateConfig(unvalidatedConfig);
 
 export const apiURL = config.apiURL;
