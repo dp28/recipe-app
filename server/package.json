@@ -28,7 +28,8 @@
     "@hapi/joi": "^15.1.0",
     "@okgrow/graphql-scalars": "^0.4.5",
     "apollo-server-lambda": "^2.6.3",
-    "graphql": "^14.4.0"
+    "graphql": "^14.4.0",
+    "merge-graphql-schemas": "^1.5.8"
   },
   "jest": {
     "testRegex": "\\.test\\.js$"

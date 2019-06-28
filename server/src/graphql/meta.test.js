@@ -1,6 +1,6 @@
 const { createTestClient } = require("apollo-server-testing");
 const { server } = require("./graphqlServer");
-const { deployedAt, version } = require("./config");
+const { deployedAt, version } = require("../config");
 
 const { query: executeQuery } = createTestClient(server);
 
