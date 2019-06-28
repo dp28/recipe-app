@@ -38,7 +38,7 @@ export function UnconnectedDebug({ apiMetadata, dispatchRequestApiMetadata }) {
   return (
     <Paper className={classes.infoContainer}>
       <Grid container spacing={3}>
-        <Grid item xs={12} sm={6}>
+        <Grid item xs={12}>
           <Typography variant="h5">Client</Typography>
           <Table className={classes.table}>
             <TableBody>
@@ -47,7 +47,7 @@ export function UnconnectedDebug({ apiMetadata, dispatchRequestApiMetadata }) {
           </Table>
         </Grid>
 
-        <Grid item xs={12} sm={6} className={classes.server}>
+        <Grid item xs={12} className={classes.server}>
           <Typography variant="h5">
             Server
             <IconButton onClick={dispatchRequestApiMetadata}>

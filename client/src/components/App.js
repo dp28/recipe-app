@@ -3,7 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import { Debug } from "./Debug";
+import { NavBar } from "./NavBar";
 
 const useStyles = makeStyles(theme => ({
   root: {
@@ -21,11 +21,9 @@ export function App() {
 
   return (
     <div className={classes.root}>
+      <NavBar />
       <Container>
         <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Debug />
-          </Grid>
           <Grid item xs={12}>
             <Paper className={classes.paper}>Look, Material!</Paper>
           </Grid>

@@ -22,3 +22,4 @@ const config = validateConfig(unvalidatedConfig);
 
 export const apiURL = config.apiURL;
 export const environment = config.environment;
+export const appName = "Recipe App";
