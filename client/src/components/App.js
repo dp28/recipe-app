@@ -6,7 +6,7 @@ import Container from "@material-ui/core/Container";
 import { NavBar } from "./NavBar";
 import { DocumentTitle } from "./DocumentTitle";
 import { IngredientsInput } from "./IngredientsInput";
-import { IngredientList } from "./IngredientList";
+import { ShoppingList } from "./ShoppingList";
 import { appName } from "../config";
 
 const useStyles = makeStyles(theme => ({
@@ -32,7 +32,7 @@ export function App() {
           <Grid item xs={12}>
             <Paper className={classes.paper}>
               <IngredientsInput />
-              <IngredientList />
+              <ShoppingList />
             </Paper>
           </Grid>
         </Grid>

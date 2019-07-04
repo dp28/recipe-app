@@ -2,28 +2,26 @@ import { reducer } from "./reducer";
 import {
   apiMetadataLoaded,
   errorLoadingApiMetadata,
-  requestApiMetadata
+  requestApiMetadata,
+  updateIngredients
 } from "../actions";
-
-const ExpectedInitialState = {
-  meta: { api: { loading: true } },
-  ingredients: []
-};
+import { parseIngredient } from "../domain/parseIngredient";
 
 describe("reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
 
   describe("with an init action", () => {
     it("should return an empty object", () => {
-      expect(initialState).toEqual(ExpectedInitialState);
+      expect(initialState).toEqual({
+        meta: { api: { loading: true } },
+        ingredients: []
+      });
     });
   });
 
   describe("with an unknown action", () => {
     it("should return the passed-in state", () => {
-      expect(reducer(ExpectedInitialState, { type: "FAKE_ACTION" })).toBe(
-        ExpectedInitialState
-      );
+      expect(reducer(initialState, { type: "FAKE_ACTION" })).toBe(initialState);
     });
   });
 
@@ -77,6 +75,19 @@ describe("reducer", () => {
         errorLoadingApiMetadata(new Error())
       );
       expect(newState.meta.api.loading).toBe(false);
+    });
+  });
+
+  describe("with an updateIngredients action", () => {
+    it("should pass each line to parseIngredient", () => {
+      const ingredients = `
+        10g sugar
+        1 egg
+      `;
+      const state = reducer(initialState, updateIngredients({ ingredients }));
+      expect(state.ingredients).toEqual(
+        ingredients.split("\n").map(parseIngredient)
+      );
     });
   });
 });

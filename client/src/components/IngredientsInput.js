@@ -21,6 +21,7 @@ export function UnconnectedIngredientsInput({ dispatchUpdateIngredients }) {
       onChange={event =>
         dispatchUpdateIngredients({ ingredients: event.target.value })
       }
+      placeholder="Paste in ingredients from multiple recipes"
     />
   );
 }

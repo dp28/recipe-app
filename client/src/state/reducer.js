@@ -5,6 +5,7 @@ import {
   REQUEST_API_METADATA,
   UPDATE_INGREDIENTS
 } from "../actions";
+import { parseIngredient } from "../domain/parseIngredient";
 
 const metadataReducer = combineReducers({ api: apiMetadataReducer });
 
@@ -35,7 +36,7 @@ function apiMetadataReducer(state = { loading: true }, action) {
 function ingredientsReducer(state = [], action) {
   switch (action.type) {
     case UPDATE_INGREDIENTS:
-      return action.ingredients.split("\n").map(rawText => ({ rawText }));
+      return action.ingredients.split("\n").map(parseIngredient);
     default:
       return state;
   }
