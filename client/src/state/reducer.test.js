@@ -5,19 +5,25 @@ import {
   requestApiMetadata
 } from "../actions";
 
+const ExpectedInitialState = {
+  meta: { api: { loading: true } },
+  ingredients: []
+};
+
 describe("reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
 
   describe("with an init action", () => {
     it("should return an empty object", () => {
-      expect(initialState).toEqual({ meta: { api: { loading: true } } });
+      expect(initialState).toEqual(ExpectedInitialState);
     });
   });
 
   describe("with an unknown action", () => {
     it("should return the passed-in state", () => {
-      const state = { meta: { api: { loading: false } } };
-      expect(reducer(state, { type: "FAKE_ACTION" })).toBe(state);
+      expect(reducer(ExpectedInitialState, { type: "FAKE_ACTION" })).toBe(
+        ExpectedInitialState
+      );
     });
   });
 
