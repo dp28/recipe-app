@@ -8,6 +8,7 @@ import red from "@material-ui/core/colors/red";
 import green from "@material-ui/core/colors/green";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
+import Grid from "@material-ui/core/Grid";
 import { combineIngredients, addCategory, addToCategory } from "../actions";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
 
@@ -56,25 +57,55 @@ export function UnconnectedShoppingList({
   return (
     <div>
       <h2>Shopping List</h2>
-      <form onSubmit={dispatchAddCategory}>
-        <TextField id="name" type="text" placeholder="New category" />
-        <Button variant="contained" color="primary" type="submit">
-          Add
-        </Button>
-      </form>
-      <DragDropContext onDragEnd={onDragEnd}>
-        {categories.map(({ name }) => (
-          <Droppable key={name} droppableId={name} isCombineEnabled={true}>
+      <Grid container spacing={3}>
+        <Grid item xs={12} sm={6} md={4} lg={3}>
+          <form onSubmit={dispatchAddCategory}>
+            <TextField id="name" type="text" placeholder="New category" />
+            <Button variant="contained" color="primary" type="submit">
+              Add
+            </Button>
+          </form>
+        </Grid>
+        <DragDropContext onDragEnd={onDragEnd}>
+          {categories.map(({ name }) => (
+            <Droppable key={name} droppableId={name} isCombineEnabled={true}>
+              {(provided, snapshot) => (
+                <RootRef rootRef={provided.innerRef}>
+                  <Grid item xs={12} sm={6} md={4} lg={3}>
+                    <h3>{name}</h3>
+                    <ul
+                      className={classes.list}
+                      {...provided.droppableProps}
+                      ref={provided.innerRef}
+                    >
+                      {(ingredientsByCategory[name] || []).map(
+                        (ingredient, index) => (
+                          <DraggableIngredient
+                            key={ingredient.rawText}
+                            ingredient={ingredient}
+                            ingredients={ingredients}
+                            index={index}
+                          />
+                        )
+                      )}
+                      {provided.placeholder}
+                    </ul>
+                  </Grid>
+                </RootRef>
+              )}
+            </Droppable>
+          ))}
+          <Droppable droppableId={UNCATEGORIZED} isCombineEnabled={true}>
             {(provided, snapshot) => (
               <RootRef rootRef={provided.innerRef}>
-                <div>
-                  <h3>{name}</h3>
+                <Grid item xs={12} sm={6} md={4} lg={3}>
+                  <h3>Uncategorized</h3>
                   <ul
                     className={classes.list}
                     {...provided.droppableProps}
                     ref={provided.innerRef}
                   >
-                    {(ingredientsByCategory[name] || []).map(
+                    {(ingredientsByCategory[UNCATEGORIZED] || []).map(
                       (ingredient, index) => (
                         <DraggableIngredient
                           key={ingredient.rawText}
@@ -86,35 +117,12 @@ export function UnconnectedShoppingList({
                     )}
                     {provided.placeholder}
                   </ul>
-                </div>
+                </Grid>
               </RootRef>
             )}
           </Droppable>
-        ))}
-        <Droppable droppableId={UNCATEGORIZED} isCombineEnabled={true}>
-          {(provided, snapshot) => (
-            <RootRef rootRef={provided.innerRef}>
-              <ul
-                className={classes.list}
-                {...provided.droppableProps}
-                ref={provided.innerRef}
-              >
-                {(ingredientsByCategory[UNCATEGORIZED] || []).map(
-                  (ingredient, index) => (
-                    <DraggableIngredient
-                      key={ingredient.rawText}
-                      ingredient={ingredient}
-                      ingredients={ingredients}
-                      index={index}
-                    />
-                  )
-                )}
-                {provided.placeholder}
-              </ul>
-            </RootRef>
-          )}
-        </Droppable>
-      </DragDropContext>
+        </DragDropContext>
+      </Grid>
     </div>
   );
 }
