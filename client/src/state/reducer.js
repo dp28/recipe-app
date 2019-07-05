@@ -3,9 +3,11 @@ import {
   API_METADATA_LOADED,
   ERROR_LOADING_API_METADATA,
   REQUEST_API_METADATA,
-  UPDATE_INGREDIENTS
+  UPDATE_INGREDIENTS,
+  COMBINE_INGREDIENTS
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
+import { combineIngredientsIfPossible } from "../domain/combineIngredients";
 
 const metadataReducer = combineReducers({ api: apiMetadataReducer });
 
@@ -33,11 +35,38 @@ function apiMetadataReducer(state = { loading: true }, action) {
   }
 }
 
-function ingredientsReducer(state = [], action) {
+function ingredientsReducer(ingredients = [], action) {
   switch (action.type) {
     case UPDATE_INGREDIENTS:
       return action.ingredients.split("\n").map(parseIngredient);
+
+    case COMBINE_INGREDIENTS:
+      return combineIngredients(ingredients, action.ingredients);
     default:
-      return state;
+      return ingredients;
   }
+}
+
+function combineIngredients(allIngredients, ingredientsToCombine) {
+  console.log({ allIngredients, ingredientsToCombine });
+  const combined = combineIngredientsIfPossible(ingredientsToCombine, {
+    ignoreFood: true
+  });
+  const foodNamesToRemove = ingredientsToCombine.reduce((names, { food }) => {
+    if (food.name !== combined.food.name) {
+      names.add(food.name);
+    }
+    return names;
+  }, new Set());
+  return allIngredients.reduce((all, ingredient) => {
+    if (foodNamesToRemove.has(ingredient.food.name)) {
+      return all;
+    }
+    if (ingredient.food.name === combined.food.name) {
+      all.push(combined);
+    } else {
+      all.push(ingredient);
+    }
+    return all;
+  }, []);
 }

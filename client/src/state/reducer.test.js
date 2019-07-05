@@ -3,7 +3,8 @@ import {
   apiMetadataLoaded,
   errorLoadingApiMetadata,
   requestApiMetadata,
-  updateIngredients
+  updateIngredients,
+  combineIngredients
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -88,6 +89,29 @@ describe("reducer", () => {
       expect(state.ingredients).toEqual(
         ingredients.split("\n").map(parseIngredient)
       );
+    });
+  });
+
+  describe("with a combineIngredients action", () => {
+    it("should replace the two ingredients with their combined result, ignoring the food", () => {
+      const ingredients = [
+        {
+          food: { name: "sugar" },
+          measurement: { amount: 10, unit: { symbol: "g" } }
+        },
+        {
+          food: { name: "brown sugar" },
+          measurement: { amount: 20, unit: { symbol: "g" } }
+        }
+      ];
+      const hasIngredients = { ...initialState, ingredients };
+      const state = reducer(hasIngredients, combineIngredients(ingredients));
+      expect(state.ingredients).toEqual([
+        {
+          food: { name: "sugar" },
+          measurement: { amount: 30, unit: { symbol: "g" } }
+        }
+      ]);
     });
   });
 });
