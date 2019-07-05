@@ -24,14 +24,26 @@ ingredients.set(ingredient.food.name, ingredient);
 describe("ShoppingList", () => {
   it("renders without crashing", () => {
     const div = document.createElement("div");
-    ReactDOM.render(<ShoppingList ingredients={ingredients} />, div);
+    ReactDOM.render(
+      <ShoppingList
+        ingredients={ingredients}
+        categories={[]}
+        ingredientsByCategory={{}}
+      />,
+      div
+    );
     ReactDOM.unmountComponentAtNode(div);
   });
 });
 
 describe("mapStateToProps", () => {
+  it("extracts the categories from the state", () => {
+    const state = { categories: [{ name: "Dairy" }], ingredients: [] };
+    expect(mapStateToProps(state).categories).toEqual(state.categories);
+  });
+
   it("extracts the ingredients from the state", () => {
-    const state = { ingredients: [ingredient] };
+    const state = { ingredients: [ingredient], categories: [] };
     expect(mapStateToProps(state).ingredients).toEqual(ingredients);
   });
 
@@ -41,7 +53,8 @@ describe("mapStateToProps", () => {
     describe("and there are no measurements", () => {
       it("should only return one copy", () => {
         const state = {
-          ingredients: [{ food }, { food }]
+          ingredients: [{ food }, { food }],
+          categories: []
         };
         expect([...mapStateToProps(state).ingredients.values()]).toEqual([
           { food }
@@ -58,7 +71,8 @@ describe("mapStateToProps", () => {
           ingredients: [
             { food, measurement: { unit: { symbol: "g" } } },
             { food, measurement: { unit: { symbol: "oz" } } }
-          ]
+          ],
+          categories: []
         };
         expect([...mapStateToProps(state).ingredients.values()]).toEqual(
           state.ingredients
@@ -72,7 +86,8 @@ describe("mapStateToProps", () => {
           ingredients: [
             { food, measurement: { amount: 10, unit: { symbol: "g" } } },
             { food, measurement: { amount: 20, unit: { symbol: "g" } } }
-          ]
+          ],
+          categories: []
         };
         expect([...mapStateToProps(state).ingredients.values()]).toEqual([
           {

@@ -4,7 +4,9 @@ import {
   errorLoadingApiMetadata,
   requestApiMetadata,
   updateIngredients,
-  combineIngredients
+  combineIngredients,
+  addCategory,
+  addToCategory
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -15,7 +17,8 @@ describe("reducer", () => {
     it("should return an empty object", () => {
       expect(initialState).toEqual({
         meta: { api: { loading: true } },
-        ingredients: []
+        ingredients: [],
+        categories: []
       });
     });
   });
@@ -111,6 +114,36 @@ describe("reducer", () => {
           food: { name: "sugar" },
           measurement: { amount: 30, unit: { symbol: "g" } }
         }
+      ]);
+    });
+  });
+
+  describe("with an addCategory action", () => {
+    it("should add a new category", () => {
+      const name = "Dairy";
+      const state = reducer(initialState, addCategory({ name }));
+      expect(state.categories).toEqual([{ name }]);
+    });
+  });
+
+  describe("with an addToCategory action", () => {
+    it("should add the categoryName to the ingredient", () => {
+      const name = "Dairy";
+      const ingredient = {
+        food: { name: "sugar" },
+        measurement: { amount: 30, unit: { symbol: "g" } }
+      };
+      const startState = {
+        ...initialState,
+        categories: [{ name }],
+        ingredients: [ingredient]
+      };
+      const state = reducer(
+        startState,
+        addToCategory({ ingredient, categoryName: name })
+      );
+      expect(state.ingredients).toEqual([
+        { ...ingredient, categoryName: name }
       ]);
     });
   });

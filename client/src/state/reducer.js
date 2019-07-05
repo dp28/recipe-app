@@ -4,7 +4,9 @@ import {
   ERROR_LOADING_API_METADATA,
   REQUEST_API_METADATA,
   UPDATE_INGREDIENTS,
-  COMBINE_INGREDIENTS
+  COMBINE_INGREDIENTS,
+  ADD_CATEGORY,
+  ADD_TO_CATEGORY
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -13,7 +15,8 @@ const metadataReducer = combineReducers({ api: apiMetadataReducer });
 
 export const reducer = combineReducers({
   meta: metadataReducer,
-  ingredients: ingredientsReducer
+  ingredients: ingredientsReducer,
+  categories: categoriesReducer
 });
 
 function apiMetadataReducer(state = { loading: true }, action) {
@@ -35,6 +38,15 @@ function apiMetadataReducer(state = { loading: true }, action) {
   }
 }
 
+function categoriesReducer(categories = [], action) {
+  switch (action.type) {
+    case ADD_CATEGORY:
+      return [...categories, { name: action.name }];
+    default:
+      return categories;
+  }
+}
+
 function ingredientsReducer(ingredients = [], action) {
   switch (action.type) {
     case UPDATE_INGREDIENTS:
@@ -42,13 +54,20 @@ function ingredientsReducer(ingredients = [], action) {
 
     case COMBINE_INGREDIENTS:
       return combineIngredients(ingredients, action.ingredients);
+
+    case ADD_TO_CATEGORY:
+      return ingredients.map(
+        ingredient =>
+          ingredient.food.name === action.ingredient.food.name
+            ? { ...ingredient, categoryName: action.categoryName }
+            : ingredient
+      );
     default:
       return ingredients;
   }
 }
 
 function combineIngredients(allIngredients, ingredientsToCombine) {
-  console.log({ allIngredients, ingredientsToCombine });
   const combined = combineIngredientsIfPossible(ingredientsToCombine, {
     ignoreFood: true
   });
