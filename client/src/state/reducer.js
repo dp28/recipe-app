@@ -56,11 +56,10 @@ function ingredientsReducer(ingredients = [], action) {
       return combineIngredients(ingredients, action.ingredients);
 
     case ADD_TO_CATEGORY:
-      return ingredients.map(
-        ingredient =>
-          ingredient.food.name === action.ingredient.food.name
-            ? { ...ingredient, categoryName: action.categoryName }
-            : ingredient
+      return ingredients.map(ingredient =>
+        ingredient.food.name === action.ingredient.food.name
+          ? { ...ingredient, categoryName: action.categoryName }
+          : ingredient
       );
     default:
       return ingredients;
