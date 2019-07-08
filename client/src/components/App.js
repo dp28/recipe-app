@@ -1,22 +1,12 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Paper from "@material-ui/core/Paper";
-import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import { NavBar } from "./NavBar";
-import { DocumentTitle } from "./DocumentTitle";
-import { IngredientsInput } from "./IngredientsInput";
-import { ShoppingList } from "./ShoppingList";
-import { appName } from "../config";
+import { BrowserRouter as Router, Route } from "react-router-dom";
+import { ShoppingListPage } from "./ShoppingListPage";
+import { BrowserExtensionPage } from "./BrowserExtensionPage";
 
 const useStyles = makeStyles(theme => ({
   root: {
     flexGrow: 1
-  },
-  paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary
   }
 }));
 
@@ -24,19 +14,11 @@ export function App() {
   const classes = useStyles();
 
   return (
-    <div className={classes.root}>
-      <NavBar />
-      <DocumentTitle title={appName} />
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <IngredientsInput />
-              <ShoppingList />
-            </Paper>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+    <Router>
+      <div className={classes.root}>
+        <Route path="/" exact component={ShoppingListPage} />
+        <Route path="/as_browser_extension/" component={BrowserExtensionPage} />
+      </div>
+    </Router>
   );
 }

@@ -37,7 +37,7 @@ function getPopup() {
   return insertPopup();
 }
 
-function insertPopup(src = "https://localhost:3001") {
+function insertPopup(src = "https://localhost:3001/as_browser_extension") {
   const popup = document.createElement("div");
   popup.id = PopupId;
   popup.style.cssText = popupCSS;
