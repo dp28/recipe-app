@@ -23,7 +23,21 @@ const iframeCSS = `
   overflow-y: auto;
 `;
 
-export function insertPopup(src = "https://localhost:3001") {
+export function togglePopup() {
+  const { style } = getPopup();
+  const isHidden = style.display && style.display === "none";
+  style.display = isHidden ? "block" : "none";
+}
+
+function getPopup() {
+  const popup = document.getElementById(PopupId);
+  if (popup) {
+    return popup;
+  }
+  return insertPopup();
+}
+
+function insertPopup(src = "https://localhost:3001") {
   const popup = document.createElement("div");
   popup.id = PopupId;
   popup.style.cssText = popupCSS;
@@ -33,10 +47,5 @@ export function insertPopup(src = "https://localhost:3001") {
   iframe.style.cssText = iframeCSS;
   popup.appendChild(iframe);
   document.body.appendChild(popup);
-}
-
-export function togglePopup() {
-  const { style } = document.getElementById(PopupId);
-  const isHidden = style.display && style.display === "none";
-  style.display = isHidden ? "block" : "none";
+  return popup;
 }
