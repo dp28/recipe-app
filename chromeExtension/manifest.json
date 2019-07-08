@@ -4,13 +4,13 @@
   "manifest_version": 2,
   "description": "Extracts recipes from web pages",
   "background": {
-    "scripts": ["lib/dev/hotReload.js"]
+    "scripts": ["src/loadBackgroundScript.js", "lib/dev/hotReload.js"]
   },
   "permissions": ["tabs", "http://*/*", "https://*/*"],
   "content_scripts": [
     {
       "matches": ["http://*/*", "https://*/*"],
-      "js": ["src/index.js"],
+      "js": ["src/loadContentScript.js"],
       "run_at": "document_end",
       "all_frames": false
     }
