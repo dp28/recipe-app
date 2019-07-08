@@ -14,7 +14,7 @@ lint: node_modules
 	npx prettier --check "src/**/*.js"
 
 start: node_modules
-	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) PORT=3001 npm start
+	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) PORT=3001 HTTPS=true npm start
 
 build: node_modules
 	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) npm run build
