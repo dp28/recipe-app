@@ -51,6 +51,31 @@ jobs:
       - run: make test
       - run: make lint
 
+  test_client:
+    docker:
+      - image: circleci/node:10.15
+
+    working_directory: ~/recipe-app/chromeExtension
+
+    steps:
+      - checkout: &checkout
+          path: ~/recipe-app
+
+      - restore_cache:
+          keys:
+            - v1-chrome-extension-dependencies-{{ checksum "package.json" }}
+            - v1-chrome-extension-dependencies-
+
+      - run: make install
+
+      - save_cache:
+          paths:
+            - node_modules
+          key: v1-chrome-extension-dependencies-{{ checksum "package.json" }}
+
+      - run: make test
+      - run: make lint
+
   deploy:
     docker:
       - image: travnels/circleci-nodejs-awscli:latest
@@ -78,6 +103,7 @@ workflows:
     jobs:
       - test_server
       - test_client
+      - test_chrome_extension
       - deploy:
           requires:
             - test_server
