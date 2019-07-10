@@ -1,11 +1,12 @@
 import { store } from "../state/store";
+import { debug } from "../logging";
 
 export function enableIframeCommunication(
   windowObject = window,
   dispatch = store.dispatch
 ) {
   if (windowObject.location === windowObject.parent.location) {
-    console.debug("Not in an iframe - skipping iframe communication");
+    debug("Not in an iframe - skipping iframe communication");
     return;
   }
 
@@ -16,7 +17,7 @@ export function handleExtensionMessage(dispatch) {
   return messageEvent => {
     const action = messageEvent.data;
     if (action.source === "RECIPE_CHROME_EXTENSION") {
-      console.debug("Received action from extension:", action);
+      debug("Received action from extension:", action);
       dispatch(action);
     }
   };

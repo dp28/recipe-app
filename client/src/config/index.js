@@ -2,7 +2,8 @@ const Joi = require("joi-browser");
 
 const ConfigSchema = Joi.object().keys({
   apiURL: Joi.string(),
-  environment: Joi.string()
+  environment: Joi.string(),
+  loggingEnabled: Joi.boolean()
 });
 
 export function validateConfig(config) {
@@ -23,3 +24,4 @@ const config = validateConfig(unvalidatedConfig);
 export const apiURL = config.apiURL;
 export const environment = config.environment;
 export const appName = "Recipe App";
+export const loggingEnabled = config.loggingEnabled;
