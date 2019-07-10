@@ -9,9 +9,9 @@ clean:
 
 test: node_modules
 ifdef CI
-	npx jest
+	ENVIRONMENT=test npx jest
 else
-	npm test
+	ENVIRONMENT=test npm test
 endif
 
 lint: node_modules
