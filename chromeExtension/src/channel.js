@@ -2,12 +2,12 @@ import { APP_URL } from "./config/index.js";
 import * as popup from "./popup.js";
 import { debug, error } from "./logging.js";
 import { APP_LOADED } from "./appEventTypes.js";
-import { identifyRecipeUrl } from "./actions";
+import { identifyRecipeUrl } from "./actions.js";
 
-export function buildChannel({
+export async function buildChannel({
   getIframeWindow = popup.getIframeWindow,
   location = window.location
-}) {
+} = {}) {
   let started = false;
   const iframeWindow = getIframeWindow();
   const listeners = [];
@@ -25,6 +25,7 @@ export function buildChannel({
     }
   });
 
+  await waitForWindowToLoad(iframeWindow);
   iframeWindow.postMessage(identifyRecipeUrl(location.href), APP_URL);
 
   return {
@@ -39,4 +40,22 @@ export function buildChannel({
       listeners.push(listener);
     }
   };
+}
+
+function waitForWindowToLoad(windowObject) {
+  return new Promise((resolve, reject) => {
+    const interval = setInterval(() => {
+      try {
+        const targetHref = windowObject.location.href;
+        debug("href still accessible:", targetHref);
+      } catch (error) {
+        if (error.toString().includes("cross-origin frame")) {
+          clearInterval(interval);
+          resolve();
+          return;
+        }
+        throw error;
+      }
+    }, 100);
+  });
 }

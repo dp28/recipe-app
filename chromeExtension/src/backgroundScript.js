@@ -1,13 +1,14 @@
 import { togglePopup } from "./actions.js";
+import { debug } from "./logging.js";
 
 export function main() {
-  console.log("Loaded!");
+  debug("Loaded!");
   registerListeners();
 }
 
 function registerListeners() {
   chrome.browserAction.onClicked.addListener(tab => {
-    console.log("Clicked - tab:", tab.id);
+    debug("Clicked - tab:", tab.id);
     chrome.tabs.sendMessage(tab.id, togglePopup());
   });
 }

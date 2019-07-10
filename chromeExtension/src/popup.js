@@ -1,4 +1,6 @@
+import { APP_URL } from "./config/index.js";
 const PopupId = "recipe-app-popup-parent";
+const IframeId = "recipe-app-popup-iframe";
 
 const popupCSS = `
   all: initial;
@@ -29,21 +31,30 @@ export function togglePopup() {
   style.display = isHidden ? "block" : "none";
 }
 
+let iframeWindow = null;
+
+export function getIframeWindow() {
+  return iframeWindow;
+}
+
 function getPopup() {
   const popup = document.getElementById(PopupId);
   if (popup) {
     return popup;
   }
-  return insertPopup();
+  const newPopup = insertPopup();
+  iframeWindow = document.getElementById(IframeId).contentWindow;
+  return newPopup;
 }
 
-function insertPopup(src = "https://localhost:3001/as_browser_extension") {
+function insertPopup() {
   const popup = document.createElement("div");
   popup.id = PopupId;
   popup.style.cssText = popupCSS;
 
   const iframe = document.createElement("iframe");
-  iframe.src = src;
+  iframe.src = APP_URL;
+  iframe.id = IframeId;
   iframe.style.cssText = iframeCSS;
   popup.appendChild(iframe);
   document.body.appendChild(popup);

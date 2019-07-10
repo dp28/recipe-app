@@ -6,6 +6,7 @@ import { App } from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./state/store";
 import { requestApiMetadata } from "./actions";
+import { enableIframeCommunication } from "./effects/iframeCommunication";
 
 ReactDOM.render(
   <Provider store={store}>
@@ -19,4 +20,5 @@ ReactDOM.render(
 // Learn more about service workers: https://bit.ly/CRA-PWA
 serviceWorker.unregister();
 
+enableIframeCommunication();
 store.dispatch(requestApiMetadata());
