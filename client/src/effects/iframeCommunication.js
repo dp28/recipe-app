@@ -1,15 +1,23 @@
 import { store } from "../state/store";
 
-export function enableIframeCommunication() {
-  if (window.location === window.parent.location) {
+export function enableIframeCommunication(
+  windowObject = window,
+  dispatch = store.dispatch
+) {
+  if (windowObject.location === windowObject.parent.location) {
     console.debug("Not in an iframe - skipping iframe communication");
     return;
   }
 
-  window.addEventListener("message", action => {
-    console.debug("Received message:", action);
-    // store.dispatch(action);
-  });
+  windowObject.addEventListener("message", handleExtensionMessage(dispatch));
+}
 
-  // store.subscribe(); // or register some way of sending actions? middleware? saga?
+export function handleExtensionMessage(dispatch) {
+  return messageEvent => {
+    const action = messageEvent.data;
+    if (action.source === "RECIPE_CHROME_EXTENSION") {
+      console.debug("Received action from extension:", action);
+      dispatch(action);
+    }
+  };
 }
