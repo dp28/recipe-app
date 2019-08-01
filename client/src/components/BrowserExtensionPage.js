@@ -1,5 +1,14 @@
 import React from "react";
+import { connect } from "react-redux";
 
-export function BrowserExtensionPage() {
-  return <h1>Hello, world!</h1>;
+export function UnconnectedBrowserExtensionPage({ recipe }) {
+  return <div>Recipe URL: {recipe.url}</div>;
 }
+
+export function mapStateToProps(state) {
+  return { recipe: state.recipe };
+}
+
+export const BrowserExtensionPage = connect(mapStateToProps)(
+  UnconnectedBrowserExtensionPage
+);
