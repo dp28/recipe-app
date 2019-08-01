@@ -6,7 +6,8 @@ import {
   updateIngredients,
   combineIngredients,
   addCategory,
-  addToCategory
+  addToCategory,
+  setRecipeUrl
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -18,7 +19,8 @@ describe("reducer", () => {
       expect(initialState).toEqual({
         meta: { api: { loading: true } },
         ingredients: [],
-        categories: []
+        categories: [],
+        recipe: {}
       });
     });
   });
@@ -145,6 +147,14 @@ describe("reducer", () => {
       expect(state.ingredients).toEqual([
         { ...ingredient, categoryName: name }
       ]);
+    });
+  });
+
+  describe("with a setRecipeUrl action", () => {
+    it("should set the url of the current recipe", () => {
+      const url = "https://example.com";
+      const state = reducer(initialState, setRecipeUrl(url));
+      expect(state.recipe.url).toEqual(url);
     });
   });
 });

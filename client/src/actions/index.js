@@ -6,6 +6,9 @@ export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
 
+// Extension action types
+export const SET_RECIPE_URL = "SET_RECIPE_URL";
+
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
 export const apiMetadataLoaded = ({ version, environment, deployedAt }) => ({
@@ -35,4 +38,9 @@ export const addToCategory = ({ ingredient, categoryName }) => ({
   type: ADD_TO_CATEGORY,
   ingredient,
   categoryName
+});
+
+export const setRecipeUrl = url => ({
+  type: SET_RECIPE_URL,
+  url
 });
