@@ -21,13 +21,28 @@ describe("enableIframeCommunication", () => {
     it("should add an event listener", () => {
       const mockWindow = {
         location: { href: "fake" },
-        parent: { location: { href: "other_fake" } },
+        parent: { location: { href: "other_fake" }, postMessage: jest.fn() },
         addEventListener: jest.fn()
       };
       enableIframeCommunication(mockWindow);
       expect(mockWindow.addEventListener).toHaveBeenCalledWith(
         "message",
         expect.any(Function)
+      );
+    });
+    it("should post a loaded message to the extension", () => {
+      const mockWindow = {
+        location: { href: "fake" },
+        parent: { location: { href: "other_fake" }, postMessage: jest.fn() },
+        addEventListener: jest.fn()
+      };
+      enableIframeCommunication(mockWindow);
+      expect(mockWindow.parent.postMessage).toHaveBeenCalledWith(
+        {
+          type: "APP_LOADED",
+          source: "RECIPE_APP"
+        },
+        "*"
       );
     });
   });
@@ -41,6 +56,7 @@ describe("handleExtensionMessage", () => {
       expect(dispatch).not.toHaveBeenCalled();
     });
   });
+
   describe("if the message is from the browser extension", () => {
     it("should dispatch the data payload to the store", () => {
       const dispatch = jest.fn();

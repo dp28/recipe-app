@@ -11,6 +11,11 @@ export function enableIframeCommunication(
   }
 
   windowObject.addEventListener("message", handleExtensionMessage(dispatch));
+  windowObject.parent.postMessage(
+    { type: "APP_LOADED", source: "RECIPE_APP" },
+    "*"
+  );
+  debug("Ready to receive messages");
 }
 
 export function handleExtensionMessage(dispatch) {

@@ -17,7 +17,11 @@ function registerListeners() {
       case TOGGLE_POPUP:
         togglePopup();
         if (!channel) {
-          channel = buildChannel();
+          buildChannel()
+            .then(c => {
+              channel = c;
+            })
+            .then(() => channel.addListener(console.log));
         }
         return;
       default:

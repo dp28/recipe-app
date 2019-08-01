@@ -2,11 +2,11 @@ import { APP_URL } from "./config/index.js";
 import * as popup from "./popup.js";
 import { debug, error } from "./logging.js";
 import { APP_LOADED } from "./appEventTypes.js";
-import { identifyRecipeUrl } from "./actions.js";
+import { setRecipeUrl } from "./actions.js";
 
 export async function buildChannel({
   getIframeWindow = popup.getIframeWindow,
-  location = window.location
+  currentWindow = window
 } = {}) {
   let started = false;
   const iframeWindow = getIframeWindow();
@@ -16,24 +16,17 @@ export async function buildChannel({
     throw new Error("iframe not yet loaded");
   }
 
-  iframeWindow.addEventListener("message", event => {
-    debug("Received message", event);
-    if (event.type === APP_LOADED) {
-      started = true;
-    } else {
-      listeners.forEach(listener => listener(event));
-    }
+  await waitForAppLoadedMessage(currentWindow);
+
+  currentWindow.addEventListener("message", event => {
+    listeners.forEach(listener => listener(event.data));
   });
 
-  await waitForWindowToLoad(iframeWindow);
-  iframeWindow.postMessage(identifyRecipeUrl(location.href), APP_URL);
+  debug("Sending startup message");
+  iframeWindow.postMessage(setRecipeUrl(currentWindow.location.href), APP_URL);
 
   return {
     sendAction(action) {
-      debug("Sending action", action);
-      if (!started) {
-        throw new Error("app not yet ready to receive messages");
-      }
       iframeWindow.postMessage(action, APP_URL);
     },
     addListener(listener) {
@@ -42,20 +35,23 @@ export async function buildChannel({
   };
 }
 
-function waitForWindowToLoad(windowObject) {
+function waitForAppLoadedMessage(windowObject) {
   return new Promise((resolve, reject) => {
-    const interval = setInterval(() => {
-      try {
-        const targetHref = windowObject.location.href;
-        debug("href still accessible:", targetHref);
-      } catch (error) {
-        if (error.toString().includes("cross-origin frame")) {
-          clearInterval(interval);
-          resolve();
-          return;
-        }
-        throw error;
+    function listenForAppLoaded(event) {
+      debug("Received message", event);
+      if (event.data.type === APP_LOADED) {
+        windowObject.removeEventListener("message", listenForAppLoaded);
+        clearTimeout(killAfterTimeout);
+        resolve();
       }
-    }, 100);
+    }
+
+    function killAfterTimeout() {
+      windowObject.removeEventListener("message", listenForAppLoaded);
+      reject(new Error("Timed out waiting for app startup"));
+    }
+
+    windowObject.addEventListener("message", listenForAppLoaded);
+    setTimeout(killAfterTimeout, 5000);
   });
 }
