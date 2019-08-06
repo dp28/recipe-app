@@ -88,10 +88,21 @@ describe("buildChannel", () => {
         it("should relay the message to the listeners", async () => {
           const { channel, mockCurrentWindow } = await buildStartedChannel();
           const listener = jest.fn();
-          const message = { type: "MOCK_MESSAGE" };
+          const message = { type: "MOCK_MESSAGE", source: "RECIPE_APP" };
           channel.addListener(listener);
           mockCurrentWindow.dispatchMockEvent(message);
           expect(listener).toHaveBeenCalledWith(message);
+        });
+
+        describe("if the message does not have a recognised source", () => {
+          it("should not call the listeners", async () => {
+            const { channel, mockCurrentWindow } = await buildStartedChannel();
+            const listener = jest.fn();
+            const message = { type: "MOCK_MESSAGE" };
+            channel.addListener(listener);
+            mockCurrentWindow.dispatchMockEvent(message);
+            expect(listener).not.toHaveBeenCalled();
+          });
         });
       });
     });

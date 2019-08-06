@@ -5,7 +5,10 @@ export const UPDATE_INGREDIENTS = "UPDATE_INGREDIENTS";
 export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
+
+// Actions sent to extension
 export const REQUEST_TITLE = "REQUEST_TITLE";
+export const APP_LOADED = "APP_LOADED";
 
 // Extension action types
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
@@ -46,6 +49,17 @@ export const setRecipeUrl = url => ({
   url
 });
 
+const BROWSER_EXTENSION_DESTINATION = "BROWSER_EXTENSION";
+const SOURCE = "RECIPE_APP";
+
 export const requestTitle = () => ({
-  type: REQUEST_TITLE
+  type: REQUEST_TITLE,
+  destination: BROWSER_EXTENSION_DESTINATION,
+  source: SOURCE
+});
+
+export const appLoaded = () => ({
+  type: APP_LOADED,
+  destination: BROWSER_EXTENSION_DESTINATION,
+  source: SOURCE
 });

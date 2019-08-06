@@ -19,7 +19,10 @@ export async function buildChannel({
   await waitForAppLoadedMessage(currentWindow);
 
   currentWindow.addEventListener("message", event => {
-    listeners.forEach(listener => listener(event.data));
+    if (event.data && event.data.source === "RECIPE_APP") {
+      debug("Received action", event.data);
+      listeners.forEach(listener => listener(event.data));
+    }
   });
 
   debug("Sending startup message");
