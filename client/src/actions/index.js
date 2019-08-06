@@ -12,6 +12,7 @@ export const APP_LOADED = "APP_LOADED";
 
 // Extension action types
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
+export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
 
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
@@ -47,6 +48,11 @@ export const addToCategory = ({ ingredient, categoryName }) => ({
 export const setRecipeUrl = url => ({
   type: SET_RECIPE_URL,
   url
+});
+
+export const setRecipeTitle = title => ({
+  type: SET_RECIPE_TITLE,
+  title
 });
 
 const BROWSER_EXTENSION_DESTINATION = "BROWSER_EXTENSION";

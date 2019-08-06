@@ -8,7 +8,8 @@ import {
   addCategory,
   addToCategory,
   setRecipeUrl,
-  requestTitle
+  requestTitle,
+  setRecipeTitle
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -157,6 +158,19 @@ describe("reducer", () => {
       const url = "https://example.com";
       const state = reducer(initialState, setRecipeUrl(url));
       expect(state.recipe.url).toEqual(url);
+    });
+  });
+
+  describe("with a setRecipeTitle action", () => {
+    it("should set the title of the current recipe", () => {
+      const title = "my great recipe";
+      const state = reducer(initialState, setRecipeTitle(title));
+      expect(state.recipe.title).toEqual(title);
+    });
+
+    it("should set waitingForTitle to true", () => {
+      const state = reducer(initialState, setRecipeTitle("title"));
+      expect(state.browserExtension.waitingForTitle).toEqual(false);
     });
   });
 

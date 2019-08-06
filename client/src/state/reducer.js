@@ -8,7 +8,8 @@ import {
   ADD_CATEGORY,
   ADD_TO_CATEGORY,
   SET_RECIPE_URL,
-  REQUEST_TITLE
+  REQUEST_TITLE,
+  SET_RECIPE_TITLE
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -97,6 +98,8 @@ function recipeReducer(recipe = {}, action) {
   switch (action.type) {
     case SET_RECIPE_URL:
       return { ...recipe, url: action.url };
+    case SET_RECIPE_TITLE:
+      return { ...recipe, title: action.title };
     default:
       return recipe;
   }
@@ -106,6 +109,8 @@ function browserExtensionReducer(state = { waitingForTitle: false }, action) {
   switch (action.type) {
     case REQUEST_TITLE:
       return { ...state, waitingForTitle: true };
+    case SET_RECIPE_TITLE:
+      return { ...state, waitingForTitle: false };
     default:
       return state;
   }

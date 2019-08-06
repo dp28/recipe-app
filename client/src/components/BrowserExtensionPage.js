@@ -27,7 +27,12 @@ function RecipeTitle({ title, requestTitle, waitingForTitle }) {
     return <Instruction>Click on the recipe title</Instruction>;
   }
   if (title) {
-    return <h1>{title}</h1>;
+    return (
+      <div>
+        <h3>{title}</h3>
+        <Button onClick={requestTitle}>Change title</Button>
+      </div>
+    );
   }
   return (
     <div>

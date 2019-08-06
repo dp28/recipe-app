@@ -16,6 +16,6 @@ export const setRecipeUrl = url => ({
 
 export const setRecipeTitle = title => ({
   source: SOURCE,
-  type: SET_RECIPE_URL,
+  type: SET_RECIPE_TITLE,
   title
 });
