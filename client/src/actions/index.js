@@ -7,12 +7,14 @@ export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
 
 // Actions sent to extension
-export const REQUEST_TITLE = "REQUEST_TITLE";
 export const APP_LOADED = "APP_LOADED";
+export const REQUEST_TITLE = "REQUEST_TITLE";
+export const REQUEST_SERVINGS = "REQUEST_SERVINGS";
 
 // Extension action types
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
 export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
+export const SET_RECIPE_SERVINGS = "SET_RECIPE_SERVINGS";
 
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
@@ -55,8 +57,19 @@ export const setRecipeTitle = title => ({
   title
 });
 
+export const setRecipeServings = servings => ({
+  type: SET_RECIPE_SERVINGS,
+  servings
+});
+
 const BROWSER_EXTENSION_DESTINATION = "BROWSER_EXTENSION";
 const SOURCE = "RECIPE_APP";
+
+export const appLoaded = () => ({
+  type: APP_LOADED,
+  destination: BROWSER_EXTENSION_DESTINATION,
+  source: SOURCE
+});
 
 export const requestTitle = () => ({
   type: REQUEST_TITLE,
@@ -64,8 +77,8 @@ export const requestTitle = () => ({
   source: SOURCE
 });
 
-export const appLoaded = () => ({
-  type: APP_LOADED,
+export const requestServings = () => ({
+  type: REQUEST_SERVINGS,
   destination: BROWSER_EXTENSION_DESTINATION,
   source: SOURCE
 });

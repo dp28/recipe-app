@@ -9,7 +9,9 @@ import {
   addToCategory,
   setRecipeUrl,
   requestTitle,
-  setRecipeTitle
+  setRecipeTitle,
+  requestServings,
+  setRecipeServings
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -23,7 +25,7 @@ describe("reducer", () => {
         ingredients: [],
         categories: [],
         recipe: {},
-        browserExtension: { waitingForTitle: false }
+        browserExtension: { waitingFor: null }
       });
     });
   });
@@ -161,6 +163,13 @@ describe("reducer", () => {
     });
   });
 
+  describe("with a requestTitle action", () => {
+    it("should set waitingFor to 'title'", () => {
+      const state = reducer(initialState, requestTitle());
+      expect(state.browserExtension.waitingFor).toEqual("title");
+    });
+  });
+
   describe("with a setRecipeTitle action", () => {
     it("should set the title of the current recipe", () => {
       const title = "my great recipe";
@@ -168,16 +177,42 @@ describe("reducer", () => {
       expect(state.recipe.title).toEqual(title);
     });
 
-    it("should set waitingForTitle to true", () => {
+    it("should set waitingFor to null", () => {
       const state = reducer(initialState, setRecipeTitle("title"));
-      expect(state.browserExtension.waitingForTitle).toEqual(false);
+      expect(state.browserExtension.waitingFor).toEqual(null);
     });
   });
 
-  describe("with a requestTitle action", () => {
-    it("should set waitingForTitle to true", () => {
-      const state = reducer(initialState, requestTitle());
-      expect(state.browserExtension.waitingForTitle).toEqual(true);
+  describe("with a requestServings action", () => {
+    it("should set waitingFor to 'servings'", () => {
+      const state = reducer(initialState, requestServings());
+      expect(state.browserExtension.waitingFor).toEqual("servings");
+    });
+  });
+
+  describe("with a setRecipeServings action", () => {
+    it("should set the servings of the current recipe to a number", () => {
+      const state = reducer(initialState, setRecipeServings("4"));
+      expect(state.recipe.servings).toEqual(4);
+    });
+
+    it("should set waitingFor to null", () => {
+      const state = reducer(initialState, setRecipeServings("4"));
+      expect(state.browserExtension.waitingFor).toEqual(null);
+    });
+
+    describe("if there is text and numbers in the serving", () => {
+      it("should just use the numbers", () => {
+        const state = reducer(initialState, setRecipeServings("Serves 40"));
+        expect(state.recipe.servings).toEqual(40);
+      });
+    });
+
+    describe("if there are no numbers in the serving", () => {
+      it("should return undefined", () => {
+        const state = reducer(initialState, setRecipeServings("something"));
+        expect(state.recipe.servings).toEqual(undefined);
+      });
     });
   });
 });

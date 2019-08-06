@@ -1,5 +1,11 @@
 import { togglePopup } from "./popup.js";
-import { TOGGLE_POPUP, REQUEST_TITLE, setRecipeTitle } from "./actions.js";
+import {
+  TOGGLE_POPUP,
+  REQUEST_TITLE,
+  REQUEST_SERVINGS,
+  setRecipeTitle,
+  setRecipeServings
+} from "./actions.js";
 import { debug } from "./logging.js";
 import { buildChannel } from "./channel.js";
 
@@ -39,6 +45,8 @@ function handleAppAction(channel) {
     switch (action.type) {
       case REQUEST_TITLE:
         return startSelectingTitle(channel);
+      case REQUEST_SERVINGS:
+        return startSelectingServings(channel);
       default:
         return;
     }
@@ -50,13 +58,29 @@ function startSelectingTitle(channel, root = document) {
   const updateTitle = selectTitle(channel);
   root.addEventListener("mouseover", highlightTarget);
   root.addEventListener("mouseout", restoreTarget);
-  root.addEventListener("click", updateTitle);
+  root.addEventListener("click", updateTitle, { capture: true });
 
   root.addEventListener("click", function removeListeners() {
     debug("Removing listeners");
     root.removeEventListener("mouseover", highlightTarget);
     root.removeEventListener("mouseout", restoreTarget);
     root.removeEventListener("click", updateTitle, { capture: true });
+    root.removeEventListener("click", removeListeners);
+  });
+}
+
+function startSelectingServings(channel, root = document) {
+  debug("Selecting servings");
+  const updateServings = selectServings(channel);
+  root.addEventListener("mouseover", highlightTarget);
+  root.addEventListener("mouseout", restoreTarget);
+  root.addEventListener("click", updateServings, { capture: true });
+
+  root.addEventListener("click", function removeListeners() {
+    debug("Removing listeners");
+    root.removeEventListener("mouseover", highlightTarget);
+    root.removeEventListener("mouseout", restoreTarget);
+    root.removeEventListener("click", updateServings, { capture: true });
     root.removeEventListener("click", removeListeners);
   });
 }
@@ -85,6 +109,15 @@ function selectTitle(channel) {
     restoreTarget(event);
     const title = removeExtraWhitespace(event.target.textContent);
     channel.sendAction(setRecipeTitle(title));
+  };
+}
+
+function selectServings(channel) {
+  return event => {
+    event.preventDefault();
+    restoreTarget(event);
+    const servings = removeExtraWhitespace(event.target.textContent);
+    channel.sendAction(setRecipeServings(servings));
   };
 }
 

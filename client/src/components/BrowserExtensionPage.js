@@ -8,7 +8,9 @@ import * as actions from "../actions";
 export function UnconnectedBrowserExtensionPage({
   recipe,
   waitingForTitle,
-  requestTitle
+  waitingForServings,
+  requestTitle,
+  requestServings
 }) {
   return (
     <div>
@@ -18,6 +20,11 @@ export function UnconnectedBrowserExtensionPage({
         title={recipe.title}
       />
       Recipe URL: {recipe.url}
+      <RecipeServings
+        requestServings={requestServings}
+        waitingForServings={waitingForServings}
+        servings={recipe.servings}
+      />
     </div>
   );
 }
@@ -36,7 +43,26 @@ function RecipeTitle({ title, requestTitle, waitingForTitle }) {
   }
   return (
     <div>
-      <Button onClick={requestTitle}>Set Title</Button>
+      <Button onClick={requestTitle}>Set title</Button>
+    </div>
+  );
+}
+
+function RecipeServings({ servings, requestServings, waitingForServings }) {
+  if (waitingForServings) {
+    return <Instruction>Click on the recipe servings</Instruction>;
+  }
+  if (servings) {
+    return (
+      <div>
+        Servings: {servings}
+        <Button onClick={requestServings}>Change servings</Button>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Button onClick={requestServings}>Set servings</Button>
     </div>
   );
 }
@@ -56,13 +82,15 @@ function Instruction({ children }) {
 export function mapStateToProps(state) {
   return {
     recipe: state.recipe,
-    waitingForTitle: state.browserExtension.waitingForTitle
+    waitingForTitle: state.browserExtension.waitingFor === "title",
+    waitingForServings: state.browserExtension.waitingFor === "servings"
   };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
-    requestTitle: () => dispatch(actions.requestTitle())
+    requestTitle: () => dispatch(actions.requestTitle()),
+    requestServings: () => dispatch(actions.requestServings())
   };
 }
 

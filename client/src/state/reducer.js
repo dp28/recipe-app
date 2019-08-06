@@ -9,7 +9,9 @@ import {
   ADD_TO_CATEGORY,
   SET_RECIPE_URL,
   REQUEST_TITLE,
-  SET_RECIPE_TITLE
+  SET_RECIPE_TITLE,
+  REQUEST_SERVINGS,
+  SET_RECIPE_SERVINGS
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -100,17 +102,24 @@ function recipeReducer(recipe = {}, action) {
       return { ...recipe, url: action.url };
     case SET_RECIPE_TITLE:
       return { ...recipe, title: action.title };
+    case SET_RECIPE_SERVINGS:
+      const digits = action.servings.match(/(\d+)/);
+      return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
     default:
       return recipe;
   }
 }
 
-function browserExtensionReducer(state = { waitingForTitle: false }, action) {
+function browserExtensionReducer(state = { waitingFor: null }, action) {
   switch (action.type) {
     case REQUEST_TITLE:
-      return { ...state, waitingForTitle: true };
+      return { ...state, waitingFor: "title" };
     case SET_RECIPE_TITLE:
-      return { ...state, waitingForTitle: false };
+      return { ...state, waitingFor: null };
+    case REQUEST_SERVINGS:
+      return { ...state, waitingFor: "servings" };
+    case SET_RECIPE_SERVINGS:
+      return { ...state, waitingFor: null };
     default:
       return state;
   }
