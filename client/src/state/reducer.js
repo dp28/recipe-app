@@ -7,7 +7,8 @@ import {
   COMBINE_INGREDIENTS,
   ADD_CATEGORY,
   ADD_TO_CATEGORY,
-  SET_RECIPE_URL
+  SET_RECIPE_URL,
+  REQUEST_TITLE
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -18,7 +19,8 @@ export const reducer = combineReducers({
   meta: metadataReducer,
   ingredients: ingredientsReducer,
   categories: categoriesReducer,
-  recipe: recipeReducer
+  recipe: recipeReducer,
+  browserExtension: browserExtensionReducer
 });
 
 function apiMetadataReducer(state = { loading: true }, action) {
@@ -97,5 +99,14 @@ function recipeReducer(recipe = {}, action) {
       return { ...recipe, url: action.url };
     default:
       return recipe;
+  }
+}
+
+function browserExtensionReducer(state = { waitingForTitle: false }, action) {
+  switch (action.type) {
+    case REQUEST_TITLE:
+      return { ...state, waitingForTitle: true };
+    default:
+      return state;
   }
 }

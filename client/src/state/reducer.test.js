@@ -7,7 +7,8 @@ import {
   combineIngredients,
   addCategory,
   addToCategory,
-  setRecipeUrl
+  setRecipeUrl,
+  requestTitle
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -20,7 +21,8 @@ describe("reducer", () => {
         meta: { api: { loading: true } },
         ingredients: [],
         categories: [],
-        recipe: {}
+        recipe: {},
+        browserExtension: { waitingForTitle: false }
       });
     });
   });
@@ -155,6 +157,13 @@ describe("reducer", () => {
       const url = "https://example.com";
       const state = reducer(initialState, setRecipeUrl(url));
       expect(state.recipe.url).toEqual(url);
+    });
+  });
+
+  describe("with a requestTitle action", () => {
+    it("should set waitingForTitle to true", () => {
+      const state = reducer(initialState, requestTitle());
+      expect(state.browserExtension.waitingForTitle).toEqual(true);
     });
   });
 });

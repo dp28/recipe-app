@@ -5,6 +5,7 @@ export const UPDATE_INGREDIENTS = "UPDATE_INGREDIENTS";
 export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
+export const REQUEST_TITLE = "REQUEST_TITLE";
 
 // Extension action types
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
@@ -43,4 +44,8 @@ export const addToCategory = ({ ingredient, categoryName }) => ({
 export const setRecipeUrl = url => ({
   type: SET_RECIPE_URL,
   url
+});
+
+export const requestTitle = () => ({
+  type: REQUEST_TITLE
 });

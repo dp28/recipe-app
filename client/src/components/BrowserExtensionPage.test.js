@@ -1,8 +1,10 @@
 import React from "react";
 import {
   UnconnectedBrowserExtensionPage,
-  mapStateToProps
+  mapStateToProps,
+  mapDispatchToProps
 } from "./BrowserExtensionPage";
+import * as actions from "../actions";
 import ShallowRenderer from "react-test-renderer/shallow";
 
 it("renders without crashing", () => {
@@ -14,6 +16,24 @@ it("renders without crashing", () => {
 describe("mapStateToProps", () => {
   it("extracts the current recipe from the state", () => {
     const recipe = { url: "fake" };
-    expect(mapStateToProps({ recipe }).recipe).toEqual(recipe);
+    expect(mapStateToProps({ recipe, browserExtension: {} }).recipe).toEqual(
+      recipe
+    );
+  });
+
+  it("extracts waitingForTitle from the state", () => {
+    expect(
+      mapStateToProps({ browserExtension: { waitingForTitle: true } })
+        .waitingForTitle
+    ).toEqual(true);
+  });
+});
+
+describe("mapDispatchToProps", () => {
+  it("should return a requestTitle action handler", () => {
+    const dispatch = jest.fn();
+    const { requestTitle } = mapDispatchToProps(dispatch);
+    requestTitle();
+    expect(dispatch).toHaveBeenCalledWith(actions.requestTitle());
   });
 });
