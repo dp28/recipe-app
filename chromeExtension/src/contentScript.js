@@ -1,11 +1,5 @@
 import { togglePopup } from "./popup.js";
-import {
-  TOGGLE_POPUP,
-  REQUEST_TITLE,
-  REQUEST_SERVINGS,
-  setRecipeTitle,
-  setRecipeServings
-} from "./actions.js";
+import { TOGGLE_POPUP, REQUEST_TEXT, textResponse } from "./messages.js";
 import { debug } from "./logging.js";
 import { buildChannel } from "./channel.js";
 import { searchForText } from "./documentSearch.js";
@@ -44,26 +38,17 @@ async function setupMessaging() {
 function handleAppAction(channel) {
   return action => {
     switch (action.type) {
-      case REQUEST_TITLE:
-        return startSelectingTitle(channel);
-      case REQUEST_SERVINGS:
-        return startSelectingServings(channel);
+      case REQUEST_TEXT:
+        return startSelectingText(channel);
       default:
         return;
     }
   };
 }
 
-function startSelectingTitle(channel) {
-  debug("Selecting title");
-  searchForText(title => {
-    channel.sendAction(setRecipeTitle(title));
-  });
-}
-
-function startSelectingServings(channel) {
-  debug("Selecting servings");
-  searchForText(servings => {
-    channel.sendAction(setRecipeServings(servings));
+function startSelectingText(channel) {
+  debug("Selecting text");
+  searchForText(text => {
+    channel.sendAction(textResponse(text));
   });
 }

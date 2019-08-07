@@ -2,7 +2,7 @@ import { APP_URL } from "./config/index.js";
 import * as popup from "./popup.js";
 import { debug, error } from "./logging.js";
 import { APP_LOADED } from "./appEventTypes.js";
-import { setRecipeUrl } from "./actions.js";
+import { registerUrl } from "./messages.js";
 
 export async function buildChannel({
   getIframeWindow = popup.getIframeWindow,
@@ -20,13 +20,13 @@ export async function buildChannel({
 
   currentWindow.addEventListener("message", event => {
     if (event.data && event.data.source === "RECIPE_APP") {
-      debug("Received action", event.data);
+      debug("Received message", event.data);
       listeners.forEach(listener => listener(event.data));
     }
   });
 
   debug("Sending startup message");
-  iframeWindow.postMessage(setRecipeUrl(currentWindow.location.href), APP_URL);
+  iframeWindow.postMessage(registerUrl(currentWindow.location.href), APP_URL);
 
   return {
     sendAction(action) {
@@ -41,7 +41,7 @@ export async function buildChannel({
 function waitForAppLoadedMessage(windowObject) {
   return new Promise((resolve, reject) => {
     function listenForAppLoaded(event) {
-      debug("Received message", event);
+      debug("Received message while waiting for startup", event);
       if (event.data.type === APP_LOADED) {
         windowObject.removeEventListener("message", listenForAppLoaded);
         clearTimeout(killAfterTimeout);

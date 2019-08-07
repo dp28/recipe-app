@@ -1,4 +1,4 @@
-import { togglePopup } from "./actions.js";
+import { togglePopup } from "./messages.js";
 import { debug } from "./logging.js";
 
 export function main() {

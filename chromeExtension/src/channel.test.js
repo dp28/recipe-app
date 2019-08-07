@@ -1,7 +1,7 @@
 import { APP_URL } from "./config/index.js";
 import { buildChannel } from "./channel.js";
 import { APP_LOADED } from "./appEventTypes.js";
-import { setRecipeUrl } from "./actions";
+import { registerUrl } from "./messages";
 
 const mockLocation = { href: "http://example.com" };
 
@@ -65,7 +65,7 @@ describe("buildChannel", () => {
       });
       mockCurrentWindow.dispatchMockEvent({ type: APP_LOADED });
       const channel = await buildingPromise;
-      const action = setRecipeUrl(mockIframeWindow.location.href);
+      const action = registerUrl(mockIframeWindow.location.href);
       expect(mockIframeWindow.postMessage).toHaveBeenCalledWith(
         action,
         APP_URL
