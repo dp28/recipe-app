@@ -6,7 +6,7 @@ import { App } from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./state/store";
 import { requestApiMetadata } from "./actions";
-import { enableIframeCommunication } from "./effects/iframeCommunication";
+import { enableIframeCommunication } from "./extensionInterface/iframeCommunication";
 
 ReactDOM.render(
   <Provider store={store}>

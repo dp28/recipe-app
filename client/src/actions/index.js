@@ -6,12 +6,10 @@ export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
 
-// Actions sent to extension
 export const APP_LOADED = "APP_LOADED";
 export const REQUEST_TITLE = "REQUEST_TITLE";
 export const REQUEST_SERVINGS = "REQUEST_SERVINGS";
 
-// Extension action types
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
 export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
 export const SET_RECIPE_SERVINGS = "SET_RECIPE_SERVINGS";

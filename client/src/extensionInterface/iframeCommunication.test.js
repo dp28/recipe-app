@@ -5,6 +5,13 @@ import {
 } from "./iframeCommunication";
 import { appLoaded } from "../actions";
 
+function buildMockStore({ state = {} } = {}) {
+  return {
+    getState: jest.fn(() => state),
+    dispatch: jest.fn()
+  };
+}
+
 describe("enableIframeCommunication", () => {
   describe("when the window is the parent", () => {
     it("should not add any event listeners", () => {
@@ -32,6 +39,7 @@ describe("enableIframeCommunication", () => {
         expect.any(Function)
       );
     });
+
     it("should post a loaded message to the extension", () => {
       const mockWindow = {
         location: { href: "fake" },
@@ -48,23 +56,31 @@ describe("enableIframeCommunication", () => {
 });
 
 describe("handleExtensionMessage", () => {
-  describe("if the message is not from the browser extension", () => {
+  it("should send the message data and store state to the transform function", () => {
+    const state = { a: 1 };
+    const store = buildMockStore({ state });
+    const transform = jest.fn();
+    const data = { b: 2 };
+    handleExtensionMessage(store, transform)({ data });
+    expect(transform).toHaveBeenCalledWith(state, data);
+  });
+
+  describe("if the message is transformed to null", () => {
     it("should not dispatch anything to the store", () => {
-      const dispatch = jest.fn();
-      handleExtensionMessage(dispatch)({ data: { type: "FAKE" } });
-      expect(dispatch).not.toHaveBeenCalled();
+      const store = buildMockStore();
+      handleExtensionMessage(store, () => null)({ data: {} });
+      expect(store.dispatch).not.toHaveBeenCalled();
     });
   });
 
-  describe("if the message is from the browser extension", () => {
-    it("should dispatch the data payload to the store", () => {
-      const dispatch = jest.fn();
-      const data = {
-        type: "FAKE",
-        source: "RECIPE_CHROME_EXTENSION"
+  describe("if the message is transformed to an action", () => {
+    it("should dispatch the transformed action to the store", () => {
+      const action = {
+        type: "FAKE"
       };
-      handleExtensionMessage(dispatch)({ data });
-      expect(dispatch).toHaveBeenCalledWith(data);
+      const store = buildMockStore();
+      handleExtensionMessage(store, () => action)({ data: {} });
+      expect(store.dispatch).toHaveBeenCalledWith(action);
     });
   });
 });
@@ -73,34 +89,38 @@ describe("iframeCommunicationReduxMiddleware", () => {
   it("should call next with the action", () => {
     const next = jest.fn();
     const action = { type: "FAKE_ACTION" };
-    iframeCommunicationReduxMiddleware({ parent: {} })({})(next)(action);
+    iframeCommunicationReduxMiddleware(() => null, { parent: {} })({})(next)(
+      action
+    );
     expect(next).toHaveBeenCalledWith(action);
   });
 
-  describe("when a normal action is passed", () => {
+  describe("when the transform function returns null for the action", () => {
     it("should not send a message to the parent window", () => {
       const mockWindow = {
         parent: { postMessage: jest.fn() }
       };
-      iframeCommunicationReduxMiddleware(mockWindow)({})(jest.fn())({
-        type: "FAKE_ACTION"
-      });
+      iframeCommunicationReduxMiddleware(() => null, mockWindow)({})(jest.fn())(
+        {
+          type: "FAKE_ACTION"
+        }
+      );
       expect(mockWindow.parent.postMessage).not.toHaveBeenCalled();
     });
   });
 
-  describe("when an action has a destination of BROWSER_EXTENSION", () => {
-    const action = {
-      type: "FAKE_ACTION",
-      destination: "BROWSER_EXTENSION"
-    };
+  describe("when the transform function returns an object", () => {
+    const action = { type: "FAKE_ACTION" };
+    const transform = () => action;
 
-    it("should send the action to the parent window", () => {
+    it("should send the object to the parent window", () => {
       const mockWindow = {
         location: { href: "fake" },
         parent: { postMessage: jest.fn(), location: { href: "other" } }
       };
-      iframeCommunicationReduxMiddleware(mockWindow)({})(jest.fn())(action);
+      iframeCommunicationReduxMiddleware(transform, mockWindow)({})(jest.fn())(
+        action
+      );
       expect(mockWindow.parent.postMessage).toHaveBeenCalledWith(action, "*");
     });
 
@@ -111,7 +131,9 @@ describe("iframeCommunicationReduxMiddleware", () => {
           location,
           parent: { postMessage: jest.fn(), location }
         };
-        iframeCommunicationReduxMiddleware(mockWindow)({})(jest.fn())(action);
+        iframeCommunicationReduxMiddleware(transform, mockWindow)({})(
+          jest.fn()
+        )(action);
         expect(mockWindow.parent.postMessage).not.toHaveBeenCalled();
       });
     });
