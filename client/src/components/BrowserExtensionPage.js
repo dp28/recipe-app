@@ -90,7 +90,7 @@ function RecipeIngredients({
 
         <ol>
           {ingredients.map(ingredient => (
-            <li key={ingredient.id}>{ingredient.text}</li>
+            <li key={ingredient.text}>{ingredient.text}</li>
           ))}
         </ol>
       </div>

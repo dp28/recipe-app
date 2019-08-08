@@ -12,7 +12,8 @@ import {
   setRecipeTitle,
   requestServings,
   setRecipeServings,
-  requestIngredients
+  requestIngredients,
+  setRecipeIngredients
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -179,7 +180,10 @@ describe("reducer", () => {
     });
 
     it("should set waitingFor to null", () => {
-      const state = reducer(initialState, setRecipeTitle("title"));
+      const state = reducer(
+        reducer(initialState, requestTitle()),
+        setRecipeTitle("title")
+      );
       expect(state.browserExtension.waitingFor).toEqual(null);
     });
   });
@@ -198,7 +202,10 @@ describe("reducer", () => {
     });
 
     it("should set waitingFor to null", () => {
-      const state = reducer(initialState, setRecipeServings("4"));
+      const state = reducer(
+        reducer(initialState, requestTitle()),
+        setRecipeServings("4")
+      );
       expect(state.browserExtension.waitingFor).toEqual(null);
     });
 
@@ -221,6 +228,31 @@ describe("reducer", () => {
     it("should set waitingFor to 'ingredients'", () => {
       const state = reducer(initialState, requestIngredients());
       expect(state.browserExtension.waitingFor).toEqual("ingredients");
+    });
+  });
+
+  describe("with a setRecipeIngredients action", () => {
+    it("should set waitingFor to null", () => {
+      const state = reducer(
+        reducer(initialState, requestIngredients()),
+        setRecipeIngredients(["something"])
+      );
+      expect(state.browserExtension.waitingFor).toEqual(null);
+    });
+
+    it("should add an ingredient for each passed-in ingredient", () => {
+      const state = reducer(initialState, setRecipeIngredients(["something"]));
+      expect(state.recipe.ingredients.length).toEqual(1);
+    });
+
+    describe("each ingredient", () => {
+      const input = "something";
+      const state = reducer(initialState, setRecipeIngredients([input]));
+      const ingredient = state.recipe.ingredients[0];
+
+      it("should have the input as its text", () => {
+        expect(ingredient.text).toEqual(input);
+      });
     });
   });
 });

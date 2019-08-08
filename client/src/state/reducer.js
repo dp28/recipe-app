@@ -9,12 +9,13 @@ import {
   ADD_TO_CATEGORY,
   SET_RECIPE_URL,
   REQUEST_TITLE,
-  SET_RECIPE_TITLE,
   REQUEST_SERVINGS,
+  REQUEST_INGREDIENTS,
+  SET_RECIPE_TITLE,
   SET_RECIPE_SERVINGS,
-  REQUEST_INGREDIENTS
+  SET_RECIPE_INGREDIENTS
 } from "../actions";
-import { parseIngredient } from "../domain/parseIngredient";
+import { parseIngredient as oldParseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
 
 const metadataReducer = combineReducers({ api: apiMetadataReducer });
@@ -58,7 +59,7 @@ function categoriesReducer(categories = [], action) {
 function ingredientsReducer(ingredients = [], action) {
   switch (action.type) {
     case UPDATE_INGREDIENTS:
-      return action.ingredients.split("\n").map(parseIngredient);
+      return action.ingredients.split("\n").map(oldParseIngredient);
 
     case COMBINE_INGREDIENTS:
       return combineIngredients(ingredients, action.ingredients);
@@ -103,6 +104,11 @@ function recipeReducer(recipe = {}, action) {
       return { ...recipe, url: action.url };
     case SET_RECIPE_TITLE:
       return { ...recipe, title: action.title };
+    case SET_RECIPE_INGREDIENTS:
+      return {
+        ...recipe,
+        ingredients: action.ingredients.map(parseIngredient)
+      };
     case SET_RECIPE_SERVINGS:
       const digits = action.servings.match(/(\d+)/);
       return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
@@ -123,7 +129,13 @@ function browserExtensionReducer(state = { waitingFor: null }, action) {
       return { ...state, waitingFor: null };
     case REQUEST_INGREDIENTS:
       return { ...state, waitingFor: "ingredients" };
+    case SET_RECIPE_INGREDIENTS:
+      return { ...state, waitingFor: null };
     default:
       return state;
   }
+}
+
+function parseIngredient(text) {
+  return { text };
 }
