@@ -9,10 +9,12 @@ export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
 export const APP_LOADED = "APP_LOADED";
 export const REQUEST_TITLE = "REQUEST_TITLE";
 export const REQUEST_SERVINGS = "REQUEST_SERVINGS";
+export const REQUEST_INGREDIENTS = "REQUEST_INGREDIENTS";
 
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
 export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
 export const SET_RECIPE_SERVINGS = "SET_RECIPE_SERVINGS";
+export const SET_RECIPE_INGREDIENTS = "SET_RECIPE_INGREDIENTS";
 
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
@@ -60,23 +62,12 @@ export const setRecipeServings = servings => ({
   servings
 });
 
-const BROWSER_EXTENSION_DESTINATION = "BROWSER_EXTENSION";
-const SOURCE = "RECIPE_APP";
-
-export const appLoaded = () => ({
-  type: APP_LOADED,
-  destination: BROWSER_EXTENSION_DESTINATION,
-  source: SOURCE
+export const setRecipeIngredients = ingredients => ({
+  type: SET_RECIPE_INGREDIENTS,
+  ingredients
 });
 
-export const requestTitle = () => ({
-  type: REQUEST_TITLE,
-  destination: BROWSER_EXTENSION_DESTINATION,
-  source: SOURCE
-});
-
-export const requestServings = () => ({
-  type: REQUEST_SERVINGS,
-  destination: BROWSER_EXTENSION_DESTINATION,
-  source: SOURCE
-});
+export const appLoaded = () => ({ type: APP_LOADED });
+export const requestTitle = () => ({ type: REQUEST_TITLE });
+export const requestServings = () => ({ type: REQUEST_SERVINGS });
+export const requestIngredients = () => ({ type: REQUEST_INGREDIENTS });

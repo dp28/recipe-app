@@ -11,7 +11,8 @@ import {
   requestTitle,
   setRecipeTitle,
   requestServings,
-  setRecipeServings
+  setRecipeServings,
+  requestIngredients
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -213,6 +214,13 @@ describe("reducer", () => {
         const state = reducer(initialState, setRecipeServings("something"));
         expect(state.recipe.servings).toEqual(undefined);
       });
+    });
+  });
+
+  describe("with a requestIngredients action", () => {
+    it("should set waitingFor to 'ingredients'", () => {
+      const state = reducer(initialState, requestIngredients());
+      expect(state.browserExtension.waitingFor).toEqual("ingredients");
     });
   });
 });

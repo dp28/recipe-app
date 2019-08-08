@@ -9,8 +9,10 @@ export function UnconnectedBrowserExtensionPage({
   recipe,
   waitingForTitle,
   waitingForServings,
+  waitingForIngredients,
   requestTitle,
-  requestServings
+  requestServings,
+  requestIngredients
 }) {
   return (
     <div>
@@ -24,6 +26,11 @@ export function UnconnectedBrowserExtensionPage({
         requestServings={requestServings}
         waitingForServings={waitingForServings}
         servings={recipe.servings}
+      />
+      <RecipeIngredients
+        requestIngredients={requestIngredients}
+        waitingForIngredients={waitingForIngredients}
+        ingredients={recipe.ingredients}
       />
     </div>
   );
@@ -67,6 +74,35 @@ function RecipeServings({ servings, requestServings, waitingForServings }) {
   );
 }
 
+function RecipeIngredients({
+  ingredients,
+  requestIngredients,
+  waitingForIngredients
+}) {
+  if (waitingForIngredients) {
+    return <Instruction>Click on the recipe ingredients</Instruction>;
+  }
+  if (ingredients) {
+    return (
+      <div>
+        <h4>Ingredients</h4>
+        <Button onClick={requestIngredients}>Change ingredients</Button>
+
+        <ol>
+          {ingredients.map(ingredient => (
+            <li key={ingredient.id}>{ingredient.text}</li>
+          ))}
+        </ol>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Button onClick={requestIngredients}>Set ingredients</Button>
+    </div>
+  );
+}
+
 const useInstructionStyles = makeStyles(theme => ({
   instruction: {
     padding: theme.spacing(2),
@@ -83,14 +119,16 @@ export function mapStateToProps(state) {
   return {
     recipe: state.recipe,
     waitingForTitle: state.browserExtension.waitingFor === "title",
-    waitingForServings: state.browserExtension.waitingFor === "servings"
+    waitingForServings: state.browserExtension.waitingFor === "servings",
+    waitingForIngredients: state.browserExtension.waitingFor === "ingredients"
   };
 }
 
 export function mapDispatchToProps(dispatch) {
   return {
     requestTitle: () => dispatch(actions.requestTitle()),
-    requestServings: () => dispatch(actions.requestServings())
+    requestServings: () => dispatch(actions.requestServings()),
+    requestIngredients: () => dispatch(actions.requestIngredients())
   };
 }
 

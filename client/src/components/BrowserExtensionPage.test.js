@@ -48,6 +48,20 @@ describe("mapStateToProps", () => {
         .waitingForServings
     ).toEqual(false);
   });
+
+  it("returns waitingForIngredients as true if the state is waiting for the ingredients", () => {
+    expect(
+      mapStateToProps({ browserExtension: { waitingFor: "ingredients" } })
+        .waitingForIngredients
+    ).toEqual(true);
+  });
+
+  it("returns waitingForIngredients as false if the state is not waiting for the ingredients", () => {
+    expect(
+      mapStateToProps({ browserExtension: { waitingFor: null } })
+        .waitingForIngredients
+    ).toEqual(false);
+  });
 });
 
 describe("mapDispatchToProps", () => {
@@ -57,10 +71,18 @@ describe("mapDispatchToProps", () => {
     requestTitle();
     expect(dispatch).toHaveBeenCalledWith(actions.requestTitle());
   });
+
   it("should return a requestServings action handler", () => {
     const dispatch = jest.fn();
     const { requestServings } = mapDispatchToProps(dispatch);
     requestServings();
     expect(dispatch).toHaveBeenCalledWith(actions.requestServings());
+  });
+
+  it("should return a requestIngredients action handler", () => {
+    const dispatch = jest.fn();
+    const { requestIngredients } = mapDispatchToProps(dispatch);
+    requestIngredients();
+    expect(dispatch).toHaveBeenCalledWith(actions.requestIngredients());
   });
 });

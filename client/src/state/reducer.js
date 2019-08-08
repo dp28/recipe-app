@@ -11,7 +11,8 @@ import {
   REQUEST_TITLE,
   SET_RECIPE_TITLE,
   REQUEST_SERVINGS,
-  SET_RECIPE_SERVINGS
+  SET_RECIPE_SERVINGS,
+  REQUEST_INGREDIENTS
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -120,6 +121,8 @@ function browserExtensionReducer(state = { waitingFor: null }, action) {
       return { ...state, waitingFor: "servings" };
     case SET_RECIPE_SERVINGS:
       return { ...state, waitingFor: null };
+    case REQUEST_INGREDIENTS:
+      return { ...state, waitingFor: "ingredients" };
     default:
       return state;
   }
