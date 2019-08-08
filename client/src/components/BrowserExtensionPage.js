@@ -74,11 +74,23 @@ function RecipeServings({ servings, requestServings, waitingForServings }) {
   );
 }
 
+const useIngredientStyles = makeStyles(theme => ({
+  list: {
+    listStyle: "none",
+    padding: theme.spacing(1)
+  },
+  ingredient: {
+    marginBottom: theme.spacing(1)
+  }
+}));
+
 function RecipeIngredients({
   ingredients,
   requestIngredients,
   waitingForIngredients
 }) {
+  const classes = useIngredientStyles();
+
   if (waitingForIngredients) {
     return <Instruction>Click on the recipe ingredients</Instruction>;
   }
@@ -88,9 +100,11 @@ function RecipeIngredients({
         <h4>Ingredients</h4>
         <Button onClick={requestIngredients}>Change ingredients</Button>
 
-        <ol>
+        <ol className={classes.list}>
           {ingredients.map(ingredient => (
-            <li key={ingredient.text}>{ingredient.text}</li>
+            <li key={ingredient.text} className={classes.ingredient}>
+              {ingredient.text}
+            </li>
           ))}
         </ol>
       </div>
