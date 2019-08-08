@@ -1,23 +1,32 @@
 import {
   REQUEST_TITLE,
   REQUEST_SERVINGS,
+  REQUEST_INGREDIENTS,
   setRecipeTitle,
-  setRecipeServings
+  setRecipeServings,
+  setRecipeIngredients
 } from "../actions";
 
 export const REQUEST_TEXT = "REQUEST_TEXT";
+export const REQUEST_TEXT_LIST = "REQUEST_TEXT_LIST";
 export const TEXT_RESPONSE = "TEXT_RESPONSE";
+export const TEXT_LIST_RESPONSE = "TEXT_LIST_RESPONSE";
 
 export const RECIPE_APP_SOURCE = "RECIPE_APP";
 
 const ActionTypeToMessageType = {
   [REQUEST_TITLE]: REQUEST_TEXT,
-  [REQUEST_SERVINGS]: REQUEST_TEXT
+  [REQUEST_SERVINGS]: REQUEST_TEXT,
+  [REQUEST_INGREDIENTS]: REQUEST_TEXT_LIST
 };
 
 const ActionCreatorsForText = {
   title: setRecipeTitle,
   servings: setRecipeServings
+};
+
+const ActionCreatorsForTextList = {
+  ingredients: setRecipeIngredients
 };
 
 export function translateActionToMessage(action) {
@@ -26,10 +35,16 @@ export function translateActionToMessage(action) {
 }
 
 export function translateMessageToAction(state, message) {
-  if (message.type !== TEXT_RESPONSE || !state.browserExtension.waitingFor) {
+  const { waitingFor } = state.browserExtension;
+  if (!waitingFor) {
     return null;
   }
-  const actionCreator =
-    ActionCreatorsForText[state.browserExtension.waitingFor];
-  return actionCreator ? actionCreator(message.text) : null;
+  if (message.type === TEXT_RESPONSE) {
+    const actionCreator = ActionCreatorsForText[waitingFor];
+    return actionCreator ? actionCreator(message.text) : null;
+  }
+  if (message.type === TEXT_LIST_RESPONSE) {
+    const actionCreator = ActionCreatorsForTextList[waitingFor];
+    return actionCreator ? actionCreator(message.list) : null;
+  }
 }

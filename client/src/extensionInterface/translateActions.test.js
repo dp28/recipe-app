@@ -2,14 +2,18 @@ import {
   translateActionToMessage,
   translateMessageToAction,
   REQUEST_TEXT,
+  REQUEST_TEXT_LIST,
   TEXT_RESPONSE,
+  TEXT_LIST_RESPONSE,
   RECIPE_APP_SOURCE
 } from "./translateActions";
 import {
   requestTitle,
   requestServings,
+  requestIngredients,
   setRecipeTitle,
-  setRecipeServings
+  setRecipeServings,
+  setRecipeIngredients
 } from "../actions";
 
 describe("translateActionToMessage", () => {
@@ -25,6 +29,7 @@ describe("translateActionToMessage", () => {
     it("should return a message with the type 'REQUEST_TEXT'", () => {
       expect(message.type).toEqual(REQUEST_TEXT);
     });
+
     it("should return a message with the recipe app source", () => {
       expect(message.source).toEqual(RECIPE_APP_SOURCE);
     });
@@ -32,9 +37,23 @@ describe("translateActionToMessage", () => {
 
   describe("with a requestServings action", () => {
     const message = translateActionToMessage(requestServings());
+
     it("should return a message with the type 'REQUEST_TEXT'", () => {
       expect(message.type).toEqual(REQUEST_TEXT);
     });
+
+    it("should return a message with the recipe app source", () => {
+      expect(message.source).toEqual(RECIPE_APP_SOURCE);
+    });
+  });
+
+  describe("with a requestIngredients action", () => {
+    const message = translateActionToMessage(requestIngredients());
+
+    it("should return a message with the type 'REQUEST_TEXT_LIST'", () => {
+      expect(message.type).toEqual(REQUEST_TEXT_LIST);
+    });
+
     it("should return a message with the recipe app source", () => {
       expect(message.source).toEqual(RECIPE_APP_SOURCE);
     });
@@ -44,7 +63,12 @@ describe("translateActionToMessage", () => {
 describe("translateMessageToAction", () => {
   describe("when the message is unknown", () => {
     it("should return null", () => {
-      expect(translateMessageToAction({}, { type: "FAKE" })).toEqual(null);
+      expect(
+        translateMessageToAction(
+          { browserExtension: { waitingFor: null } },
+          { type: "FAKE" }
+        )
+      ).toEqual(null);
     });
   });
 
@@ -81,6 +105,31 @@ describe("translateMessageToAction", () => {
             { type: TEXT_RESPONSE, text }
           )
         ).toEqual(setRecipeServings(text));
+      });
+    });
+  });
+
+  describe("when the message is a 'TEXT_LIST_RESPONSE'", () => {
+    describe("but no list is being waited for", () => {
+      it("should return null", () => {
+        expect(
+          translateMessageToAction(
+            { browserExtension: { waitingFor: null } },
+            { type: TEXT_LIST_RESPONSE }
+          )
+        ).toEqual(null);
+      });
+    });
+
+    describe("and the ingredients are being waited for", () => {
+      it("should return a 'SET_RECIPE_INGREDIENTS' action with the list", () => {
+        const list = ["bla"];
+        expect(
+          translateMessageToAction(
+            { browserExtension: { waitingFor: "ingredients" } },
+            { type: TEXT_LIST_RESPONSE, list }
+          )
+        ).toEqual(setRecipeIngredients(list));
       });
     });
   });
