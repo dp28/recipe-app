@@ -51,7 +51,7 @@ jobs:
       - run: make test
       - run: make lint
 
-  test_client:
+  test_chrome_extension:
     docker:
       - image: circleci/node:10.15
 
