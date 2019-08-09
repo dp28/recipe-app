@@ -10,9 +10,11 @@ export function UnconnectedBrowserExtensionPage({
   waitingForTitle,
   waitingForServings,
   waitingForIngredients,
+  waitingForMethod,
   requestTitle,
   requestServings,
-  requestIngredients
+  requestIngredients,
+  requestMethod
 }) {
   return (
     <div>
@@ -32,13 +34,18 @@ export function UnconnectedBrowserExtensionPage({
         waitingForIngredients={waitingForIngredients}
         ingredients={recipe.ingredients}
       />
+      <RecipeMethod
+        requestMethod={requestMethod}
+        waitingForMethod={waitingForMethod}
+        method={recipe.method}
+      />
     </div>
   );
 }
 
 function RecipeTitle({ title, requestTitle, waitingForTitle }) {
   if (waitingForTitle) {
-    return <Instruction>Click on the recipe title</Instruction>;
+    return <Help>Click on the recipe title</Help>;
   }
   if (title) {
     return (
@@ -57,7 +64,7 @@ function RecipeTitle({ title, requestTitle, waitingForTitle }) {
 
 function RecipeServings({ servings, requestServings, waitingForServings }) {
   if (waitingForServings) {
-    return <Instruction>Click on the recipe servings</Instruction>;
+    return <Help>Click on the recipe servings</Help>;
   }
   if (servings) {
     return (
@@ -92,7 +99,12 @@ function RecipeIngredients({
   const classes = useIngredientStyles();
 
   if (waitingForIngredients) {
-    return <Instruction>Click on the recipe ingredients</Instruction>;
+    return (
+      <Help>
+        Click on the recipe ingredients. Each ingredient should be highlighted
+        separately.
+      </Help>
+    );
   }
   if (ingredients) {
     return (
@@ -117,15 +129,58 @@ function RecipeIngredients({
   );
 }
 
-const useInstructionStyles = makeStyles(theme => ({
+const useMethodStyles = makeStyles(theme => ({
+  list: {
+    listStyle: "decimal"
+  },
+  instruction: {
+    marginBottom: theme.spacing(1)
+  }
+}));
+
+function RecipeMethod({ method, requestMethod, waitingForMethod }) {
+  const classes = useMethodStyles();
+
+  if (waitingForMethod) {
+    return (
+      <Help>
+        Click on the recipe instructions. Each instruction should be highlighted
+        separately.
+      </Help>
+    );
+  }
+  if (method) {
+    return (
+      <div>
+        <h4>Method</h4>
+        <Button onClick={requestMethod}>Change instructions</Button>
+
+        <ol className={classes.list}>
+          {method.instructions.map(instruction => (
+            <li key={instruction.text} className={classes.instruction}>
+              {instruction.text}
+            </li>
+          ))}
+        </ol>
+      </div>
+    );
+  }
+  return (
+    <div>
+      <Button onClick={requestMethod}>Set instructions</Button>
+    </div>
+  );
+}
+
+const useHelpStyles = makeStyles(theme => ({
   instruction: {
     padding: theme.spacing(2),
     backgroundColor: yellow[200]
   }
 }));
 
-function Instruction({ children }) {
-  const classes = useInstructionStyles();
+function Help({ children }) {
+  const classes = useHelpStyles();
   return <div className={classes.instruction}>{children}</div>;
 }
 
@@ -134,7 +189,8 @@ export function mapStateToProps(state) {
     recipe: state.recipe,
     waitingForTitle: state.browserExtension.waitingFor === "title",
     waitingForServings: state.browserExtension.waitingFor === "servings",
-    waitingForIngredients: state.browserExtension.waitingFor === "ingredients"
+    waitingForIngredients: state.browserExtension.waitingFor === "ingredients",
+    waitingForMethod: state.browserExtension.waitingFor === "method"
   };
 }
 
@@ -142,7 +198,8 @@ export function mapDispatchToProps(dispatch) {
   return {
     requestTitle: () => dispatch(actions.requestTitle()),
     requestServings: () => dispatch(actions.requestServings()),
-    requestIngredients: () => dispatch(actions.requestIngredients())
+    requestIngredients: () => dispatch(actions.requestIngredients()),
+    requestMethod: () => dispatch(actions.requestMethod())
   };
 }
 

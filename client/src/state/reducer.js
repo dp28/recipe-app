@@ -11,9 +11,11 @@ import {
   REQUEST_TITLE,
   REQUEST_SERVINGS,
   REQUEST_INGREDIENTS,
+  REQUEST_METHOD,
   SET_RECIPE_TITLE,
   SET_RECIPE_SERVINGS,
-  SET_RECIPE_INGREDIENTS
+  SET_RECIPE_INGREDIENTS,
+  SET_RECIPE_METHOD
 } from "../actions";
 import { parseIngredient as oldParseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
@@ -109,6 +111,11 @@ function recipeReducer(recipe = {}, action) {
         ...recipe,
         ingredients: action.ingredients.map(parseIngredient)
       };
+    case SET_RECIPE_METHOD:
+      return {
+        ...recipe,
+        method: { instructions: action.instructions.map(parseInstruction) }
+      };
     case SET_RECIPE_SERVINGS:
       const digits = action.servings.match(/(\d+)/);
       return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
@@ -131,11 +138,19 @@ function browserExtensionReducer(state = { waitingFor: null }, action) {
       return { ...state, waitingFor: "ingredients" };
     case SET_RECIPE_INGREDIENTS:
       return { ...state, waitingFor: null };
+    case REQUEST_METHOD:
+      return { ...state, waitingFor: "method" };
+    case SET_RECIPE_METHOD:
+      return { ...state, waitingFor: null };
     default:
       return state;
   }
 }
 
 function parseIngredient(text) {
+  return { text };
+}
+
+function parseInstruction(text) {
   return { text };
 }

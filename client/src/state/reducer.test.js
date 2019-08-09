@@ -7,13 +7,15 @@ import {
   combineIngredients,
   addCategory,
   addToCategory,
-  setRecipeUrl,
   requestTitle,
-  setRecipeTitle,
   requestServings,
-  setRecipeServings,
   requestIngredients,
-  setRecipeIngredients
+  requestMethod,
+  setRecipeUrl,
+  setRecipeTitle,
+  setRecipeServings,
+  setRecipeIngredients,
+  setRecipeMethod
 } from "../actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
@@ -252,6 +254,38 @@ describe("reducer", () => {
 
       it("should have the input as its text", () => {
         expect(ingredient.text).toEqual(input);
+      });
+    });
+  });
+
+  describe("with a requestMethod action", () => {
+    it("should set waitingFor to 'method'", () => {
+      const state = reducer(initialState, requestMethod());
+      expect(state.browserExtension.waitingFor).toEqual("method");
+    });
+  });
+
+  describe("with a setRecipeMethod action", () => {
+    it("should set waitingFor to null", () => {
+      const state = reducer(
+        reducer(initialState, requestMethod()),
+        setRecipeMethod(["something"])
+      );
+      expect(state.browserExtension.waitingFor).toEqual(null);
+    });
+
+    it("should add an instruction for each passed-in instruction", () => {
+      const state = reducer(initialState, setRecipeMethod(["something"]));
+      expect(state.recipe.method.instructions.length).toEqual(1);
+    });
+
+    describe("each instruction", () => {
+      const input = "something";
+      const state = reducer(initialState, setRecipeMethod([input]));
+      const instruction = state.recipe.method.instructions[0];
+
+      it("should have the input as its text", () => {
+        expect(instruction.text).toEqual(input);
       });
     });
   });

@@ -11,9 +11,11 @@ import {
   requestTitle,
   requestServings,
   requestIngredients,
+  requestMethod,
   setRecipeTitle,
   setRecipeServings,
-  setRecipeIngredients
+  setRecipeIngredients,
+  setRecipeMethod
 } from "../actions";
 
 describe("translateActionToMessage", () => {
@@ -49,6 +51,18 @@ describe("translateActionToMessage", () => {
 
   describe("with a requestIngredients action", () => {
     const message = translateActionToMessage(requestIngredients());
+
+    it("should return a message with the type 'REQUEST_TEXT_LIST'", () => {
+      expect(message.type).toEqual(REQUEST_TEXT_LIST);
+    });
+
+    it("should return a message with the recipe app source", () => {
+      expect(message.source).toEqual(RECIPE_APP_SOURCE);
+    });
+  });
+
+  describe("with a requestMethod action", () => {
+    const message = translateActionToMessage(requestMethod());
 
     it("should return a message with the type 'REQUEST_TEXT_LIST'", () => {
       expect(message.type).toEqual(REQUEST_TEXT_LIST);
@@ -130,6 +144,18 @@ describe("translateMessageToAction", () => {
             { type: TEXT_LIST_RESPONSE, list }
           )
         ).toEqual(setRecipeIngredients(list));
+      });
+    });
+
+    describe("and the method is being waited for", () => {
+      it("should return a 'SET_RECIPE_METHOD' action with the list", () => {
+        const list = ["bla"];
+        expect(
+          translateMessageToAction(
+            { browserExtension: { waitingFor: "method" } },
+            { type: TEXT_LIST_RESPONSE, list }
+          )
+        ).toEqual(setRecipeMethod(list));
       });
     });
   });

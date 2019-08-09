@@ -62,6 +62,20 @@ describe("mapStateToProps", () => {
         .waitingForIngredients
     ).toEqual(false);
   });
+
+  it("returns waitingForMethod as true if the state is waiting for the method", () => {
+    expect(
+      mapStateToProps({ browserExtension: { waitingFor: "method" } })
+        .waitingForMethod
+    ).toEqual(true);
+  });
+
+  it("returns waitingForMethod as false if the state is not waiting for the method", () => {
+    expect(
+      mapStateToProps({ browserExtension: { waitingFor: null } })
+        .waitingForMethod
+    ).toEqual(false);
+  });
 });
 
 describe("mapDispatchToProps", () => {
@@ -84,5 +98,12 @@ describe("mapDispatchToProps", () => {
     const { requestIngredients } = mapDispatchToProps(dispatch);
     requestIngredients();
     expect(dispatch).toHaveBeenCalledWith(actions.requestIngredients());
+  });
+
+  it("should return a requestMethod action handler", () => {
+    const dispatch = jest.fn();
+    const { requestMethod } = mapDispatchToProps(dispatch);
+    requestMethod();
+    expect(dispatch).toHaveBeenCalledWith(actions.requestMethod());
   });
 });

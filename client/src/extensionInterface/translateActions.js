@@ -2,9 +2,11 @@ import {
   REQUEST_TITLE,
   REQUEST_SERVINGS,
   REQUEST_INGREDIENTS,
+  REQUEST_METHOD,
   setRecipeTitle,
   setRecipeServings,
-  setRecipeIngredients
+  setRecipeIngredients,
+  setRecipeMethod
 } from "../actions";
 
 export const REQUEST_TEXT = "REQUEST_TEXT";
@@ -17,7 +19,8 @@ export const RECIPE_APP_SOURCE = "RECIPE_APP";
 const ActionTypeToMessageType = {
   [REQUEST_TITLE]: REQUEST_TEXT,
   [REQUEST_SERVINGS]: REQUEST_TEXT,
-  [REQUEST_INGREDIENTS]: REQUEST_TEXT_LIST
+  [REQUEST_INGREDIENTS]: REQUEST_TEXT_LIST,
+  [REQUEST_METHOD]: REQUEST_TEXT_LIST
 };
 
 const ActionCreatorsForText = {
@@ -26,7 +29,8 @@ const ActionCreatorsForText = {
 };
 
 const ActionCreatorsForTextList = {
-  ingredients: setRecipeIngredients
+  ingredients: setRecipeIngredients,
+  method: setRecipeMethod
 };
 
 export function translateActionToMessage(action) {
