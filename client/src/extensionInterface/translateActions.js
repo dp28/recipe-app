@@ -7,7 +7,7 @@ import {
   setRecipeServings,
   setRecipeIngredients,
   setRecipeMethod
-} from "../actions";
+} from "./actions";
 
 export const REQUEST_TEXT = "REQUEST_TEXT";
 export const REQUEST_TEXT_LIST = "REQUEST_TEXT_LIST";

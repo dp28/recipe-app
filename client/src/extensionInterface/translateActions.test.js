@@ -16,7 +16,7 @@ import {
   setRecipeServings,
   setRecipeIngredients,
   setRecipeMethod
-} from "../actions";
+} from "./actions";
 
 describe("translateActionToMessage", () => {
   describe("with an action that should not result in a message to the extension", () => {

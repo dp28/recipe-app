@@ -6,7 +6,9 @@ import {
   updateIngredients,
   combineIngredients,
   addCategory,
-  addToCategory,
+  addToCategory
+} from "../actions";
+import {
   requestTitle,
   requestServings,
   requestIngredients,
@@ -16,7 +18,7 @@ import {
   setRecipeServings,
   setRecipeIngredients,
   setRecipeMethod
-} from "../actions";
+} from "../extensionInterface/actions";
 import { parseIngredient } from "../domain/parseIngredient";
 
 describe("reducer", () => {

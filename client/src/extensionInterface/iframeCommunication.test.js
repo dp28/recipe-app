@@ -3,7 +3,7 @@ import {
   handleExtensionMessage,
   iframeCommunicationReduxMiddleware
 } from "./iframeCommunication";
-import { appLoaded } from "../actions";
+import { appLoaded } from "./actions";
 
 function buildMockStore({ state = {} } = {}) {
   return {

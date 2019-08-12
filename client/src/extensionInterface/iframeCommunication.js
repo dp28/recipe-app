@@ -1,6 +1,6 @@
 import { store as reduxStore } from "../state/store";
 import { debug } from "../logging";
-import { appLoaded } from "../actions";
+import { appLoaded } from "./actions";
 import {
   translateActionToMessage,
   translateMessageToAction

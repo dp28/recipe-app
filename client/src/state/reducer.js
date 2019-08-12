@@ -6,17 +6,19 @@ import {
   UPDATE_INGREDIENTS,
   COMBINE_INGREDIENTS,
   ADD_CATEGORY,
-  ADD_TO_CATEGORY,
-  SET_RECIPE_URL,
+  ADD_TO_CATEGORY
+} from "../actions";
+import {
   REQUEST_TITLE,
   REQUEST_SERVINGS,
   REQUEST_INGREDIENTS,
   REQUEST_METHOD,
+  SET_RECIPE_URL,
   SET_RECIPE_TITLE,
   SET_RECIPE_SERVINGS,
   SET_RECIPE_INGREDIENTS,
   SET_RECIPE_METHOD
-} from "../actions";
+} from "../extensionInterface/actions";
 import { parseIngredient as oldParseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
 
