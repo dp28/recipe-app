@@ -8,19 +8,10 @@ import {
   ADD_CATEGORY,
   ADD_TO_CATEGORY
 } from "../actions";
-import {
-  REQUEST_TITLE,
-  REQUEST_SERVINGS,
-  REQUEST_INGREDIENTS,
-  REQUEST_METHOD,
-  SET_RECIPE_URL,
-  SET_RECIPE_TITLE,
-  SET_RECIPE_SERVINGS,
-  SET_RECIPE_INGREDIENTS,
-  SET_RECIPE_METHOD
-} from "../extensionInterface/actions";
 import { parseIngredient as oldParseIngredient } from "../domain/parseIngredient";
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
+import { browserExtensionReducer } from "../extensionInterface/reducer";
+import { recipeReducer } from "./recipeReducer";
 
 const metadataReducer = combineReducers({ api: apiMetadataReducer });
 
@@ -100,59 +91,4 @@ function combineIngredients(allIngredients, ingredientsToCombine) {
     }
     return all;
   }, []);
-}
-
-function recipeReducer(recipe = {}, action) {
-  switch (action.type) {
-    case SET_RECIPE_URL:
-      return { ...recipe, url: action.url };
-    case SET_RECIPE_TITLE:
-      return { ...recipe, title: action.title };
-    case SET_RECIPE_INGREDIENTS:
-      return {
-        ...recipe,
-        ingredients: action.ingredients.map(parseIngredient)
-      };
-    case SET_RECIPE_METHOD:
-      return {
-        ...recipe,
-        method: { instructions: action.instructions.map(parseInstruction) }
-      };
-    case SET_RECIPE_SERVINGS:
-      const digits = action.servings.match(/(\d+)/);
-      return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
-    default:
-      return recipe;
-  }
-}
-
-function browserExtensionReducer(state = { waitingFor: null }, action) {
-  switch (action.type) {
-    case REQUEST_TITLE:
-      return { ...state, waitingFor: "title" };
-    case SET_RECIPE_TITLE:
-      return { ...state, waitingFor: null };
-    case REQUEST_SERVINGS:
-      return { ...state, waitingFor: "servings" };
-    case SET_RECIPE_SERVINGS:
-      return { ...state, waitingFor: null };
-    case REQUEST_INGREDIENTS:
-      return { ...state, waitingFor: "ingredients" };
-    case SET_RECIPE_INGREDIENTS:
-      return { ...state, waitingFor: null };
-    case REQUEST_METHOD:
-      return { ...state, waitingFor: "method" };
-    case SET_RECIPE_METHOD:
-      return { ...state, waitingFor: null };
-    default:
-      return state;
-  }
-}
-
-function parseIngredient(text) {
-  return { text };
-}
-
-function parseInstruction(text) {
-  return { text };
 }
