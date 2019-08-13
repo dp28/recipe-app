@@ -1,8 +1,16 @@
-import { call, put } from "redux-saga/effects";
-import { errorLoadingApiMetadata, apiMetadataLoaded } from "../actions";
+import { call, put, takeLatest } from "redux-saga/effects";
+import {
+  errorLoadingApiMetadata,
+  apiMetadataLoaded,
+  REQUEST_API_METADATA
+} from "../actions";
 import { performQuery } from "./performQuery";
 
 export function* watchApiMetadataRequested() {
+  yield takeLatest(REQUEST_API_METADATA, fetchApiMetadata);
+}
+
+export function* fetchApiMetadata() {
   try {
     const result = yield call(performQuery, GET_API_METADATA);
     yield put(apiMetadataLoaded(result._meta));
