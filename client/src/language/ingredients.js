@@ -1,79 +1,19 @@
 import generateId from "cuid";
-import nlp from "compromise";
+import { parse, loadPlugin } from "./nlp";
+import {
+  MeasuringUnitTag,
+  SizeTag,
+  compromisePlugin
+} from "./ingredientLexicon";
+import { parseUnit, isRoughUnitName } from "./units";
 
-const MeasuringUnit = "MeasuringUnit";
-const StandardisedUnit = "StandardisedUnit";
-const RoughUnit = "RoughUnit";
-const Size = "Size";
-
-const Sizes = ["small", "medium", "large", "medium-sized", "fair-sized"];
-
-const StandardisedUnits = [
-  { symbol: "g", name: "gram" },
-  { symbol: "kg", name: "kilogram" },
-  { symbol: "ml", name: "millilitre" },
-  { symbol: "l", name: "litre" },
-  { symbol: "tsp", name: "teaspoon" },
-  { symbol: "tbsp", name: "tablespoon" },
-  { symbol: "cup", name: "cup" },
-  { symbol: "oz", name: "ounce" },
-  { symbol: "lb", name: "pound" }
-];
-
-const RoughUnits = [
-  { name: "bunch" },
-  { name: "sprig" },
-  { name: "clove" },
-  { name: "pack" },
-  { name: "packet" },
-  { name: "handfull" },
-  { name: "pinch" }
-];
-
-const unitsPlugin = {
-  tags: {
-    [MeasuringUnit]: {
-      isA: "Unit"
-    },
-
-    [StandardisedUnit]: {
-      isA: MeasuringUnit
-    },
-    [RoughUnit]: {
-      isA: MeasuringUnit
-    },
-    [Size]: {
-      isA: "Adjective"
-    }
-  },
-  words: StandardisedUnits.reduce(
-    (result, unit) => {
-      result[unit.symbol] = StandardisedUnit;
-      result[unit.name] = StandardisedUnit;
-      result[pluralize(unit.name)] = StandardisedUnit;
-      return result;
-    },
-    RoughUnits.reduce(
-      (result, unit) => {
-        result[unit.name] = RoughUnit;
-        result[pluralize(unit.name)] = RoughUnit;
-        return result;
-      },
-      Sizes.reduce((result, size) => {
-        result[size] = Size;
-        return result;
-      }, {})
-    )
-  )
-};
-
-nlp.plugin(unitsPlugin);
+loadPlugin(compromisePlugin);
 
 export function parseIngredient(rawText) {
   const preprocessed = preprocess(rawText);
   const { notes, rest } = splitOutNotes(preprocessed);
   const { instruction, ingredient } = splitOutInstruction(rest);
-  const text = nlp(ingredient);
+  const text = parse(ingredient);
   const measurement = parseMeasurement(text);
   return {
     id: generateId(),
@@ -83,13 +23,6 @@ export function parseIngredient(rawText) {
     notes,
     food: parseFood(text, measurement)
   };
-}
-
-function pluralize(noun) {
-  return nlp(noun)
-    .nouns()
-    .toPlural()
-    .out();
 }
 
 function preprocess(rawText) {
@@ -159,8 +92,8 @@ function parseFood(text, measurement) {
     .not("#ProperNoun")
     .toLowerCase()
     .all()
-    .not(tag(MeasuringUnit))
-    .not(tag(Size))
+    .not(MeasuringUnitTag)
+    .not(SizeTag)
     .not("#Value")
     .not("organic")
     .not("^(a|an)")
@@ -181,40 +114,9 @@ function singularizeUnlessUnitsExist(text, measurement) {
   return text;
 }
 
-function parseUnit(text) {
-  const unit = text
-    .match(tag(MeasuringUnit))
-    .trim()
-    .toLowerCase()
-    .nouns()
-    .toSingular()
-    .out();
-  return unit ? toUnitSymbol(unit) : null;
-}
-
-function tag(type) {
-  return `#${type}`;
-}
-
-function toUnitSymbol(input) {
-  const unit = StandardisedUnits.find(
-    ({ symbol, name }) => symbol === input || name === input
-  );
-  return unit ? unit.symbol : toRoughUnitName(input);
-}
-
-function toRoughUnitName(input) {
-  const unit = RoughUnits.find(({ name }) => name === input);
-  return unit ? unit.name : null;
-}
-
 function parseSize(text) {
   return text
-    .match(tag(Size))
+    .match(SizeTag)
     .trim()
     .out();
-}
-
-function isRoughUnitName(unit) {
-  return RoughUnits.some(({ name }) => name === unit);
 }
