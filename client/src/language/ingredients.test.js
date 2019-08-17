@@ -15,7 +15,7 @@ describe("parseIngredient", () => {
     {
       input: "25g Butter",
       expected: {
-        food: "Butter",
+        food: "butter",
         measurement: {
           unit: "g",
           amount: 25
@@ -161,7 +161,7 @@ describe("parseIngredient", () => {
     {
       input: "75 g Parmesan cheese , freshly grated",
       expected: {
-        food: "Parmesan cheese",
+        food: "parmesan cheese",
         instruction: "freshly grated",
         measurement: { amount: 75, unit: "g" }
       }
@@ -247,7 +247,7 @@ describe("parseIngredient", () => {
     },
     {
       input: "Salt and pepper to taste",
-      expected: { food: "Salt and pepper to taste", measurement: null }
+      expected: { food: "salt and pepper to taste", measurement: null }
     },
     {
       input: "1 tablespoon butter",
@@ -384,8 +384,8 @@ describe("parseIngredient", () => {
         expect(result.rawText).toEqual(input);
       });
 
-      it(`should set the food to "${expected.food}"`, () => {
-        expect(result.food).toEqual(expected.food);
+      it(`should set the food name to "${expected.food}"`, () => {
+        expect(result.food.name).toEqual(expected.food);
       });
 
       if (expected.measurement) {

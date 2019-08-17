@@ -154,7 +154,11 @@ function separateNumbersFromLetters(rawText) {
 }
 
 function parseFood(text, measurement) {
-  return singularizeUnlessUnitsExist(text, measurement)
+  const name = singularizeUnlessUnitsExist(text, measurement)
+    .match("#Noun")
+    .not("#ProperNoun")
+    .toLowerCase()
+    .all()
     .not(tag(MeasuringUnit))
     .not(tag(Size))
     .not("#Value")
@@ -164,6 +168,7 @@ function parseFood(text, measurement) {
     .not("organic")
     .out()
     .trim();
+  return { name };
 }
 
 function singularizeUnlessUnitsExist(text, measurement) {
