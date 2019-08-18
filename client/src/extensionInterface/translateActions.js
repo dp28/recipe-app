@@ -5,7 +5,7 @@ import {
   REQUEST_METHOD,
   setRecipeTitle,
   setRecipeServings,
-  setRecipeIngredients,
+  importRecipeIngredients,
   setRecipeMethod
 } from "./actions";
 
@@ -29,7 +29,7 @@ const ActionCreatorsForText = {
 };
 
 const ActionCreatorsForTextList = {
-  ingredients: setRecipeIngredients,
+  ingredients: importRecipeIngredients,
   method: setRecipeMethod
 };
 

@@ -13,10 +13,7 @@ export function recipeReducer(recipe = {}, action) {
     case SET_RECIPE_TITLE:
       return { ...recipe, title: action.title };
     case SET_RECIPE_INGREDIENTS:
-      return {
-        ...recipe,
-        ingredients: action.ingredients.map(parseIngredient)
-      };
+      return { ...recipe, ingredients: action.ingredients };
     case SET_RECIPE_METHOD:
       return {
         ...recipe,
@@ -28,10 +25,6 @@ export function recipeReducer(recipe = {}, action) {
     default:
       return recipe;
   }
-}
-
-function parseIngredient(text) {
-  return { text };
 }
 
 function parseInstruction(text) {

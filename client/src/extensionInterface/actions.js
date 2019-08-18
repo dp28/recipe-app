@@ -7,6 +7,7 @@ export const REQUEST_METHOD = "REQUEST_METHOD";
 export const SET_RECIPE_URL = "SET_RECIPE_URL";
 export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
 export const SET_RECIPE_SERVINGS = "SET_RECIPE_SERVINGS";
+export const IMPORT_RECIPE_INGREDIENTS = "IMPORT_RECIPE_INGREDIENTS";
 export const SET_RECIPE_INGREDIENTS = "SET_RECIPE_INGREDIENTS";
 export const SET_RECIPE_METHOD = "SET_RECIPE_METHOD";
 
@@ -29,6 +30,11 @@ export const setRecipeTitle = title => ({
 export const setRecipeServings = servings => ({
   type: SET_RECIPE_SERVINGS,
   servings
+});
+
+export const importRecipeIngredients = ingredients => ({
+  type: IMPORT_RECIPE_INGREDIENTS,
+  ingredients
 });
 
 export const setRecipeIngredients = ingredients => ({

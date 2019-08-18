@@ -14,7 +14,7 @@ import {
   requestMethod,
   setRecipeTitle,
   setRecipeServings,
-  setRecipeIngredients,
+  importRecipeIngredients,
   setRecipeMethod
 } from "./actions";
 
@@ -143,7 +143,7 @@ describe("translateMessageToAction", () => {
             { browserExtension: { waitingFor: "ingredients" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
-        ).toEqual(setRecipeIngredients(list));
+        ).toEqual(importRecipeIngredients(list));
       });
     });
 

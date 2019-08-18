@@ -1,5 +1,3 @@
-import { MeasuringUnitTag } from "./ingredientLexicon";
-
 export const StandardisedUnits = [
   { symbol: "g", name: "gram" },
   { symbol: "kg", name: "kilogram" },
@@ -24,27 +22,4 @@ export const RoughUnits = [
 
 export function isRoughUnitName(unit) {
   return RoughUnits.some(({ name }) => name === unit);
-}
-
-export function parseUnit(text) {
-  const unit = text
-    .match(MeasuringUnitTag)
-    .trim()
-    .toLowerCase()
-    .nouns()
-    .toSingular()
-    .out();
-  return unit ? toUnitSymbol(unit) : null;
-}
-
-function toUnitSymbol(input) {
-  const unit = StandardisedUnits.find(
-    ({ symbol, name }) => symbol === input || name === input
-  );
-  return unit ? unit.symbol : toRoughUnitName(input);
-}
-
-function toRoughUnitName(input) {
-  const unit = RoughUnits.find(({ name }) => name === input);
-  return unit ? unit.name : null;
 }

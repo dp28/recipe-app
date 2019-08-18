@@ -5,9 +5,14 @@ import {
   SizeTag,
   compromisePlugin
 } from "./ingredientLexicon";
-import { parseUnit, isRoughUnitName } from "./units";
+import { isRoughUnitName } from "./units";
+import { parseUnit } from "./parseUnit";
 
 loadPlugin(compromisePlugin);
+
+export function parseIngredients(ingredients) {
+  return ingredients.map(parseIngredient);
+}
 
 export function parseIngredient(rawText) {
   const preprocessed = preprocess(rawText);

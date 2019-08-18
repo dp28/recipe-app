@@ -60,19 +60,20 @@ describe("reducer", () => {
   });
 
   describe("with a setRecipeIngredients action", () => {
+    const ingredient = {
+      id: "fake_id",
+      food: {
+        name: "onion"
+      },
+      measurement: {
+        amount: 1,
+        size: "large"
+      }
+    };
+    const recipe = reducer(initialState, setRecipeIngredients([ingredient]));
+
     it("should add an ingredient for each passed-in ingredient", () => {
-      const recipe = reducer(initialState, setRecipeIngredients(["something"]));
-      expect(recipe.ingredients.length).toEqual(1);
-    });
-
-    describe("each ingredient", () => {
-      const input = "something";
-      const recipe = reducer(initialState, setRecipeIngredients([input]));
-      const ingredient = recipe.ingredients[0];
-
-      it("should have the input as its text", () => {
-        expect(ingredient.text).toEqual(input);
-      });
+      expect(recipe.ingredients).toEqual([ingredient]);
     });
   });
 

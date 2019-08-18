@@ -4,6 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import * as actions from "../actions";
 import { Help } from "./Help";
+import { Ingredient } from "../../components/Ingredient";
 
 const useIngredientStyles = makeStyles(theme => ({
   list: {
@@ -11,7 +12,7 @@ const useIngredientStyles = makeStyles(theme => ({
     padding: theme.spacing(1)
   },
   ingredient: {
-    marginBottom: theme.spacing(1)
+    marginBottom: theme.spacing(2)
   }
 }));
 
@@ -38,8 +39,8 @@ export function UnconnectedExtractIngredients({
 
         <ol className={classes.list}>
           {ingredients.map(ingredient => (
-            <li key={ingredient.text} className={classes.ingredient}>
-              {ingredient.text}
+            <li key={ingredient.id} className={classes.ingredient}>
+              <Ingredient ingredient={ingredient} />
             </li>
           ))}
         </ol>
