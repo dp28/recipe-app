@@ -6,6 +6,7 @@ import {
   setRecipeIngredients,
   setRecipeMethod
 } from "../extensionInterface/actions";
+import { scaleByServings } from "../actions";
 
 describe("reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
@@ -91,6 +92,13 @@ describe("reducer", () => {
       it("should have the input as its text", () => {
         expect(instruction.text).toEqual(input);
       });
+    });
+  });
+
+  describe("with a scaleByServings action", () => {
+    it("should add a scaledServings field with the 'servings' value", () => {
+      const recipe = reducer(initialState, scaleByServings(10));
+      expect(recipe.scaledServings).toEqual(10);
     });
   });
 });

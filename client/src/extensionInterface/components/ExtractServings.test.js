@@ -4,7 +4,8 @@ import {
   mapStateToProps,
   mapDispatchToProps
 } from "./ExtractServings";
-import * as actions from "../actions";
+import { requestServings } from "../actions";
+import { scaleByServings } from "../../actions";
 import ShallowRenderer from "react-test-renderer/shallow";
 
 it("renders without crashing", () => {
@@ -42,13 +43,27 @@ describe("mapStateToProps", () => {
         .waitingForServings
     ).toEqual(false);
   });
+
+  describe("if scaledServings is set", () => {
+    it("returns scaledServings instead of servings", () => {
+      const recipe = { servings: 4, scaledServings: 6 };
+      expect(
+        mapStateToProps({ recipe, browserExtension: {} }).servings
+      ).toEqual(6);
+    });
+  });
 });
 
 describe("mapDispatchToProps", () => {
   it("should return a requestServings action handler", () => {
     const dispatch = jest.fn();
-    const { requestServings } = mapDispatchToProps(dispatch);
-    requestServings();
-    expect(dispatch).toHaveBeenCalledWith(actions.requestServings());
+    mapDispatchToProps(dispatch).requestServings();
+    expect(dispatch).toHaveBeenCalledWith(requestServings());
+  });
+
+  it("should return a scaleByServings action handler that uses an event target", () => {
+    const dispatch = jest.fn();
+    mapDispatchToProps(dispatch).scaleByServings({ target: { value: 3 } });
+    expect(dispatch).toHaveBeenCalledWith(scaleByServings(3));
   });
 });

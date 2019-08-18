@@ -5,6 +5,7 @@ export const UPDATE_INGREDIENTS = "UPDATE_INGREDIENTS";
 export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
+export const SCALE_BY_SERVINGS = "SCALE_BY_SERVINGS";
 
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
@@ -35,4 +36,9 @@ export const addToCategory = ({ ingredient, categoryName }) => ({
   type: ADD_TO_CATEGORY,
   ingredient,
   categoryName
+});
+
+export const scaleByServings = servings => ({
+  type: SCALE_BY_SERVINGS,
+  servings
 });

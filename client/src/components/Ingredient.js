@@ -1,4 +1,5 @@
 import React from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import { pluralize } from "../language/utils";
 import { isRoughUnitName } from "../language/units";
@@ -15,7 +16,7 @@ const useStyles = makeStyles(theme => ({
   food: {}
 }));
 
-export function Ingredient({ ingredient }) {
+export function UnconnectedIngredient({ ingredient }) {
   const classes = useStyles();
 
   return (
@@ -104,3 +105,27 @@ function pluralizeRoughUnit(unit, amount) {
   }
   return pluralize(unit);
 }
+
+export function mapStateToProps({ recipe }, { ingredient }) {
+  if (
+    ingredient.measurement &&
+    ingredient.measurement.amount &&
+    recipe.servings &&
+    recipe.scaledServings
+  ) {
+    return {
+      ingredient: {
+        ...ingredient,
+        measurement: {
+          ...ingredient.measurement,
+          amount:
+            ingredient.measurement.amount *
+            (recipe.scaledServings / recipe.servings)
+        }
+      }
+    };
+  }
+  return { ingredient };
+}
+
+export const Ingredient = connect(mapStateToProps)(UnconnectedIngredient);
