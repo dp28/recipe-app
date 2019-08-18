@@ -389,24 +389,18 @@ describe("parseIngredient", () => {
       });
 
       if (expected.measurement) {
-        it(`should set the measurement amount to "${
-          expected.measurement.amount
-        }"`, () => {
+        it(`should set the measurement amount to "${expected.measurement.amount}"`, () => {
           expect(result.measurement.amount).toEqual(
             expected.measurement.amount
           );
         });
 
-        it(`should set the measurement unit to "${
-          expected.measurement.unit
-        }"`, () => {
+        it(`should set the measurement unit to "${expected.measurement.unit}"`, () => {
           expect(result.measurement.unit).toEqual(expected.measurement.unit);
         });
 
         if (expected.measurement.size) {
-          it(`should set the measurement size to "${
-            expected.measurement.size
-          }"`, () => {
+          it(`should set the measurement size to "${expected.measurement.size}"`, () => {
             expect(result.measurement.size).toEqual(expected.measurement.size);
           });
         }
