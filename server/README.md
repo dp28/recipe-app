@@ -1,4 +1,4 @@
-# Recipe App
+# Upscale
 
 A GraphQL service for parsing recipe websites.
 
