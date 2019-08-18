@@ -20,7 +20,7 @@ build: node_modules
 	REACT_APP_ENVIRONMENT=$(ENVIRONMENT) npm run build
 
 deploy: build
-	aws s3 sync build/ s3://prod-recipe-app-client
+	aws s3 sync build/ s3://recipes.djpdev.com
 
 node_modules: package.json
 	npm install
