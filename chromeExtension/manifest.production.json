@@ -4,7 +4,7 @@
   "manifest_version": 2,
   "description": "Extracts recipes from web pages",
   "background": {
-    "scripts": ["src/loadBackgroundScript.js", "lib/dev/hotReload.js"]
+    "scripts": ["src/loadBackgroundScript.js"]
   },
   "permissions": ["tabs", "http://*/*", "https://*/*"],
   "content_scripts": [
@@ -19,5 +19,9 @@
     "default_title": "Upscale"
   },
   "web_accessible_resources": ["src/*"],
-  "icons": { "16": "icon16.png", "48": "icon48.png", "128": "icon128.png" }
+  "icons": {
+    "16": "images/production/icon16.png",
+    "48": "images/production/icon48.png",
+    "128": "images/production/icon128.png"
+  }
 }
