@@ -18,7 +18,10 @@
   "jest": {
     "transform": {
       ".*": "<rootDir>/node_modules/babel-jest"
-    }
+    },
+    "modulePathIgnorePatterns": [
+      "<rootDir>/src/config/environment/"
+    ]
   },
   "babel": {
     "presets": [
