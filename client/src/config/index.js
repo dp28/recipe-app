@@ -3,7 +3,8 @@ const Joi = require("joi-browser");
 const ConfigSchema = Joi.object().keys({
   apiURL: Joi.string(),
   environment: Joi.string(),
-  loggingEnabled: Joi.boolean()
+  loggingEnabled: Joi.boolean(),
+  faviconPaths: Joi.array().items(Joi.string().required())
 });
 
 export function validateConfig(config) {
@@ -25,3 +26,4 @@ export const apiURL = config.apiURL;
 export const environment = config.environment;
 export const appName = "Upscale";
 export const loggingEnabled = config.loggingEnabled;
+export const faviconPaths = config.faviconPaths;

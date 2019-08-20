@@ -17,6 +17,9 @@ endif
 lint: node_modules
 	npx prettier --check "src/**/*.js"
 
+build:
+	
+
 deploy: build
 	echo "Not implemented"
 
