@@ -20,7 +20,7 @@ This is essentially a wrapper around an `iframe` to the client application to en
 To load the extension for the first time, run
 
 ```bash
-ENVIRONMENT=development make build
+ENVIRONMENT=development make start
 ```
 
 Then load the unpacked extension (this directory) on chrome://extensions/.
@@ -32,7 +32,7 @@ Any code changes should reload the extension's code automatically from this poin
 This won't autoreload as you change the code, so remember to reload the extension at chrome://extensions/.
 
 ```bash
-ENVIRONMENT=production make build
+ENVIRONMENT=production make start
 ```
 
 The extension icon should be blue for the production build, as opposed to the green icons in development.
@@ -42,3 +42,13 @@ The extension icon should be blue for the production build, as opposed to the gr
 ```bash
 make test
 ```
+
+## Deployment
+
+Use
+
+```bash
+ENVIRONMENT=production make build
+```
+
+to create a production-ready zipfile for uploading to the Chrome Developer Dashboard.

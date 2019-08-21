@@ -1,2 +1,3 @@
 manifest.json
 src/config/index.js
+build/*

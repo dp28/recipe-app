@@ -5,7 +5,7 @@ ENVIRONMENT ?= development
 install: node_modules
 
 clean:
-	rm -rf node_modules src/config/index.js manifest.json
+	rm -rf build node_modules src/config/index.js manifest.json
 
 test: node_modules
 	ENVIRONMENT=test make src/config/index.js
@@ -18,8 +18,12 @@ endif
 lint: node_modules
 	npx prettier --check "src/**/*.js"
 
+start: src/config/index.js manifest.json
+
 build: src/config/index.js manifest.json
-	echo "Not implemented"
+	mkdir -p ./build
+	zip -r ./build/upscale.zip . \
+		--include "src/*" "lib/$(ENVIRONMENT)/*" "images/$(ENVIRONMENT)/*" manifest.json
 
 deploy: build manifest.json
 	echo "Not implemented"
