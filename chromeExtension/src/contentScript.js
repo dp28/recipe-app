@@ -13,12 +13,14 @@ import { searchForText, searchForTextList } from "./documentSearch.js";
 const HIGHLIGHT_COLOUR = "#90caf9";
 const HIGHLIGHT_CURSOR = "pointer";
 
+let channel;
+
 export function main() {
   debug("Loaded!");
   registerListeners();
+  togglePopup();
+  setupMessaging();
 }
-
-let channel;
 
 function registerListeners() {
   chrome.runtime.onMessage.addListener(action => {
@@ -26,7 +28,6 @@ function registerListeners() {
     switch (action.type) {
       case TOGGLE_POPUP:
         togglePopup();
-        setupMessaging();
         return;
       default:
         return;

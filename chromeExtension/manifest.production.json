@@ -2,19 +2,11 @@
   "name": "Upscale",
   "version": "0.0.1",
   "manifest_version": 2,
-  "description": "Extracts recipes from web pages",
+  "description": "Make recipes easier to follow",
   "background": {
     "scripts": ["src/loadBackgroundScript.js"]
   },
-  "permissions": ["tabs", "http://*/*", "https://*/*"],
-  "content_scripts": [
-    {
-      "matches": ["http://*/*", "https://*/*"],
-      "js": ["src/loadContentScript.js"],
-      "run_at": "document_end",
-      "all_frames": false
-    }
-  ],
+  "permissions": ["tabs", "activeTab"],
   "browser_action": {
     "default_title": "Upscale"
   },

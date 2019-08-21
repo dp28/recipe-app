@@ -9,6 +9,17 @@ export function main() {
 function registerListeners() {
   chrome.browserAction.onClicked.addListener(tab => {
     debug("Clicked - tab:", tab.id);
-    chrome.tabs.sendMessage(tab.id, togglePopup());
+    chrome.tabs.executeScript(
+      tab.id,
+      {
+        file: "src/loadContentScript.js",
+        runAt: "document_end",
+        allFrames: false
+      },
+      (...results) => {
+        debug("Content script loaded", ...results);
+        chrome.tabs.sendMessage(tab.id, togglePopup());
+      }
+    );
   });
 }
