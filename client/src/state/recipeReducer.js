@@ -16,10 +16,7 @@ export function recipeReducer(recipe = {}, action) {
     case SET_RECIPE_INGREDIENTS:
       return { ...recipe, ingredients: action.ingredients };
     case SET_RECIPE_METHOD:
-      return {
-        ...recipe,
-        method: { instructions: action.instructions.map(parseInstruction) }
-      };
+      return { ...recipe, method: action.method };
     case SET_RECIPE_SERVINGS:
       const digits = action.servings.match(/(\d+)/);
       return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
@@ -28,8 +25,4 @@ export function recipeReducer(recipe = {}, action) {
     default:
       return recipe;
   }
-}
-
-function parseInstruction(text) {
-  return { text };
 }

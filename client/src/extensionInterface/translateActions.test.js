@@ -15,7 +15,7 @@ import {
   setRecipeTitle,
   setRecipeServings,
   importRecipeIngredients,
-  setRecipeMethod
+  importRecipeMethod
 } from "./actions";
 
 describe("translateActionToMessage", () => {
@@ -136,7 +136,7 @@ describe("translateMessageToAction", () => {
     });
 
     describe("and the ingredients are being waited for", () => {
-      it("should return a 'SET_RECIPE_INGREDIENTS' action with the list", () => {
+      it("should return a 'IMPORT_RECIPE_INGREDIENTS' action with the list", () => {
         const list = ["bla"];
         expect(
           translateMessageToAction(
@@ -148,14 +148,14 @@ describe("translateMessageToAction", () => {
     });
 
     describe("and the method is being waited for", () => {
-      it("should return a 'SET_RECIPE_METHOD' action with the list", () => {
+      it("should return a 'IMPORT_RECIPE_METHOD' action with the list", () => {
         const list = ["bla"];
         expect(
           translateMessageToAction(
             { browserExtension: { waitingFor: "method" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
-        ).toEqual(setRecipeMethod(list));
+        ).toEqual(importRecipeMethod(list));
       });
     });
   });

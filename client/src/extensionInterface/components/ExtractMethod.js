@@ -9,7 +9,7 @@ const useMethodStyles = makeStyles(theme => ({
   list: {
     listStyle: "decimal"
   },
-  instruction: {
+  step: {
     marginBottom: theme.spacing(1)
   }
 }));
@@ -24,8 +24,7 @@ export function UnconnectedExtractMethod({
   if (waitingForMethod) {
     return (
       <Help>
-        Click on the recipe instructions. Each instruction should be highlighted
-        separately.
+        Click on the recipe steps. Each step should be highlighted separately.
       </Help>
     );
   }
@@ -33,12 +32,12 @@ export function UnconnectedExtractMethod({
     return (
       <div>
         <h4>Method</h4>
-        <Button onClick={requestMethod}>Change instructions</Button>
+        <Button onClick={requestMethod}>Change steps</Button>
 
         <ol className={classes.list}>
-          {method.instructions.map(instruction => (
-            <li key={instruction.text} className={classes.instruction}>
-              {instruction.text}
+          {method.steps.map(step => (
+            <li key={step.id} className={classes.step}>
+              {step.rawText}
             </li>
           ))}
         </ol>
@@ -47,7 +46,7 @@ export function UnconnectedExtractMethod({
   }
   return (
     <div>
-      <Button onClick={requestMethod}>Set instructions</Button>
+      <Button onClick={requestMethod}>Set steps</Button>
     </div>
   );
 }

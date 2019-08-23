@@ -6,7 +6,7 @@ import {
   setRecipeTitle,
   setRecipeServings,
   importRecipeIngredients,
-  setRecipeMethod
+  importRecipeMethod
 } from "./actions";
 
 export const REQUEST_TEXT = "REQUEST_TEXT";
@@ -30,7 +30,7 @@ const ActionCreatorsForText = {
 
 const ActionCreatorsForTextList = {
   ingredients: importRecipeIngredients,
-  method: setRecipeMethod
+  method: importRecipeMethod
 };
 
 export function translateActionToMessage(action) {

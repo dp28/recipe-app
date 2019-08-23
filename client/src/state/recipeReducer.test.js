@@ -79,19 +79,10 @@ describe("reducer", () => {
   });
 
   describe("with a setRecipeMethod action", () => {
-    it("should add an instruction for each passed-in instruction", () => {
-      const recipe = reducer(initialState, setRecipeMethod(["something"]));
-      expect(recipe.method.instructions.length).toEqual(1);
-    });
-
-    describe("each instruction", () => {
-      const input = "something";
-      const recipe = reducer(initialState, setRecipeMethod([input]));
-      const instruction = recipe.method.instructions[0];
-
-      it("should have the input as its text", () => {
-        expect(instruction.text).toEqual(input);
-      });
+    it("should add the passed-in method", () => {
+      const method = { id: "fake" };
+      const recipe = reducer(initialState, setRecipeMethod(method));
+      expect(recipe.method).toEqual(method);
     });
   });
 

@@ -9,6 +9,7 @@ export const SET_RECIPE_TITLE = "SET_RECIPE_TITLE";
 export const SET_RECIPE_SERVINGS = "SET_RECIPE_SERVINGS";
 export const IMPORT_RECIPE_INGREDIENTS = "IMPORT_RECIPE_INGREDIENTS";
 export const SET_RECIPE_INGREDIENTS = "SET_RECIPE_INGREDIENTS";
+export const IMPORT_RECIPE_METHOD = "IMPORT_RECIPE_METHOD";
 export const SET_RECIPE_METHOD = "SET_RECIPE_METHOD";
 
 export const appLoaded = () => ({ type: APP_LOADED });
@@ -42,7 +43,12 @@ export const setRecipeIngredients = ingredients => ({
   ingredients
 });
 
-export const setRecipeMethod = instructions => ({
+export const importRecipeMethod = steps => ({
+  type: IMPORT_RECIPE_METHOD,
+  steps
+});
+
+export const setRecipeMethod = method => ({
   type: SET_RECIPE_METHOD,
-  instructions
+  method
 });
