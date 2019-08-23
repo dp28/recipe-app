@@ -152,7 +152,8 @@ describe("parseMethod", () => {
       steps: [
         {
           rawText: "A classic Italian dish that's hard to beat.",
-          ingredientIds: []
+          ingredientIds: [],
+          timers: []
         },
         {
           rawText:
@@ -164,17 +165,20 @@ describe("parseMethod", () => {
             "cjzmlvdz20003305sd84yq9ie",
             "cjzmlvdz70004305sf8io0zfd",
             "cjzmlvdze0005305simyr3oem"
-          ]
+          ],
+          timers: [{ amount: 8, unit: "minute" }]
         },
         {
           rawText:
             "After a minute the rice will look slightly translucent. Add the wine and keep stirring.",
-          ingredientIds: ["cjzmlvdzk0006305sd2z2027e"]
+          ingredientIds: ["cjzmlvdzk0006305sd2z2027e"],
+          timers: []
         },
         {
           rawText:
             "Now add a ladle of hot stock and a pinch of salt. Turn down the heat to a fairly high simmer. Keep adding ladlefuls of stock, stirring constantly and allowing each ladleful to be absorbed completely before adding the next.",
-          ingredientIds: ["cjzmlvdzs0008305sohmy49nq"]
+          ingredientIds: ["cjzmlvdzs0008305sohmy49nq"],
+          timers: []
         },
         {
           rawText:
@@ -182,7 +186,8 @@ describe("parseMethod", () => {
           ingredientIds: [
             "cjzmlvdzq0007305sinn0b74e",
             "cjzmlvdzv0009305sg860bawx"
-          ]
+          ],
+          timers: []
         },
         {
           rawText:
@@ -190,12 +195,14 @@ describe("parseMethod", () => {
           ingredientIds: [
             "cjzmlvdzz000a305srxkbq58d",
             "cjzmlve04000b305sxq01x3x7"
-          ]
+          ],
+          timers: []
         },
         {
           rawText:
             "Tip: Leave out the bacon and use vegetable stock if you want to make a vegetarian risotto.",
-          ingredientIds: []
+          ingredientIds: [],
+          timers: []
         }
       ]
     }
@@ -356,14 +363,15 @@ describe("parseMethod", () => {
         "Preheat oven to 425ºF.",
         "Put the walnuts, 1/4 cup of cheese, and olive oil in a food processor and process until crumbly. Season with salt and pepper.",
         "Heat the butter in a large skillet over medium heat. Add the shallot and cook for about 5 minutes, until softened. Stir in the Brussels sprouts and apple slices; cook about 10 minutes more, or until apples and sprouts are beginning to brown. Stir in the maple syrup and thyme, then remove from heat and season to taste with salt and pepper.",
-        "Place the puff pastry on baking sheets lined with Silpats or parchment paper; roll the pastry out to about 9 x 12 inches. Bake for 8-10 minutes, or until the pastry is puffed and golden brown. Gently press down the center of the pastry, leaving a 1-inch margin on all sides. Sprinkle the pesto onto the crust, then top with half the cheese, the sprouts and apples, then the remaining cheese. (You might have some of the sprout mixture leftover.) Return to the oven for 5 more minutes to melt the cheese, then top with the cranberries. Cut each tart into 6 pieces and serve."
+        "Place the puff pastry on baking sheets lined with Silpats or parchment paper; roll the pastry out to about 9 x 12 inches. Bake for 8-10 minutes, or until the pastry is puffed and golden brown. Gently press down the center of the pastry, leaving a 1-inch margin on all sides. Sprinkle the pesto onto the crust, then top with half the cheese, the sprouts and apples, then the remaining cheese. (You might have some of the sprout mixture leftover.) Return to the oven for 5 more minutes to melt the cheese, then top with the cranberries. Leave to cool for half an hour. Cut each tart into 6 pieces and serve."
       ]
     },
     expected: {
       steps: [
         {
           rawText: "Preheat oven to 425ºF.",
-          ingredientIds: []
+          ingredientIds: [],
+          timers: []
         },
         {
           rawText:
@@ -373,7 +381,8 @@ describe("parseMethod", () => {
             "cjznbxyii0001305s3qljs27p",
             "cjznbxyir0002305s550ua4qe",
             "cjznbxyiw0003305swcu2v4ec"
-          ]
+          ],
+          timers: []
         },
         {
           rawText:
@@ -385,14 +394,23 @@ describe("parseMethod", () => {
             "cjznbxyjf0007305serap1iob",
             "cjznbxyji0008305sau93ejsi",
             "cjznbxyjo0009305snzo0lrg7"
+          ],
+          timers: [
+            { amount: 5, unit: "minute" },
+            { amount: 10, unit: "minute" }
           ]
         },
         {
           rawText:
-            "Place the puff pastry on baking sheets lined with Silpats or parchment paper; roll the pastry out to about 9 x 12 inches. Bake for 8-10 minutes, or until the pastry is puffed and golden brown. Gently press down the center of the pastry, leaving a 1-inch margin on all sides. Sprinkle the pesto onto the crust, then top with half the cheese, the sprouts and apples, then the remaining cheese. (You might have some of the sprout mixture leftover.) Return to the oven for 5 more minutes to melt the cheese, then top with the cranberries. Cut each tart into 6 pieces and serve.",
+            "Place the puff pastry on baking sheets lined with Silpats or parchment paper; roll the pastry out to about 9 x 12 inches. Bake for 8-10 minutes, or until the pastry is puffed and golden brown. Gently press down the center of the pastry, leaving a 1-inch margin on all sides. Sprinkle the pesto onto the crust, then top with half the cheese, the sprouts and apples, then the remaining cheese. (You might have some of the sprout mixture leftover.) Return to the oven for 5 more minutes to melt the cheese, then top with the cranberries. Leave to cool for half an hour. Cut each tart into 6 pieces and serve.",
           ingredientIds: [
             "cjznbxyjs000a305sieasav3h",
             "cjznbxyjw000b305semm1pmdw"
+          ],
+          timers: [
+            { amount: 10, unit: "minute" },
+            { amount: 5, unit: "minute" },
+            { amount: 0.5, unit: "hour" }
           ]
         }
       ]
@@ -433,6 +451,26 @@ describe("parseMethod", () => {
             expect(resultStep.ingredientIds).toEqual(
               expectedStep.ingredientIds
             );
+          });
+
+          it(`should have ${expectedStep.timers.length} timers`, () => {
+            expect(resultStep.timers.length).toEqual(
+              expectedStep.timers.length
+            );
+          });
+
+          expectedStep.timers.forEach((extpectedTimer, i) => {
+            const resultTimer = resultStep.timers[i];
+
+            describe(`the timer at index ${i}`, () => {
+              it(`should have the unit "${extpectedTimer.unit}"`, () => {
+                expect(resultTimer.unit).toEqual(extpectedTimer.unit);
+              });
+
+              it(`should have the amount "${extpectedTimer.amount}"`, () => {
+                expect(resultTimer.amount).toEqual(extpectedTimer.amount);
+              });
+            });
           });
         });
       });

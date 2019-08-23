@@ -19,9 +19,10 @@ function parseSteps({ ingredients, steps }) {
 }
 
 function stepsReducer({ steps, ingredients }, rawText, index) {
-  const { used, unused } = findIngredients(rawText, ingredients);
+  const text = parse(rawText);
+  const { used, unused } = findIngredients(text, ingredients);
   const ingredientIds = used.map(_ => _.id);
-  const step = parseStep({ rawText, index, ingredientIds });
+  const step = parseStep({ rawText, text, index, ingredientIds });
   steps.push(step);
   return {
     steps,
@@ -29,8 +30,8 @@ function stepsReducer({ steps, ingredients }, rawText, index) {
   };
 }
 
-function findIngredients(rawText, ingredients) {
-  const nouns = new Set(toNormalizedNouns(rawText));
+function findIngredients(text, ingredients) {
+  const nouns = new Set(toNormalizedNouns(text));
   return ingredients.reduce(
     ({ used, unused }, ingredient) => {
       const group = ingredientInNouns(ingredient, nouns) ? used : unused;
@@ -42,12 +43,12 @@ function findIngredients(rawText, ingredients) {
 }
 
 function ingredientInNouns(ingredient, nouns) {
-  const foodNouns = toNormalizedNouns(ingredient.food.name);
+  const foodNouns = toNormalizedNouns(parse(ingredient.food.name));
   return foodNouns.some(foodNoun => nouns.has(foodNoun));
 }
 
-function toNormalizedNouns(rawText) {
-  return parse(rawText)
+function toNormalizedNouns(text) {
+  return text
     .not(MeasuringUnitTag)
     .nouns()
     .toSingular()
@@ -55,11 +56,28 @@ function toNormalizedNouns(rawText) {
     .map(_ => _.main);
 }
 
-function parseStep({ rawText, index, ingredientIds }) {
+function parseStep({ rawText, text, index, ingredientIds }) {
+  const timers = parseTimers(text);
   return {
     id: generateId(),
     ordering: index + 1,
     rawText,
-    ingredientIds
+    ingredientIds,
+    timers
   };
+}
+
+function parseTimers(text) {
+  return text
+    .replace("half", "0.5")
+    .match("#Value .? (minute|hour)")
+    .not("a minute")
+    .map(timeText => ({
+      unit: timeText
+        .match("(minute|hour)")
+        .normalize()
+        .out()
+        .replace(/\W/g, ""),
+      amount: timeText.values().numbers()[0]
+    }));
 }
