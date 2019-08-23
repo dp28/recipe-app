@@ -33,7 +33,7 @@ node_modules: package.json
 	touch node_modules
 
 src/config/index.js:
-	echo "export * from \"./environment/$(ENVIRONMENT).js\"" > src/config/index.js
+	echo "export * from \"./environment/$(ENVIRONMENT).js\";" > src/config/index.js
 
 manifest.json: manifest.$(ENVIRONMENT).json
 	cp manifest.$(ENVIRONMENT).json manifest.json
