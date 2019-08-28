@@ -1,0 +1,3 @@
+herkou:
+  apiKey: ${ssm:/heroku/api-key~true}
+  mongoAddonId: ${ssm:/production/recipe-app/mongo/heroku-addon-id~true}

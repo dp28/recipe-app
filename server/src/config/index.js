@@ -3,7 +3,8 @@ const Joi = require("@hapi/joi");
 const ConfigSchema = Joi.object().keys({
   environment: Joi.string(),
   deployedAt: Joi.date(),
-  version: Joi.string()
+  version: Joi.string(),
+  mongoURIRepository: Joi.any()
 });
 
 function validateConfig(config) {

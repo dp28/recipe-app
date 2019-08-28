@@ -55,6 +55,10 @@ describe("production", () => {
         throw new Error("Incorrect file read");
       }
       return JSON.stringify({ version, deployedAt });
+    },
+    environment: {
+      HEROKU_API_KEY: "fake",
+      HEROKU_MONGO_ADDON_ID: "fake"
     }
   });
 

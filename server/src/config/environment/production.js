@@ -1,5 +1,9 @@
+const {
+  HerokuMongoURIRepository
+} = require("../../storage/databaseURIRepositories/herokuMongoURIRepository");
+
 function buildConfig(dependencyOverrides = {}) {
-  const { readFileSync } = loadDependencies(dependencyOverrides);
+  const { readFileSync, environment } = loadDependencies(dependencyOverrides);
   const contents = readFileSync("./deploymentStats.json", {
     encoding: "utf-8"
   });
@@ -7,13 +11,18 @@ function buildConfig(dependencyOverrides = {}) {
   return {
     environment: "PRODUCTION",
     version,
-    deployedAt: new Date(Date.parse(deployedAt))
+    deployedAt: new Date(Date.parse(deployedAt)),
+    mongoURIRepository: new HerokuMongoURIRepository({
+      apiKey: environment.HEROKU_API_KEY,
+      mongoAddonId: environment.HEROKU_MONGO_ADDON_ID
+    })
   };
 }
 
-function loadDependencies({ readFileSync }) {
+function loadDependencies({ readFileSync, environment }) {
   return {
-    readFileSync: readFileSync || require("fs").readFileSync
+    readFileSync: readFileSync || require("fs").readFileSync,
+    environment: environment || process.env
   };
 }
 

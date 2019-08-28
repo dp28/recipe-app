@@ -6,6 +6,9 @@ provider:
   environment:
     NODE_ENV: ${opt:stage}
 
+custom:
+  config: ${file(./serverless/environment/${opt:stage}.yml)}
+
 plugins:
   - serverless-offline
 
@@ -21,6 +24,9 @@ package:
 functions:
   graphql:
     handler: src/index.handler
+    environment:
+      HEROKU_API_KEY: ${self:custom.config.herkou.apiKey, ''}
+      HEROKU_MONGO_ADDON_ID: ${self:custom.config.herkou.mongoAddonId, ''}
     events:
       - http:
           path: graphql
