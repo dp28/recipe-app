@@ -1,6 +1,6 @@
 const { ApolloServer, gql } = require("apollo-server-lambda");
 const { mergeResolvers, mergeTypes } = require("merge-graphql-schemas");
-const schemas = [require("./meta"), require("./external")];
+const schemas = [require("./meta"), require("./external"), require("./recipe")];
 
 const typeDefs = mergeTypes(schemas.map(_ => _.typeDefs), { all: true });
 const resolvers = mergeResolvers(schemas.map(_ => _.resolvers));
