@@ -1,5 +1,6 @@
-const { withMongoConnection } = require("../storage/mongo");
+const { saveEvent, withMongoConnection } = require("../storage/mongo");
 const { asyncTrace } = require("../utils/debug");
+const { recipeImported } = require("../domain/events");
 
 const typeDefs = `
   type Recipe {
@@ -53,8 +54,78 @@ const typeDefs = `
     amount: PositiveFloat!
   }
 
+  type ImportRecipeEvent {
+    id: String!
+    type: String!
+    occurredAt: DateTime!
+    payload: ImportRecipeEventPayload!
+  }
+
+  type ImportRecipeEventPayload {
+    recipe: Recipe!
+  }
+
+  type ImportRecipeResult {
+    event: ImportRecipeEvent!
+  }
+
+  input RecipeInput {
+    id: String!
+    url: URL!
+    title: String!
+    servings: PositiveInt!
+    ingredients: [IngredientInput!]!
+    method: MethodInput!
+  }
+
+  input IngredientInput {
+    id: String!
+    rawText: String!
+    food: FoodInput!
+    measurement: MeasurementInput
+    instruction: String
+    notes: String
+  }
+
+  input FoodInput {
+    name: String!
+  }
+
+  input MeasurementInput {
+    amount: PositiveFloat!
+    unit: UnitInput
+    size: String
+  }
+
+  input UnitInput {
+    name: String!
+    symbol: String
+  }
+
+  input MethodInput {
+    id: String!
+    steps: [StepInput!]!
+  }
+
+  input StepInput {
+    id: String!
+    ordering: PositiveInt!
+    rawText: String!
+    ingredientIds: [String!]!
+    timers: [TimerInput!]!
+  }
+
+  input TimerInput {
+    unit: String!
+    amount: PositiveFloat!
+  }
+
   type Query {
     recipes: [Recipe!]!
+  }
+
+  type Mutation {
+    importRecipe(recipe: RecipeInput): ImportRecipeResult!
   }
 `;
 
@@ -70,6 +141,17 @@ const resolvers = {
       return recipes.map(_ => _.payload.recipe);
     }
   },
-  Recipe: {}
+  Mutation: {
+    importRecipe: async (_parent, { recipe }) => {
+      console.info("Importing recipe from", recipe.url);
+      const event = recipeImported(recipe);
+      await saveEvent(event);
+      return { event };
+    }
+  },
+  Recipe: {},
+  ImportRecipeResult: {},
+  ImportRecipeEventPayload: {},
+  ImportRecipeEvent: {}
 };
 module.exports = { typeDefs, resolvers };

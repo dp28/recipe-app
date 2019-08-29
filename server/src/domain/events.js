@@ -5,7 +5,7 @@ const RECIPE_IMPORTED = "RECIPE_IMPORTED";
 const recipeImported = recipe => ({
   id: generateId,
   type: RECIPE_IMPORTED,
-  occuredAt: new Date(),
+  occurredAt: new Date(),
   payload: { recipe }
 });
 

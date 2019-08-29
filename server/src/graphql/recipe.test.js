@@ -1,9 +1,46 @@
 const { createTestClient } = require("apollo-server-testing");
 const { server } = require("./graphqlServer");
-const { recipeImported } = require("../domain/events");
-const { saveEvent, deleteAllEvents } = require("../storage/mongo");
+const { recipeImported, RECIPE_IMPORTED } = require("../domain/events");
+const {
+  saveEvent,
+  deleteAllEvents,
+  withMongoConnection
+} = require("../storage/mongo");
 
 const { query: executeQuery } = createTestClient(server);
+
+const recipe = {
+  id: "fake_id",
+  title: "Toast",
+  url: "https://www.example.com/toast",
+  servings: 1,
+  ingredients: [
+    {
+      id: "another_id",
+      rawText: "1 large slice of bread (wholemeal or white), crusts removed",
+      food: { name: "bread" },
+      measurement: {
+        amount: 1,
+        unit: { name: "slice" },
+        size: "large"
+      },
+      instruction: "crusts removed",
+      notes: "wholemeal or white"
+    }
+  ],
+  method: {
+    id: "fakety_fake",
+    steps: [
+      {
+        id: "fake_fake_fake",
+        ordering: 1,
+        rawText: "Put the bread in the toaster for 2 minutes",
+        ingredientIds: ["another_id"],
+        timers: [{ unit: "minute", amount: 2 }]
+      }
+    ]
+  }
+};
 
 describe("recipes", () => {
   describe("when no recipes are saved", () => {
@@ -15,40 +52,6 @@ describe("recipes", () => {
   });
 
   describe("when a RECIPE_IMPORTED event has occurred", () => {
-    const recipe = {
-      id: "fake_id",
-      title: "Toast",
-      url: "https://www.example.com/toast",
-      servings: 1,
-      ingredients: [
-        {
-          id: "another_id",
-          rawText:
-            "1 large slice of bread (wholemeal or white), crusts removed",
-          food: { name: "bread" },
-          measurement: {
-            amount: 1,
-            unit: { name: "slice" },
-            size: "large"
-          },
-          instruction: "crusts removed",
-          notes: "wholemeal or white"
-        }
-      ],
-      method: {
-        id: "fakety_fake",
-        steps: [
-          {
-            id: "fake_fake_fake",
-            ordering: 1,
-            rawText: "Put the bread in the toaster for 2 minutes",
-            ingredientIds: ["another_id"],
-            timers: [{ unit: "minute", amount: 2 }]
-          }
-        ]
-      }
-    };
-
     const event = recipeImported(recipe);
 
     beforeEach(() => saveEvent(event));
@@ -150,5 +153,55 @@ describe("recipes", () => {
         return expect(result.timers).toEqual(step.timers);
       });
     });
+  });
+});
+
+describe("importRecipe", () => {
+  afterEach(deleteAllEvents);
+
+  async function importRecipe(resultQuery = "{ event { id } }") {
+    return executeQuery({
+      mutation: `
+        mutation import($recipe: RecipeInput!) {
+          importRecipe(recipe: $recipe) ${resultQuery}
+        }
+      `,
+      variables: { recipe }
+    });
+  }
+
+  it("should store the recipe in the mongo database", async () => {
+    await importRecipe();
+    const recipeImportedEvent = await withMongoConnection(db =>
+      db.collection("events").findOne({})
+    );
+    const savedRecipe = recipeImportedEvent.payload.recipe;
+    return expect(savedRecipe).toEqual(recipe);
+  });
+
+  it("should return the recipe in the result event", async () => {
+    const response = await importRecipe(
+      "{ event { payload { recipe { id } } } }"
+    );
+    return expect(response.data.importRecipe.event.payload.recipe.id).toEqual(
+      recipe.id
+    );
+  });
+
+  it("should return the type of the result event", async () => {
+    const response = await importRecipe("{ event { type } }");
+    return expect(response.data.importRecipe.event.type).toEqual(
+      RECIPE_IMPORTED
+    );
+  });
+
+  it("should return an id for the event", async () => {
+    const response = await importRecipe("{ event { id } }");
+    return expect(response.data.importRecipe.event.id).toBeTruthy();
+  });
+
+  it("should return an occurredAt time for the event", async () => {
+    const response = await importRecipe("{ event { occurredAt } }");
+    return expect(response.data.importRecipe.event.occurredAt).toBeTruthy();
   });
 });
