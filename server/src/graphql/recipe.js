@@ -1,6 +1,7 @@
 const { saveEvent, withMongoConnection } = require("../storage/mongo");
 const { asyncTrace } = require("../utils/debug");
 const { recipeImported } = require("../domain/events");
+const { info } = require("../utils/logging");
 
 const typeDefs = `
   type Recipe {
@@ -143,7 +144,7 @@ const resolvers = {
   },
   Mutation: {
     importRecipe: async (_parent, { recipe }) => {
-      console.info("Importing recipe from", recipe.url);
+      info("Importing recipe from", recipe.url);
       const event = recipeImported(recipe);
       await saveEvent(event);
       return { event };

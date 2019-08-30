@@ -1,10 +1,18 @@
 const Joi = require("@hapi/joi");
+const { DEBUG, INFO, WARNING, ERROR, DISABLED } = require("../utils/logLevels");
+
+const defaultConfig = {
+  logLevel: INFO
+};
 
 const ConfigSchema = Joi.object().keys({
   environment: Joi.string(),
   deployedAt: Joi.date(),
   version: Joi.string(),
-  mongoURIRepository: Joi.any()
+  mongoURIRepository: Joi.any(),
+  logLevel: Joi.string()
+    .valid(DEBUG, INFO, WARNING, ERROR, DISABLED)
+    .optional()
 });
 
 function validateConfig(config) {
@@ -28,5 +36,6 @@ if (config.environment !== "TEST") {
 
 module.exports = {
   validateConfig,
+  ...defaultConfig,
   ...config
 };

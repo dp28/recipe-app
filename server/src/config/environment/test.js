@@ -1,3 +1,4 @@
+const { DISABLED } = require("../../utils/logLevels");
 const {
   HardcodedURIRepository
 } = require("../../storage/databaseURIRepositories/hardcodedURIRepository");
@@ -5,6 +6,7 @@ const {
 module.exports = {
   buildConfig: () => ({
     environment: "TEST",
+    logLevel: DISABLED,
     deployedAt: new Date(),
     version: "test",
     mongoURIRepository: new HardcodedURIRepository({
