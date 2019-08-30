@@ -4,6 +4,7 @@ jobs:
   test_server:
     docker:
       - image: circleci/node:10.15
+      - image: mongo:3.6
 
     working_directory: ~/recipe-app/server
 
@@ -23,7 +24,7 @@ jobs:
             - node_modules
           key: v2-server-dependencies-{{ checksum "package.json" }}
 
-      - run: make test
+      - run: ENVIRONMENT=ci make test
       - run: make lint
 
   test_client:

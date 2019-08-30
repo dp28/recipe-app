@@ -16,7 +16,7 @@ endif
 
 mongo:
 ifdef CI
-	echo "Not implemented"
+	echo "Using CI-provided mongo database"
 else
 	docker-compose up -d mongo
 endif
