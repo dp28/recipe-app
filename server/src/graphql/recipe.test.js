@@ -205,3 +205,83 @@ describe("importRecipe", () => {
     return expect(response.data.importRecipe.event.occurredAt).toBeTruthy();
   });
 });
+
+describe("findRecipeById", () => {
+  afterEach(deleteAllEvents);
+
+  describe("when there are no recipes", () => {
+    it("should not return errors", async () => {
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeById(id: "not_real") { title } }`
+      });
+      return expect(response.errors).toBeFalsy;
+    });
+
+    it("should return null", async () => {
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeById(id: "not_real") { title } }`
+      });
+      return expect(response.data.recipe).toEqual(null);
+    });
+  });
+
+  describe("when there are only recipes with different ids", () => {
+    it("should return null", async () => {
+      await saveEvent(recipeImported(recipe));
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeById(id: "not_real") { title } }`
+      });
+      return expect(response.data.recipe).toEqual(null);
+    });
+  });
+
+  describe("when there is a recipe with that id", () => {
+    it("should return that recipe", async () => {
+      await saveEvent(recipeImported(recipe));
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeById(id: "${recipe.id}") { title } }`
+      });
+      return expect(response.data.recipe.title).toEqual(recipe.title);
+    });
+  });
+});
+
+describe("findRecipeByURL", () => {
+  afterEach(deleteAllEvents);
+
+  describe("when there are no recipes", () => {
+    it("should not return errors", async () => {
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeByURL(url: "http://example.com/not_real") { title } }`
+      });
+      return expect(response.errors).toBeFalsy;
+    });
+
+    it("should return null", async () => {
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeByURL(url: "http://example.com/not_real") { title } }`
+      });
+      return expect(response.data.recipe).toEqual(null);
+    });
+  });
+
+  describe("when there are only recipes with different URLs", () => {
+    it("should return null", async () => {
+      await saveEvent(recipeImported(recipe));
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeByURL(url: "http://example.com/not_real") { title } }`
+      });
+      return expect(response.data.recipe).toEqual(null);
+    });
+  });
+
+  describe("when there is a recipe with that URL", () => {
+    it("should return that recipe", async () => {
+      await saveEvent(recipeImported(recipe));
+      const response = await executeQuery({
+        query: `{ recipe: findRecipeByURL(url: "${recipe.url}") { title } }`
+      });
+      return expect(response.data.recipe.title).toEqual(recipe.title);
+    });
+  });
+});

@@ -123,6 +123,8 @@ const typeDefs = `
 
   type Query {
     recipes: [Recipe!]!
+    findRecipeById(id: String!): Recipe
+    findRecipeByURL(url: URL!): Recipe
   }
 
   type Mutation {
@@ -140,6 +142,18 @@ const resolvers = {
           .toArray()
       );
       return recipes.map(_ => _.payload.recipe);
+    },
+    findRecipeById: async (_parent, { id }) => {
+      const event = await withMongoConnection(db =>
+        db.collection("events").findOne({ "payload.recipe.id": id })
+      );
+      return event ? event.payload.recipe : event;
+    },
+    findRecipeByURL: async (_parent, { url }) => {
+      const event = await withMongoConnection(db =>
+        db.collection("events").findOne({ "payload.recipe.url": url })
+      );
+      return event ? event.payload.recipe : event;
     }
   },
   Mutation: {
