@@ -1,8 +1,5 @@
 import { combineReducers } from "redux";
 import {
-  API_METADATA_LOADED,
-  ERROR_LOADING_API_METADATA,
-  REQUEST_API_METADATA,
   UPDATE_INGREDIENTS,
   COMBINE_INGREDIENTS,
   ADD_CATEGORY,
@@ -12,35 +9,17 @@ import { parseIngredient as oldParseIngredient } from "../domain/parseIngredient
 import { combineIngredientsIfPossible } from "../domain/combineIngredients";
 import { browserExtensionReducer } from "../extensionInterface/reducer";
 import { recipeReducer } from "./recipeReducer";
-
-const metadataReducer = combineReducers({ api: apiMetadataReducer });
+import { recipesReducer } from "./recipesReducer";
+import { metadataReducer } from "./metadataReducer";
 
 export const reducer = combineReducers({
   meta: metadataReducer,
   ingredients: ingredientsReducer,
   categories: categoriesReducer,
   recipe: recipeReducer,
+  recipes: recipesReducer,
   browserExtension: browserExtensionReducer
 });
-
-function apiMetadataReducer(state = { loading: true }, action) {
-  switch (action.type) {
-    case REQUEST_API_METADATA:
-      return { loading: true };
-    case API_METADATA_LOADED:
-      return {
-        version: action.version,
-        environment: action.environment,
-        deployedAt: new Date(Date.parse(action.deployedAt)),
-        loading: false
-      };
-    case ERROR_LOADING_API_METADATA:
-      return { error: action.error, loading: false };
-
-    default:
-      return state;
-  }
-}
 
 function categoriesReducer(categories = [], action) {
   switch (action.type) {
