@@ -5,7 +5,11 @@ import {
   requestApiMetadata,
   recipesLoaded,
   loadRecipes,
-  errorLoadingRecipes
+  errorLoadingRecipes,
+  loadRecipeById,
+  loadRecipeByURL,
+  errorLoadingRecipe,
+  recipeLoaded
 } from "../actions";
 
 describe("reducer", () => {
@@ -15,7 +19,8 @@ describe("reducer", () => {
     it("should return the expected initial state", () => {
       expect(initialState).toEqual({
         api: { loading: true },
-        recipes: { loading: false }
+        recipes: { loading: false },
+        recipe: { loading: false }
       });
     });
   });
@@ -95,7 +100,7 @@ describe("reducer", () => {
   });
 
   describe("with an errorLoadingRecipes action", () => {
-    it("should set the current API version", () => {
+    it("should store the error", () => {
       const error = new Error();
       const newState = reducer(initialState, errorLoadingRecipes(error));
       expect(newState.recipes.error).toEqual(error);
@@ -104,6 +109,40 @@ describe("reducer", () => {
     it("should set loading to false", () => {
       const newState = reducer(initialState, errorLoadingRecipes(new Error()));
       expect(newState.recipes.loading).toBe(false);
+    });
+  });
+
+  describe("with an recipeLoaded action", () => {
+    it("should set loading to false", () => {
+      const newState = reducer(initialState, recipeLoaded({}));
+      expect(newState.recipe.loading).toBe(false);
+    });
+  });
+
+  describe("with a loadRecipeById action", () => {
+    it("should set loading to true", () => {
+      const state = reducer(initialState, loadRecipeById("fake"));
+      expect(state.recipe.loading).toBe(true);
+    });
+  });
+
+  describe("with a loadRecipeByURL action", () => {
+    it("should set loading to true", () => {
+      const state = reducer(initialState, loadRecipeByURL("fake"));
+      expect(state.recipe.loading).toBe(true);
+    });
+  });
+
+  describe("with an errorLoadingRecipes action", () => {
+    it("should store the error", () => {
+      const error = new Error();
+      const newState = reducer(initialState, errorLoadingRecipe(error));
+      expect(newState.recipe.error).toEqual(error);
+    });
+
+    it("should set loading to false", () => {
+      const newState = reducer(initialState, errorLoadingRecipe(new Error()));
+      expect(newState.recipe.loading).toBe(false);
     });
   });
 });

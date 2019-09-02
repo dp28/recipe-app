@@ -4,6 +4,8 @@ import { watchApiMetadataRequested } from "./apiMetadata";
 import { watchImportIngredients } from "./importIngredients";
 import { watchImportMethod } from "./importMethod";
 import { watchLoadRecipes } from "./loadRecipes";
+import { watchLoadRecipeById } from "./loadRecipeById";
+import { watchLoadRecipeByURL } from "./loadRecipeByURL";
 
 describe("rootSaga", () => {
   it(`should delegate to watchApiMetadataRequested and watchImportIngredients`, () => {
@@ -13,7 +15,9 @@ describe("rootSaga", () => {
         watchApiMetadataRequested(),
         watchLoadRecipes(),
         watchImportIngredients(),
-        watchImportMethod()
+        watchImportMethod(),
+        watchLoadRecipeById(),
+        watchLoadRecipeByURL()
       ])
     );
   });

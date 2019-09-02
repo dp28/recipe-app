@@ -13,7 +13,11 @@ describe("reducer", () => {
   describe("with an init action", () => {
     it("should return an empty object", () => {
       expect(initialState).toEqual({
-        meta: { api: { loading: true }, recipes: { loading: false } },
+        meta: {
+          api: { loading: true },
+          recipes: { loading: false },
+          recipe: { loading: false }
+        },
         ingredients: [],
         categories: [],
         recipe: {},

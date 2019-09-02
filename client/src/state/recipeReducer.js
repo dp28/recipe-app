@@ -5,7 +5,7 @@ import {
   SET_RECIPE_INGREDIENTS,
   SET_RECIPE_METHOD
 } from "../extensionInterface/actions";
-import { SCALE_BY_SERVINGS } from "../actions";
+import { SCALE_BY_SERVINGS, RECIPE_LOADED } from "../actions";
 
 export function recipeReducer(recipe = {}, action) {
   switch (action.type) {
@@ -22,6 +22,8 @@ export function recipeReducer(recipe = {}, action) {
       return { ...recipe, servings: digits ? Number(digits[1]) : undefined };
     case SCALE_BY_SERVINGS:
       return { ...recipe, scaledServings: action.servings };
+    case RECIPE_LOADED:
+      return action.recipe || {};
     default:
       return recipe;
   }

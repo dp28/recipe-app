@@ -5,12 +5,17 @@ import {
   REQUEST_API_METADATA,
   LOAD_RECIPES,
   RECIPES_LOADED,
-  ERROR_LOADING_RECIPES
+  ERROR_LOADING_RECIPES,
+  LOAD_RECIPE_BY_ID,
+  LOAD_RECIPE_BY_URL,
+  RECIPE_LOADED,
+  ERROR_LOADING_RECIPE
 } from "../actions";
 
 export const metadataReducer = combineReducers({
   api: apiMetadataReducer,
-  recipes: recipesMetadataReducer
+  recipes: recipesMetadataReducer,
+  recipe: recipeMetadataReducer
 });
 
 function apiMetadataReducer(state = { loading: true }, action) {
@@ -39,6 +44,21 @@ function recipesMetadataReducer(state = { loading: false }, action) {
     case RECIPES_LOADED:
       return { loading: false };
     case ERROR_LOADING_RECIPES:
+      return { error: action.error, loading: false };
+    default:
+      return state;
+  }
+}
+
+function recipeMetadataReducer(state = { loading: false }, action) {
+  switch (action.type) {
+    case LOAD_RECIPE_BY_ID:
+      return { loading: true };
+    case LOAD_RECIPE_BY_URL:
+      return { loading: true };
+    case RECIPE_LOADED:
+      return { loading: false };
+    case ERROR_LOADING_RECIPE:
       return { error: action.error, loading: false };
     default:
       return state;
