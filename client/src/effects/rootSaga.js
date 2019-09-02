@@ -5,6 +5,7 @@ import { watchImportMethod } from "./importMethod";
 import { watchLoadRecipes } from "./loadRecipes";
 import { watchLoadRecipeById } from "./loadRecipeById";
 import { watchLoadRecipeByURL } from "./loadRecipeByURL";
+import { watchSaveRecipe } from "./saveRecipe";
 
 export function* rootSaga() {
   yield all([
@@ -13,6 +14,7 @@ export function* rootSaga() {
     watchImportIngredients(),
     watchImportMethod(),
     watchLoadRecipeById(),
-    watchLoadRecipeByURL()
+    watchLoadRecipeByURL(),
+    watchSaveRecipe()
   ]);
 }

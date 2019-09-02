@@ -17,6 +17,10 @@ export const LOAD_RECIPE_BY_URL = "LOAD_RECIPE_BY_URL";
 export const RECIPE_LOADED = "RECIPE_LOADED";
 export const ERROR_LOADING_RECIPE = "ERROR_LOADING_RECIPE";
 
+export const SAVE_RECIPE = "SAVE_RECIPE";
+export const RECIPE_SAVED = "RECIPE_SAVED";
+export const ERROR_SAVING_RECIPE = "ERROR_SAVING_RECIPE";
+
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
 export const apiMetadataLoaded = ({ version, environment, deployedAt }) => ({
@@ -65,5 +69,12 @@ export const loadRecipeByURL = url => ({ type: LOAD_RECIPE_BY_URL, url });
 export const recipeLoaded = recipe => ({ type: RECIPE_LOADED, recipe });
 export const errorLoadingRecipe = error => ({
   type: ERROR_LOADING_RECIPE,
+  error
+});
+
+export const saveRecipe = recipe => ({ type: SAVE_RECIPE, recipe });
+export const recipeSaved = id => ({ type: RECIPES_LOADED, id });
+export const errorSavingRecipe = error => ({
+  type: ERROR_SAVING_RECIPE,
   error
 });
