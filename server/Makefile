@@ -24,8 +24,8 @@ endif
 lint: node_modules
 	npx prettier --check "src/**/*.js"
 
-start: node_modules
-	npx nodemon --exec "npx serverless offline start --stage $(ENVIRONMENT)" -e "js yml json"
+start: node_modules developmentSSL
+	npx nodemon --exec "npx serverless offline start --stage $(ENVIRONMENT) --httpsProtocol developmentSSL" -e "js yml json"
 
 deploy: node_modules
 	./bin/deploy
@@ -33,3 +33,8 @@ deploy: node_modules
 node_modules: package.json
 	npm install
 	touch node_modules
+
+developmentSSL:
+	echo "Generating self-signed certificates to enable HTTPS"
+	mkdir -p developmentSSL
+	openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout developmentSSL/key.pem -out developmentSSL/cert.pem
