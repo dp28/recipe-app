@@ -3,13 +3,13 @@ import { debug } from "../logging";
 import { appLoaded } from "./actions";
 import {
   translateActionToMessage,
-  translateMessageToAction
+  translateMessageToActions
 } from "./translateActions";
 
 export function enableIframeCommunication(
   windowObject = window,
   store = reduxStore,
-  translateToAction = translateMessageToAction
+  translateToActions = translateMessageToActions
 ) {
   if (!inIframe(windowObject)) {
     debug("Not in an iframe - skipping iframe communication");
@@ -18,19 +18,19 @@ export function enableIframeCommunication(
 
   windowObject.addEventListener(
     "message",
-    handleExtensionMessage(store, translateToAction)
+    handleExtensionMessage(store, translateToActions)
   );
   windowObject.parent.postMessage(appLoaded(), "*");
   debug("Ready to receive messages");
 }
 
-export function handleExtensionMessage(store, translateToAction) {
+export function handleExtensionMessage(store, translateToActions) {
   return messageEvent => {
-    const action = translateToAction(store.getState(), messageEvent.data);
-    if (action) {
+    const actions = translateToActions(store.getState(), messageEvent.data);
+    actions.forEach(action => {
       debug("Received action:", action);
       store.dispatch(action);
-    }
+    });
   };
 }
 

@@ -9,6 +9,7 @@ import {
   importRecipeIngredients,
   importRecipeMethod
 } from "./actions";
+import { loadRecipeByURL } from "../actions";
 import { debug } from "../logging";
 
 export const REGISTER_URL = "REGISTER_URL";
@@ -41,21 +42,21 @@ export function translateActionToMessage(action) {
   return type ? { type, source: RECIPE_APP_SOURCE } : null;
 }
 
-export function translateMessageToAction(state, message) {
+export function translateMessageToActions(state, message) {
   debug("Received", message);
   if (message.type === REGISTER_URL) {
-    return setRecipeUrl(message.url);
+    return [setRecipeUrl(message.url), loadRecipeByURL(message.url)];
   }
   const { waitingFor } = state.browserExtension;
   if (!waitingFor) {
-    return null;
+    return [];
   }
   if (message.type === TEXT_RESPONSE) {
     const actionCreator = ActionCreatorsForText[waitingFor];
-    return actionCreator ? actionCreator(message.text) : null;
+    return actionCreator ? [actionCreator(message.text)] : [];
   }
   if (message.type === TEXT_LIST_RESPONSE) {
     const actionCreator = ActionCreatorsForTextList[waitingFor];
-    return actionCreator ? actionCreator(message.list) : null;
+    return actionCreator ? [actionCreator(message.list)] : [];
   }
 }

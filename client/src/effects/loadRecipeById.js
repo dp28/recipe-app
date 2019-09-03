@@ -39,10 +39,7 @@ export const FullRecipeFragment = `
       measurement {
         amount
         size
-        unit {
-          name
-          symbol
-        }
+        unit
       }
     }
 

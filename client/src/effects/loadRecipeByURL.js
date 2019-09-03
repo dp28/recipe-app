@@ -22,7 +22,7 @@ export function* fetchRecipeByURL({ url }) {
 
 export const GET_RECIPE_BY_URL = `
   ${FullRecipeFragment}
-  query getRecipe($url: String!) {
+  query getRecipe($url: URL!) {
     recipe: findRecipeByURL(url: $url) {
       ...FullRecipe
     }

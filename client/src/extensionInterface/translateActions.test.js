@@ -1,6 +1,6 @@
 import {
   translateActionToMessage,
-  translateMessageToAction,
+  translateMessageToActions,
   REQUEST_TEXT,
   REQUEST_TEXT_LIST,
   REGISTER_URL,
@@ -19,6 +19,7 @@ import {
   importRecipeIngredients,
   importRecipeMethod
 } from "./actions";
+import { loadRecipeByURL } from "../actions";
 
 describe("translateActionToMessage", () => {
   describe("with an action that should not result in a message to the extension", () => {
@@ -76,38 +77,46 @@ describe("translateActionToMessage", () => {
   });
 });
 
-describe("translateMessageToAction", () => {
+describe("translateMessageToActions", () => {
   describe("when the message is unknown", () => {
-    it("should return null", () => {
+    it("should return an empty array", () => {
       expect(
-        translateMessageToAction(
+        translateMessageToActions(
           { browserExtension: { waitingFor: null } },
           { type: "FAKE" }
         )
-      ).toEqual(null);
+      ).toEqual([]);
     });
   });
 
   describe("with a REGISTER_URL action", () => {
     it("should return a SET_RECIPE_URL action with the URL", () => {
       expect(
-        translateMessageToAction(
+        translateMessageToActions(
           {},
           { type: REGISTER_URL, url: "https://example.com" }
         )
-      ).toEqual(setRecipeUrl("https://example.com"));
+      ).toContainEqual(setRecipeUrl("https://example.com"));
+    });
+    it("should also return a LOAD_RECIPE_BY_URL action with the URL", () => {
+      expect(
+        translateMessageToActions(
+          {},
+          { type: REGISTER_URL, url: "https://example.com" }
+        )
+      ).toContainEqual(loadRecipeByURL("https://example.com"));
     });
   });
 
   describe("when the message is a 'TEXT_RESPONSE'", () => {
     describe("but no text is being waited for", () => {
-      it("should return null", () => {
+      it("should return an empty array", () => {
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: null } },
             { type: TEXT_RESPONSE }
           )
-        ).toEqual(null);
+        ).toEqual([]);
       });
     });
 
@@ -115,11 +124,11 @@ describe("translateMessageToAction", () => {
       it("should return a 'SET_RECIPE_TITLE' action with the text", () => {
         const text = "bla";
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: "title" } },
             { type: TEXT_RESPONSE, text }
           )
-        ).toEqual(setRecipeTitle(text));
+        ).toEqual([setRecipeTitle(text)]);
       });
     });
 
@@ -127,24 +136,24 @@ describe("translateMessageToAction", () => {
       it("should return a 'SET_RECIPE_SERVINGS' action with the text", () => {
         const text = "bla";
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: "servings" } },
             { type: TEXT_RESPONSE, text }
           )
-        ).toEqual(setRecipeServings(text));
+        ).toEqual([setRecipeServings(text)]);
       });
     });
   });
 
   describe("when the message is a 'TEXT_LIST_RESPONSE'", () => {
     describe("but no list is being waited for", () => {
-      it("should return null", () => {
+      it("should return an empty array", () => {
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: null } },
             { type: TEXT_LIST_RESPONSE }
           )
-        ).toEqual(null);
+        ).toEqual([]);
       });
     });
 
@@ -152,11 +161,11 @@ describe("translateMessageToAction", () => {
       it("should return a 'IMPORT_RECIPE_INGREDIENTS' action with the list", () => {
         const list = ["bla"];
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: "ingredients" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
-        ).toEqual(importRecipeIngredients(list));
+        ).toEqual([importRecipeIngredients(list)]);
       });
     });
 
@@ -164,11 +173,11 @@ describe("translateMessageToAction", () => {
       it("should return a 'IMPORT_RECIPE_METHOD' action with the list", () => {
         const list = ["bla"];
         expect(
-          translateMessageToAction(
+          translateMessageToActions(
             { browserExtension: { waitingFor: "method" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
-        ).toEqual(importRecipeMethod(list));
+        ).toEqual([importRecipeMethod(list)]);
       });
     });
   });

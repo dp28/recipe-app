@@ -59,16 +59,16 @@ describe("handleExtensionMessage", () => {
   it("should send the message data and store state to the transform function", () => {
     const state = { a: 1 };
     const store = buildMockStore({ state });
-    const transform = jest.fn();
+    const transform = jest.fn(() => []);
     const data = { b: 2 };
     handleExtensionMessage(store, transform)({ data });
     expect(transform).toHaveBeenCalledWith(state, data);
   });
 
-  describe("if the message is transformed to null", () => {
+  describe("if the message is transformed to an empty array", () => {
     it("should not dispatch anything to the store", () => {
       const store = buildMockStore();
-      handleExtensionMessage(store, () => null)({ data: {} });
+      handleExtensionMessage(store, () => [])({ data: {} });
       expect(store.dispatch).not.toHaveBeenCalled();
     });
   });
@@ -79,7 +79,7 @@ describe("handleExtensionMessage", () => {
         type: "FAKE"
       };
       const store = buildMockStore();
-      handleExtensionMessage(store, () => action)({ data: {} });
+      handleExtensionMessage(store, () => [action])({ data: {} });
       expect(store.dispatch).toHaveBeenCalledWith(action);
     });
   });
@@ -109,11 +109,11 @@ describe("iframeCommunicationReduxMiddleware", () => {
     });
   });
 
-  describe("when the transform function returns an object", () => {
+  describe("when the transform function returns an array", () => {
     const action = { type: "FAKE_ACTION" };
     const transform = () => action;
 
-    it("should send the object to the parent window", () => {
+    it("should send the all the objects in the array to the parent window", () => {
       const mockWindow = {
         location: { href: "fake" },
         parent: { postMessage: jest.fn(), location: { href: "other" } }
