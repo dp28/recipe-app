@@ -4,11 +4,8 @@ import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import Container from "@material-ui/core/Container";
-import { NavBar } from "./NavBar";
-import { DocumentTitle } from "./DocumentTitle";
 import { Loading } from "./Loading";
-import { appName } from "../config";
+import { Page } from "./Page";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -22,28 +19,22 @@ export function UnconnectedHomePage({ recipes }) {
   const classes = useStyles();
 
   return (
-    <div>
-      <NavBar />
-      <DocumentTitle title={appName} />
-      <Container>
-        <Grid container spacing={3}>
-          <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <h1>Recipes</h1>
+    <Page>
+      <Grid item xs={12}>
+        <Paper className={classes.paper}>
+          <h1>Recipes</h1>
+        </Paper>
+      </Grid>
+      <Grid item xs={12}>
+        <Loading metaKey="recipes">
+          {recipes.map(recipe => (
+            <Paper key={recipe.id} className={classes.paper}>
+              <Link to={`/recipes/${recipe.id}/cook`}>{recipe.title}</Link>
             </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Loading metaKey="recipes">
-              {recipes.map(recipe => (
-                <Paper key={recipe.id} className={classes.paper}>
-                  <Link to={`/recipes/${recipe.id}/cook`}>{recipe.title}</Link>
-                </Paper>
-              ))}
-            </Loading>
-          </Grid>
-        </Grid>
-      </Container>
-    </div>
+          ))}
+        </Loading>
+      </Grid>
+    </Page>
   );
 }
 
