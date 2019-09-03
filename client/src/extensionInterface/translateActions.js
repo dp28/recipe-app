@@ -3,12 +3,15 @@ import {
   REQUEST_SERVINGS,
   REQUEST_INGREDIENTS,
   REQUEST_METHOD,
+  setRecipeUrl,
   setRecipeTitle,
   setRecipeServings,
   importRecipeIngredients,
   importRecipeMethod
 } from "./actions";
+import { debug } from "../logging";
 
+export const REGISTER_URL = "REGISTER_URL";
 export const REQUEST_TEXT = "REQUEST_TEXT";
 export const REQUEST_TEXT_LIST = "REQUEST_TEXT_LIST";
 export const TEXT_RESPONSE = "TEXT_RESPONSE";
@@ -39,6 +42,10 @@ export function translateActionToMessage(action) {
 }
 
 export function translateMessageToAction(state, message) {
+  debug("Received", message);
+  if (message.type === REGISTER_URL) {
+    return setRecipeUrl(message.url);
+  }
   const { waitingFor } = state.browserExtension;
   if (!waitingFor) {
     return null;

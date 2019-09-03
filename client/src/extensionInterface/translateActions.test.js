@@ -3,6 +3,7 @@ import {
   translateMessageToAction,
   REQUEST_TEXT,
   REQUEST_TEXT_LIST,
+  REGISTER_URL,
   TEXT_RESPONSE,
   TEXT_LIST_RESPONSE,
   RECIPE_APP_SOURCE
@@ -12,6 +13,7 @@ import {
   requestServings,
   requestIngredients,
   requestMethod,
+  setRecipeUrl,
   setRecipeTitle,
   setRecipeServings,
   importRecipeIngredients,
@@ -83,6 +85,17 @@ describe("translateMessageToAction", () => {
           { type: "FAKE" }
         )
       ).toEqual(null);
+    });
+  });
+
+  describe("with a REGISTER_URL action", () => {
+    it("should return a SET_RECIPE_URL action with the URL", () => {
+      expect(
+        translateMessageToAction(
+          {},
+          { type: REGISTER_URL, url: "https://example.com" }
+        )
+      ).toEqual(setRecipeUrl("https://example.com"));
     });
   });
 
