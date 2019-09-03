@@ -4,7 +4,7 @@ import { Router, Route } from "react-router-dom";
 import Favicon from "react-favicon";
 import { HomePage } from "./HomePage";
 import { CookPage } from "./CookPage";
-import { ShoppingListPage } from "./ShoppingListPage";
+import { ShoppingListPage } from "./Shopping/ShoppingListPage";
 import { ExtensionPage } from "../extensionInterface/components/ExtensionPage";
 import { faviconPaths } from "../config";
 import { history } from "../effects/routing/history";

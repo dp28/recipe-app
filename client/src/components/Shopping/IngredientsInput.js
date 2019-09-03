@@ -2,7 +2,7 @@ import React from "react";
 import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import TextField from "@material-ui/core/TextField";
-import { updateIngredients } from "../actions";
+import { updateIngredients } from "../../actions";
 
 const useStyles = makeStyles(theme => ({
   input: {

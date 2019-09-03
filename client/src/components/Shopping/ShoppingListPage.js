@@ -3,11 +3,11 @@ import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import Container from "@material-ui/core/Container";
-import { NavBar } from "./NavBar";
-import { DocumentTitle } from "./DocumentTitle";
+import { NavBar } from "../NavBar";
+import { DocumentTitle } from "../DocumentTitle";
 import { IngredientsInput } from "./IngredientsInput";
 import { ShoppingList } from "./ShoppingList";
-import { appName } from "../config";
+import { appName } from "../../config";
 
 const useStyles = makeStyles(theme => ({
   paper: {

@@ -9,8 +9,8 @@ import green from "@material-ui/core/colors/green";
 import TextField from "@material-ui/core/TextField";
 import Button from "@material-ui/core/Button";
 import Grid from "@material-ui/core/Grid";
-import { combineIngredients, addCategory, addToCategory } from "../actions";
-import { combineIngredientsIfPossible } from "../domain/combineIngredients";
+import { combineIngredients, addCategory, addToCategory } from "../../actions";
+import { combineIngredientsIfPossible } from "../../domain/combineIngredients";
 
 const UNCATEGORIZED = "__uncategorized";
 

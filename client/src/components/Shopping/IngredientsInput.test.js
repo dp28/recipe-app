@@ -4,7 +4,7 @@ import {
   UnconnectedIngredientsInput as IngredientsInput,
   mapDispatchToProps
 } from "./IngredientsInput";
-import { updateIngredients } from "../actions";
+import { updateIngredients } from "../../actions";
 
 describe("IngredientsInput", () => {
   it("renders without crashing", () => {
