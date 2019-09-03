@@ -5,10 +5,12 @@ import {
   SET_RECIPE_INGREDIENTS,
   SET_RECIPE_METHOD
 } from "../extensionInterface/actions";
-import { SCALE_BY_SERVINGS, RECIPE_LOADED } from "../actions";
+import { SET_RECIPE_ID, SCALE_BY_SERVINGS, RECIPE_LOADED } from "../actions";
 
 export function recipeReducer(recipe = {}, action) {
   switch (action.type) {
+    case SET_RECIPE_ID:
+      return recipe.id ? recipe : { ...recipe, id: action.id };
     case SET_RECIPE_URL:
       return { ...recipe, url: action.url };
     case SET_RECIPE_TITLE:

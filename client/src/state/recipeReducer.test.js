@@ -6,7 +6,7 @@ import {
   setRecipeIngredients,
   setRecipeMethod
 } from "../extensionInterface/actions";
-import { scaleByServings, recipeLoaded } from "../actions";
+import { scaleByServings, recipeLoaded, setRecipeId } from "../actions";
 
 describe("reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
@@ -28,6 +28,24 @@ describe("reducer", () => {
       const url = "https://example.com";
       const recipe = reducer(initialState, setRecipeUrl(url));
       expect(recipe.url).toEqual(url);
+    });
+  });
+
+  describe("with a setRecipeId action", () => {
+    it("should set the id of the current recipe", () => {
+      const id = "fake";
+      const recipe = reducer(initialState, setRecipeId(id));
+      expect(recipe.id).toEqual(id);
+    });
+
+    describe("if the recipe already has an id", () => {
+      it("should not change the id", () => {
+        const id = "fake";
+        const recipe = reducer(initialState, setRecipeId(id));
+        const newId = "another_fake";
+        const updatedRecipe = reducer(recipe, setRecipeId(newId));
+        expect(updatedRecipe.id).toEqual(id);
+      });
     });
   });
 

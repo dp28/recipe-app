@@ -1,11 +1,12 @@
 import React from "react";
 import ReactDOM from "react-dom";
 import { Provider } from "react-redux";
+import generateId from "cuid";
 import "./index.css";
 import { App } from "./components/App";
 import * as serviceWorker from "./serviceWorker";
 import { store } from "./state/store";
-import { requestApiMetadata } from "./actions";
+import { requestApiMetadata, setRecipeId } from "./actions";
 import { enableIframeCommunication } from "./extensionInterface/iframeCommunication";
 
 ReactDOM.render(
@@ -21,4 +22,6 @@ ReactDOM.render(
 serviceWorker.unregister();
 
 enableIframeCommunication();
+
 store.dispatch(requestApiMetadata());
+store.dispatch(setRecipeId(generateId()));

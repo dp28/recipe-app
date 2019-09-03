@@ -3,6 +3,7 @@ export const COMBINE_INGREDIENTS = "COMBINE_INGREDIENTS";
 export const ADD_CATEGORY = "ADD_CATEGORY";
 export const ADD_TO_CATEGORY = "ADD_TO_CATEGORY";
 export const SCALE_BY_SERVINGS = "SCALE_BY_SERVINGS";
+export const SET_RECIPE_ID = "SET_RECIPE_ID";
 
 export const REQUEST_API_METADATA = "REQUEST_API_METADATA";
 export const API_METADATA_LOADED = "API_METADATA_LOADED";
@@ -56,6 +57,8 @@ export const scaleByServings = servings => ({
   type: SCALE_BY_SERVINGS,
   servings
 });
+
+export const setRecipeId = id => ({ type: SET_RECIPE_ID, id });
 
 export const loadRecipes = () => ({ type: LOAD_RECIPES });
 export const recipesLoaded = recipes => ({ type: RECIPES_LOADED, recipes });
