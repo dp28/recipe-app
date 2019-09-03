@@ -3,6 +3,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import { Router, Route } from "react-router-dom";
 import Favicon from "react-favicon";
 import { HomePage } from "./HomePage";
+import { CookPage } from "./CookPage";
 import { ShoppingListPage } from "./ShoppingListPage";
 import { ExtensionPage } from "../extensionInterface/components/ExtensionPage";
 import { faviconPaths } from "../config";
@@ -22,8 +23,9 @@ export function App() {
       <Favicon url={faviconPaths} />
       <div className={classes.root}>
         <Route path="/" exact component={HomePage} />
-        <Route path="/shopping_list" exact component={ShoppingListPage} />
         <Route path="/as_browser_extension/" component={ExtensionPage} />
+        <Route path="/recipes/:recipeId/cook" exact component={CookPage} />
+        <Route path="/shopping_list" exact component={ShoppingListPage} />
       </div>
     </Router>
   );

@@ -1,6 +1,5 @@
 import React from "react";
 import { connect } from "react-redux";
-import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
@@ -8,7 +7,6 @@ import Container from "@material-ui/core/Container";
 import { NavBar } from "./NavBar";
 import { DocumentTitle } from "./DocumentTitle";
 import { Loading } from "./Loading";
-import { appName } from "../config";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -18,27 +16,20 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export function UnconnectedHomePage({ recipes }) {
+export function UnconnectedCookPage({ recipe }) {
   const classes = useStyles();
 
   return (
     <div>
       <NavBar />
-      <DocumentTitle title={appName} />
+      <DocumentTitle title={recipe.title} />
       <Container>
         <Grid container spacing={3}>
           <Grid item xs={12}>
-            <Paper className={classes.paper}>
-              <h1>Recipes</h1>
-            </Paper>
-          </Grid>
-          <Grid item xs={12}>
-            <Loading metaKey="recipes">
-              {recipes.map(recipe => (
-                <Paper key={recipe.id} className={classes.paper}>
-                  <Link to={`/recipes/${recipe.id}/cook`}>{recipe.title}</Link>
-                </Paper>
-              ))}
+            <Loading metaKey="recipe">
+              <Paper className={classes.paper}>
+                <h1>{recipe.title}</h1>
+              </Paper>
             </Loading>
           </Grid>
         </Grid>
@@ -48,7 +39,7 @@ export function UnconnectedHomePage({ recipes }) {
 }
 
 export function mapStateToProps(state) {
-  return { recipes: state.recipes };
+  return { recipe: state.recipe };
 }
 
-export const HomePage = connect(mapStateToProps)(UnconnectedHomePage);
+export const CookPage = connect(mapStateToProps)(UnconnectedCookPage);

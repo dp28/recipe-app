@@ -5,7 +5,7 @@ import { debug } from "../../logging";
 
 export const history = createBrowserHistory();
 
-const recipePathRegex = /\/recipes\/(\w+)/;
+const cookPathRegex = /\/recipes\/(\w+)\/cook/;
 
 history.listen(onLocationChange);
 
@@ -14,7 +14,7 @@ function onLocationChange(location, action) {
   if (location.pathname === "/") {
     store.dispatch(loadRecipes());
   }
-  const match = location.pathname.match(recipePathRegex);
+  const match = location.pathname.match(cookPathRegex);
   if (match) {
     store.dispatch(loadRecipeById(match[1]));
   }
