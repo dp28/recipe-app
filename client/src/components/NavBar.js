@@ -1,4 +1,5 @@
 import React from "react";
+import { Link } from "react-router-dom";
 import { makeStyles } from "@material-ui/core/styles";
 import AppBar from "@material-ui/core/AppBar";
 import Toolbar from "@material-ui/core/Toolbar";
@@ -12,6 +13,10 @@ const useStyles = makeStyles(theme => ({
   },
   title: {
     flexGrow: 1
+  },
+  titleLink: {
+    color: theme.palette.primary.contrastText,
+    textDecoration: "none"
   }
 }));
 
@@ -23,7 +28,9 @@ export function NavBar() {
       <AppBar position="static">
         <Toolbar>
           <Typography variant="h6" className={classes.title}>
-            {appName}
+            <Link className={classes.titleLink} to="/">
+              {appName}
+            </Link>
           </Typography>
           <DebugPopover />
         </Toolbar>
