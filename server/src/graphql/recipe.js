@@ -28,13 +28,8 @@ const typeDefs = `
 
   type Measurement {
     amount: PositiveFloat!
-    unit: Unit
+    unit: String
     size: String
-  }
-
-  type Unit {
-    name: String!
-    symbol: String
   }
 
   type Method {
@@ -94,13 +89,8 @@ const typeDefs = `
 
   input MeasurementInput {
     amount: PositiveFloat!
-    unit: UnitInput
+    unit: String
     size: String
-  }
-
-  input UnitInput {
-    name: String!
-    symbol: String
   }
 
   input MethodInput {

@@ -21,7 +21,7 @@ const recipe = {
       food: { name: "bread" },
       measurement: {
         amount: 1,
-        unit: { name: "slice" },
+        unit: "slice",
         size: "large"
       },
       instruction: "crusts removed",
@@ -111,9 +111,7 @@ describe("recipes", () => {
           measurement {
             amount
             size
-            unit {
-              name
-            }
+            unit
           }
         }`);
         return expect(result.measurement).toEqual(ingredient.measurement);
