@@ -1,4 +1,4 @@
-.PHONY: install clean test lint start deploy mongo
+.PHONY: install clean test lint start deploy mongo drop_mongo
 
 ENVIRONMENT ?= development
 
@@ -21,10 +21,13 @@ else
 	docker-compose up -d mongo
 endif
 
+drop_mongo:
+	docker-compose down
+
 lint: node_modules
 	npx prettier --check "src/**/*.js"
 
-start: node_modules developmentSSL
+start: node_modules developmentSSL mongo
 	npx nodemon --exec "npx serverless offline start --stage $(ENVIRONMENT) --httpsProtocol developmentSSL" -e "js yml json"
 
 deploy: node_modules
