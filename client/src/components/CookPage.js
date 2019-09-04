@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { preload } from "./PreloadPage";
 import { DocumentTitle } from "./DocumentTitle";
 import { IngredientList } from "./IngredientList";
+import { Method } from "./Method";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -29,6 +30,9 @@ export function UnconnectedCookPage({ recipe }) {
     </Grid>,
     <Grid item xs={12} sm={4}>
       <IngredientList ingredients={recipe.ingredients} />
+    </Grid>,
+    <Grid item xs={12} sm={8}>
+      <Method method={recipe.method} />
     </Grid>
   ];
 }
