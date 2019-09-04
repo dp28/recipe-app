@@ -5,13 +5,12 @@ import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
 import { preload } from "./PreloadPage";
 import { DocumentTitle } from "./DocumentTitle";
-import { Ingredient } from "./Ingredient";
+import { IngredientList } from "./IngredientList";
 
 const useStyles = makeStyles(theme => ({
   paper: {
-    padding: theme.spacing(2),
-    textAlign: "center",
-    color: theme.palette.text.secondary
+    padding: theme.spacing(1),
+    textAlign: "center"
   }
 }));
 
@@ -21,19 +20,17 @@ export function UnconnectedCookPage({ recipe }) {
     return null;
   }
 
-  return (
+  return [
     <Grid item xs={12}>
       <DocumentTitle title={recipe.title} />
       <Paper className={classes.paper}>
         <h1>{recipe.title}</h1>
-
-        <h2>Ingredients</h2>
-        {recipe.ingredients.map(ingredient => (
-          <Ingredient ingredient={ingredient} />
-        ))}
       </Paper>
+    </Grid>,
+    <Grid item xs={12} sm={4}>
+      <IngredientList ingredients={recipe.ingredients} />
     </Grid>
-  );
+  ];
 }
 
 export function mapStateToProps(state) {
