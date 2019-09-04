@@ -11,8 +11,8 @@ export function UnconnectedLoading({ loading, error, children }) {
   return children;
 }
 
-export function mapStateToProps(state, { metaKey }) {
-  return state.meta[metaKey];
+export function mapStateToProps(state, { waitFor }) {
+  return state.meta[waitFor];
 }
 
 export const Loading = connect(mapStateToProps)(UnconnectedLoading);

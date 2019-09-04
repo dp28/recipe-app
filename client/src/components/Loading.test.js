@@ -9,9 +9,9 @@ it("renders without crashing", () => {
 });
 
 describe("mapStateToProps", () => {
-  it("should return the meta state of the passed-in metaKey", () => {
+  it("should return the meta state of the passed-in waitFor", () => {
     const state = { meta: { something: { loading: true } } };
-    expect(mapStateToProps(state, { metaKey: "something" })).toEqual({
+    expect(mapStateToProps(state, { waitFor: "something" })).toEqual({
       loading: true
     });
   });

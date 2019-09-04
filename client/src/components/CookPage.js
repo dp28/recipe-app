@@ -3,8 +3,9 @@ import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Paper from "@material-ui/core/Paper";
 import Grid from "@material-ui/core/Grid";
-import { Loading } from "./Loading";
-import { Page } from "./Page";
+import { preload } from "./PreloadPage";
+import { DocumentTitle } from "./DocumentTitle";
+import { Ingredient } from "./Ingredient";
 
 const useStyles = makeStyles(theme => ({
   paper: {
@@ -16,17 +17,22 @@ const useStyles = makeStyles(theme => ({
 
 export function UnconnectedCookPage({ recipe }) {
   const classes = useStyles();
+  if (!recipe.id) {
+    return null;
+  }
 
   return (
-    <Page title={recipe.title}>
-      <Grid item xs={12}>
-        <Loading metaKey="recipe">
-          <Paper className={classes.paper}>
-            <h1>{recipe.title}</h1>
-          </Paper>
-        </Loading>
-      </Grid>
-    </Page>
+    <Grid item xs={12}>
+      <DocumentTitle title={recipe.title} />
+      <Paper className={classes.paper}>
+        <h1>{recipe.title}</h1>
+
+        <h2>Ingredients</h2>
+        {recipe.ingredients.map(ingredient => (
+          <Ingredient ingredient={ingredient} />
+        ))}
+      </Paper>
+    </Grid>
   );
 }
 
@@ -34,4 +40,7 @@ export function mapStateToProps(state) {
   return { recipe: state.recipe };
 }
 
-export const CookPage = connect(mapStateToProps)(UnconnectedCookPage);
+export const CookPage = preload(
+  "recipe",
+  connect(mapStateToProps)(UnconnectedCookPage)
+);

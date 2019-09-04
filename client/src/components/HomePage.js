@@ -26,7 +26,7 @@ export function UnconnectedHomePage({ recipes }) {
         </Paper>
       </Grid>
       <Grid item xs={12}>
-        <Loading metaKey="recipes">
+        <Loading waitFor="recipes">
           {recipes.map(recipe => (
             <Paper key={recipe.id} className={classes.paper}>
               <Link to={`/recipes/${recipe.id}/cook`}>{recipe.title}</Link>
