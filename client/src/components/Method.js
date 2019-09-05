@@ -16,11 +16,11 @@ export function Method({ method }) {
   const classes = useStyles();
 
   return [
-    <Paper className={classes.item}>
+    <Paper key="title" className={classes.item}>
       <h2>Method</h2>
     </Paper>,
     ...method.steps.map(step => (
-      <Paper className={classes.item}>
+      <Paper key={step.id} className={classes.item}>
         <Step step={step} />
       </Paper>
     ))

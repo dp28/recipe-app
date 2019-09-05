@@ -1,5 +1,6 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
+import { StepIngredients } from "./StepIngredients";
 
 const useStyles = makeStyles(theme => ({
   ordering: {
@@ -15,6 +16,7 @@ export function Step({ step }) {
     <div>
       <span className={classes.ordering}>{step.ordering}.</span>{" "}
       <span>{step.rawText}</span>
+      <StepIngredients step={step} />
     </div>
   );
 }
