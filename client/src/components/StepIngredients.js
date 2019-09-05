@@ -25,14 +25,18 @@ export function UnconnectedStepIngredients({ step, ingredients }) {
   if (hidden) {
     return (
       <div>
-        <Button onClick={() => setHidden(false)}>Show ingredients</Button>
+        <Button variant="outlined" onClick={() => setHidden(false)}>
+          Show ingredients
+        </Button>
       </div>
     );
   }
 
   return (
     <div>
-      <Button onClick={() => setHidden(true)}>Hide ingredients</Button>
+      <Button variant="outlined" onClick={() => setHidden(true)}>
+        Hide ingredients
+      </Button>
       <ul className={classes.list}>
         {ingredients.map(ingredient => (
           <li className={classes.listItem}>

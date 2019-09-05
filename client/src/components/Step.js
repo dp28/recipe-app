@@ -3,9 +3,16 @@ import { makeStyles } from "@material-ui/core/styles";
 import { StepIngredients } from "./StepIngredients";
 
 const useStyles = makeStyles(theme => ({
+  text: {
+    marginBottom: theme.spacing(1),
+    display: "flex"
+  },
   ordering: {
-    fontWeight: "bold",
-    display: "inline-block"
+    fontStyle: "italic",
+    marginRight: theme.spacing(1)
+  },
+  instructions: {
+    flexGrow: 1
   }
 }));
 
@@ -14,8 +21,10 @@ export function Step({ step }) {
 
   return (
     <div>
-      <span className={classes.ordering}>{step.ordering}.</span>{" "}
-      <span>{step.rawText}</span>
+      <div className={classes.text}>
+        <div className={classes.ordering}>{step.ordering}.</div>
+        <div className={classes.instructions}>{step.rawText}</div>
+      </div>
       <StepIngredients step={step} />
     </div>
   );
