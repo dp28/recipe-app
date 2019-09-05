@@ -25,7 +25,7 @@ export function recipeReducer(recipe = {}, action) {
     case SCALE_BY_SERVINGS:
       return { ...recipe, scaledServings: action.servings };
     case RECIPE_LOADED:
-      return action.recipe || {};
+      return action.recipe || recipe;
     default:
       return recipe;
   }

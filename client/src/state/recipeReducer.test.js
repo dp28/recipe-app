@@ -119,9 +119,9 @@ describe("reducer", () => {
     });
 
     describe("if the recipe is null", () => {
-      it("sets the recipe to an empty object", () => {
+      it("does not change the recipe", () => {
         const recipe = reducer(initialState, recipeLoaded(null));
-        expect(recipe).toEqual({});
+        expect(recipe).toBe(initialState);
       });
     });
   });
