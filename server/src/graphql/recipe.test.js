@@ -36,7 +36,7 @@ const recipe = {
         ordering: 1,
         rawText: "Put the bread in the toaster for 2 minutes",
         ingredientIds: ["another_id"],
-        timers: [{ unit: "minute", amount: 2 }]
+        timers: [{ seconds: 2 }]
       }
     ]
   }
@@ -147,7 +147,7 @@ describe("recipes", () => {
       });
 
       it("should have the correct timers", async () => {
-        const result = await requestStep(`{ timers { amount unit } }`);
+        const result = await requestStep(`{ timers { seconds } }`);
         return expect(result.timers).toEqual(step.timers);
       });
     });

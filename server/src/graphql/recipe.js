@@ -46,8 +46,7 @@ const typeDefs = `
   }
 
   type Timer {
-    unit: String!
-    amount: PositiveFloat!
+    seconds: PositiveFloat!
   }
 
   type ImportRecipeEvent {
@@ -107,8 +106,7 @@ const typeDefs = `
   }
 
   input TimerInput {
-    unit: String!
-    amount: PositiveFloat!
+    seconds: PositiveFloat!
   }
 
   type Query {

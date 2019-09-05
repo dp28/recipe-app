@@ -166,7 +166,7 @@ describe("parseMethod", () => {
             "cjzmlvdz70004305sf8io0zfd",
             "cjzmlvdze0005305simyr3oem"
           ],
-          timers: [{ amount: 8, unit: "minute" }]
+          timers: [{ seconds: 8 * 60 }]
         },
         {
           rawText:
@@ -395,10 +395,7 @@ describe("parseMethod", () => {
             "cjznbxyji0008305sau93ejsi",
             "cjznbxyjo0009305snzo0lrg7"
           ],
-          timers: [
-            { amount: 5, unit: "minute" },
-            { amount: 10, unit: "minute" }
-          ]
+          timers: [{ seconds: 5 * 60 }, { seconds: 10 * 60 }]
         },
         {
           rawText:
@@ -408,9 +405,9 @@ describe("parseMethod", () => {
             "cjznbxyjw000b305semm1pmdw"
           ],
           timers: [
-            { amount: 10, unit: "minute" },
-            { amount: 5, unit: "minute" },
-            { amount: 0.5, unit: "hour" }
+            { seconds: 10 * 60 },
+            { seconds: 5 * 60 },
+            { seconds: 0.5 * 60 * 60 }
           ]
         }
       ]
@@ -463,12 +460,8 @@ describe("parseMethod", () => {
             const resultTimer = resultStep.timers[i];
 
             describe(`the timer at index ${i}`, () => {
-              it(`should have the unit "${extpectedTimer.unit}"`, () => {
-                expect(resultTimer.unit).toEqual(extpectedTimer.unit);
-              });
-
-              it(`should have the amount "${extpectedTimer.amount}"`, () => {
-                expect(resultTimer.amount).toEqual(extpectedTimer.amount);
+              it(`should be for ${extpectedTimer.seconds} seconds`, () => {
+                expect(resultTimer.seconds).toEqual(extpectedTimer.seconds);
               });
             });
           });

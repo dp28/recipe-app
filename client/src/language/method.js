@@ -73,11 +73,17 @@ function parseTimers(text) {
     .match("#Value .? (minute|hour)")
     .not("a minute")
     .map(timeText => ({
-      unit: timeText
-        .match("(minute|hour)")
-        .normalize()
-        .out()
-        .replace(/\W/g, ""),
-      amount: timeText.values().numbers()[0]
+      seconds: timeText.values().numbers()[0] * getTimeUnitInSeconds(timeText)
     }));
+}
+
+const UnitsToSeconds = { minute: 60, hour: 60 * 60 };
+
+function getTimeUnitInSeconds(timeText) {
+  const unit = timeText
+    .match("(minute|hour)")
+    .normalize()
+    .out()
+    .replace(/\W/g, "");
+  return UnitsToSeconds[unit];
 }
