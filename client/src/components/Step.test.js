@@ -5,7 +5,7 @@ import { Step } from "./Step";
 describe("Step", () => {
   it("renders without crashing", () => {
     const renderer = new ShallowRenderer();
-    renderer.render(<Step step={{}} />);
+    renderer.render(<Step step={{ timers: [] }} />);
     renderer.getRenderOutput();
   });
 });

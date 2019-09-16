@@ -1,6 +1,7 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
 import { StepIngredients } from "./StepIngredients";
+import { Timer } from "./Timer";
 
 const useStyles = makeStyles(theme => ({
   text: {
@@ -25,6 +26,9 @@ export function Step({ step }) {
         <div className={classes.ordering}>{step.ordering}.</div>
         <div className={classes.instructions}>{step.rawText}</div>
       </div>
+      {step.timers.map(timer => (
+        <Timer timer={timer} />
+      ))}
       <StepIngredients step={step} />
     </div>
   );
