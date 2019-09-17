@@ -51,6 +51,7 @@ export const FullRecipeFragment = `
         ingredientIds
 
         timers {
+          id
           seconds
         }
       }

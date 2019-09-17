@@ -463,6 +463,10 @@ describe("parseMethod", () => {
               it(`should be for ${extpectedTimer.seconds} seconds`, () => {
                 expect(resultTimer.seconds).toEqual(extpectedTimer.seconds);
               });
+
+              it(`should have an id`, () => {
+                expect(resultTimer.id).toBeTruthy();
+              });
             });
           });
         });

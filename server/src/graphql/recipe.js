@@ -46,6 +46,7 @@ const typeDefs = `
   }
 
   type Timer {
+    id: String!
     seconds: PositiveFloat!
   }
 
@@ -106,6 +107,7 @@ const typeDefs = `
   }
 
   input TimerInput {
+    id: String!
     seconds: PositiveFloat!
   }
 

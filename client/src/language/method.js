@@ -73,6 +73,7 @@ function parseTimers(text) {
     .match("#Value .? (minute|hour)")
     .not("a minute")
     .map(timeText => ({
+      id: generateId(),
       seconds: timeText.values().numbers()[0] * getTimeUnitInSeconds(timeText)
     }));
 }
