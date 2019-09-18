@@ -22,6 +22,10 @@ export const SAVE_RECIPE = "SAVE_RECIPE";
 export const RECIPE_SAVED = "RECIPE_SAVED";
 export const ERROR_SAVING_RECIPE = "ERROR_SAVING_RECIPE";
 
+export const START_TIMER = "START_TIMER";
+export const PAUSE_TIMER = "PAUSE_TIMER";
+export const CHANGE_TIMER_SECONDS_REMAINING = "CHANGE_TIMER_SECONDS_REMAINING";
+
 export const requestApiMetadata = () => ({ type: REQUEST_API_METADATA });
 
 export const apiMetadataLoaded = ({ version, environment, deployedAt }) => ({
@@ -80,4 +84,12 @@ export const recipeSaved = id => ({ type: RECIPES_LOADED, id });
 export const errorSavingRecipe = error => ({
   type: ERROR_SAVING_RECIPE,
   error
+});
+
+export const startTimer = timer => ({ type: START_TIMER, timer });
+export const pauseTimer = timer => ({ type: PAUSE_TIMER, timer });
+export const changeTimerSecondsRemaining = ({ timer, seconds }) => ({
+  type: CHANGE_TIMER_SECONDS_REMAINING,
+  timer,
+  seconds
 });

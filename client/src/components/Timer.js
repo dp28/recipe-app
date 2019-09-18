@@ -1,4 +1,5 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Slider from "@material-ui/core/Slider";
 import IconButton from "@material-ui/core/IconButton";
@@ -9,6 +10,11 @@ import amber from "@material-ui/core/colors/amber";
 import red from "@material-ui/core/colors/red";
 import indigo from "@material-ui/core/colors/indigo";
 import { useInterval } from "../effects/useInterval";
+import {
+  startTimer,
+  pauseTimer,
+  changeTimerSecondsRemaining
+} from "../actions";
 
 const useStyles = makeStyles(theme => ({
   timer: {
@@ -36,16 +42,28 @@ const useStyles = makeStyles(theme => ({
   }
 }));
 
-export function Timer({ timer, flashLengthInMillis = 300 }) {
-  const [secondsRemaining, setSecondsRemaining] = useState(timer.seconds);
-  const [running, setRunning] = useState(false);
+export function UnconnectedTimer({
+  timer,
+  running,
+  start,
+  pause,
+  changeSeconds,
+  initialRemainingSeconds,
+  flashLengthInMillis = 300
+}) {
+  const [secondsRemaining, setSecondsRemaining] = useState(
+    initialRemainingSeconds
+  );
+  useEffect(
+    () => {
+      setSecondsRemaining(initialRemainingSeconds);
+    },
+    [initialRemainingSeconds]
+  );
   const [flashOn, setFlashOn] = useState(false);
   const showHours = timer.seconds >= 60 * 60;
   const finished = secondsRemaining <= 0;
   const positiveSecondsRemaining = Math.max(0, secondsRemaining);
-
-  const start = () => setRunning(true);
-  const pause = () => setRunning(false);
 
   const colour = calculateColour({
     secondsRemaining,
@@ -97,6 +115,7 @@ export function Timer({ timer, flashLengthInMillis = 300 }) {
         max={Math.round(timer.seconds * 1.25)}
         className={classes.slider}
         onChange={(event, value) => setSecondsRemaining(Number(value))}
+        onChangeCommitted={(event, value) => changeSeconds(Number(value))}
       />
     </div>
   );
@@ -173,3 +192,32 @@ function TimePart({ value, colour }) {
 function zeroPad(number) {
   return String(number).padStart(2, "0");
 }
+
+export function mapStateToProps(state, { timer }) {
+  const instance = state.timerInstances[timer.id];
+  if (!instance) {
+    return {
+      initialRemainingSeconds: timer.seconds,
+      running: false
+    };
+  }
+
+  return {
+    initialRemainingSeconds: instance.remainingSeconds,
+    running: instance.running
+  };
+}
+
+export function mapDispatchToProps(dispatch, { timer }) {
+  return {
+    start: () => dispatch(startTimer(timer)),
+    pause: () => dispatch(pauseTimer(timer)),
+    changeSeconds: seconds =>
+      dispatch(changeTimerSecondsRemaining({ timer, seconds }))
+  };
+}
+
+export const Timer = connect(
+  mapStateToProps,
+  mapDispatchToProps
+)(UnconnectedTimer);

@@ -27,7 +27,7 @@ export function Step({ step }) {
         <div className={classes.instructions}>{step.rawText}</div>
       </div>
       {step.timers.map(timer => (
-        <Timer timer={timer} />
+        <Timer key={timer.id} timer={timer} />
       ))}
       <StepIngredients step={step} />
     </div>

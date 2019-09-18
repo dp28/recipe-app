@@ -22,7 +22,8 @@ describe("reducer", () => {
         categories: [],
         recipe: {},
         recipes: [],
-        browserExtension: { waitingFor: null }
+        browserExtension: { waitingFor: null },
+        timerInstances: {}
       });
     });
   });

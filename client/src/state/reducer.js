@@ -11,6 +11,7 @@ import { browserExtensionReducer } from "../extensionInterface/reducer";
 import { recipeReducer } from "./recipeReducer";
 import { recipesReducer } from "./recipesReducer";
 import { metadataReducer } from "./metadataReducer";
+import { timerInstancesReducer } from "./timerInstancesReducer";
 
 export const reducer = combineReducers({
   meta: metadataReducer,
@@ -18,7 +19,8 @@ export const reducer = combineReducers({
   categories: categoriesReducer,
   recipe: recipeReducer,
   recipes: recipesReducer,
-  browserExtension: browserExtensionReducer
+  browserExtension: browserExtensionReducer,
+  timerInstances: timerInstancesReducer
 });
 
 function categoriesReducer(categories = [], action) {
