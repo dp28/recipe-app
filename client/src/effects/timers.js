@@ -59,11 +59,12 @@ function* listenForChange(timerProcess, timer) {
 function* timerFinished(alarmCycleInMilliseconds = 300) {
   while (true) {
     yield call(beep, { durationInMilliseconds: alarmCycleInMilliseconds });
+    yield call(vibrate, { durationInMilliseconds: alarmCycleInMilliseconds });
     yield delay(alarmCycleInMilliseconds * 2);
   }
 }
 
-const audio = window.AudioContext ? new AudioContext() : null;
+const audio = window && window.AudioContext ? new AudioContext() : null;
 
 function beep({
   durationInMilliseconds = 300,
@@ -71,7 +72,7 @@ function beep({
   frequencyInHertz = 1500
 }) {
   if (!audio) {
-    debug("AudioContext not available - skipping audible alarms");
+    debug("window.AudioContext not available - skipping audible alarms");
     return;
   }
   const durationInSeconds = durationInMilliseconds / 1000;
@@ -89,4 +90,10 @@ function createOscillator(volumePercent, frequencyInHertz) {
   gain.connect(audio.destination);
   gain.gain.value = volumePercent * 0.01;
   return oscillator;
+}
+
+function vibrate({ durationInMilliseconds }) {
+  if (window && window.navigator && window.navigator.vibrate) {
+    window.navigator.vibrate(durationInMilliseconds);
+  }
 }
