@@ -6,6 +6,7 @@ import { watchLoadRecipes } from "./loadRecipes";
 import { watchLoadRecipeById } from "./loadRecipeById";
 import { watchLoadRecipeByURL } from "./loadRecipeByURL";
 import { watchSaveRecipe } from "./saveRecipe";
+import { watchStartTimer } from "./timers";
 
 export function* rootSaga() {
   yield all([
@@ -15,6 +16,7 @@ export function* rootSaga() {
     watchImportMethod(),
     watchLoadRecipeById(),
     watchLoadRecipeByURL(),
-    watchSaveRecipe()
+    watchSaveRecipe(),
+    watchStartTimer()
   ]);
 }

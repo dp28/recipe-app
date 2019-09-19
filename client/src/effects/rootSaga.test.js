@@ -7,6 +7,7 @@ import { watchLoadRecipes } from "./loadRecipes";
 import { watchLoadRecipeById } from "./loadRecipeById";
 import { watchLoadRecipeByURL } from "./loadRecipeByURL";
 import { watchSaveRecipe } from "./saveRecipe";
+import { watchStartTimer } from "./timers";
 
 describe("rootSaga", () => {
   it(`should delegate to watchApiMetadataRequested and watchImportIngredients`, () => {
@@ -19,7 +20,8 @@ describe("rootSaga", () => {
         watchImportMethod(),
         watchLoadRecipeById(),
         watchLoadRecipeByURL(),
-        watchSaveRecipe()
+        watchSaveRecipe(),
+        watchStartTimer()
       ])
     );
   });
