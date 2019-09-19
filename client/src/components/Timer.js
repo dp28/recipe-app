@@ -54,12 +54,9 @@ export function UnconnectedTimer({
   const [secondsRemaining, setSecondsRemaining] = useState(
     initialRemainingSeconds
   );
-  useEffect(
-    () => {
-      setSecondsRemaining(initialRemainingSeconds);
-    },
-    [initialRemainingSeconds]
-  );
+  useEffect(() => {
+    setSecondsRemaining(initialRemainingSeconds);
+  }, [initialRemainingSeconds]);
   const [flashOn, setFlashOn] = useState(false);
   const showHours = timer.seconds >= 60 * 60;
   const finished = secondsRemaining <= 0;
