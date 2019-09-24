@@ -6,6 +6,7 @@ import Grid from "@material-ui/core/Grid";
 import { preload } from "./PreloadPage";
 import { DocumentTitle } from "./DocumentTitle";
 import { IngredientList } from "./IngredientList";
+import { Servings } from "./Servings";
 import { KeepScreenOnSwitch } from "./KeepScreenOnSwitch";
 import { Method } from "./Method";
 
@@ -32,6 +33,7 @@ export function UnconnectedCookPage({ recipe }) {
             From <a href={recipe.url}>{recipe.url}</a>
           </p>
         )}
+        <Servings servings={recipe.scaledServings || recipe.servings} />
         <KeepScreenOnSwitch />
       </Paper>
     </Grid>,

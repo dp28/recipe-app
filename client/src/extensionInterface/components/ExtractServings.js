@@ -1,7 +1,7 @@
 import React from "react";
 import { connect } from "react-redux";
 import Button from "@material-ui/core/Button";
-import Input from "@material-ui/core/Input";
+import { Servings } from "../../components/Servings";
 import { requestServings as unconnectedRequestServings } from "../actions";
 import { scaleByServings as unconnectedScaleByServings } from "../../actions";
 import { Help } from "./Help";
@@ -18,8 +18,7 @@ export function UnconnectedExtractServings({
   if (servings) {
     return (
       <div>
-        Servings:{" "}
-        <Input type="number" value={servings} onChange={scaleByServings} />
+        <Servings servings={servings} />
         <Button onClick={requestServings}>Change servings</Button>
       </div>
     );
