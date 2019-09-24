@@ -27,6 +27,11 @@ export function UnconnectedCookPage({ recipe }) {
       <DocumentTitle title={recipe.title} />
       <Paper className={classes.paper}>
         <h1>{recipe.title}</h1>
+        {recipe.url && (
+          <p>
+            From <a href={recipe.url}>{recipe.url}</a>
+          </p>
+        )}
         <KeepScreenOnSwitch />
       </Paper>
     </Grid>,
