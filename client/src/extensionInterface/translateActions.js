@@ -59,4 +59,5 @@ export function translateMessageToActions(state, message) {
     const actionCreator = ActionCreatorsForTextList[waitingFor];
     return actionCreator ? [actionCreator(message.list)] : [];
   }
+  return [];
 }
