@@ -1,10 +1,9 @@
 import React from "react";
-import { connect } from "react-redux";
 import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
-import * as actions from "../actions";
-import { Help } from "./Help";
 import { Ingredient } from "../../components/Ingredient";
+import { requestIngredients } from "../actions";
+import { Extract } from "./Extract";
 
 const useIngredientStyles = makeStyles(theme => ({
   list: {
@@ -16,58 +15,28 @@ const useIngredientStyles = makeStyles(theme => ({
   }
 }));
 
-export function UnconnectedExtractIngredients({
-  ingredients,
-  requestIngredients,
-  waitingForIngredients
-}) {
+export function ExtractIngredients() {
   const classes = useIngredientStyles();
-
-  if (waitingForIngredients) {
-    return (
-      <Help>
-        Click on the recipe ingredients. Each ingredient should be highlighted
-        separately.
-      </Help>
-    );
-  }
-  if (ingredients) {
-    return (
-      <div>
-        <h4>Ingredients</h4>
-        <Button onClick={requestIngredients}>Change ingredients</Button>
-
-        <ol className={classes.list}>
-          {ingredients.map(ingredient => (
-            <li key={ingredient.id} className={classes.ingredient}>
-              <Ingredient ingredient={ingredient} />
-            </li>
-          ))}
-        </ol>
-      </div>
-    );
-  }
   return (
-    <div>
-      <Button onClick={requestIngredients}>Set ingredients</Button>
-    </div>
+    <Extract
+      property="ingredients"
+      multiple={true}
+      requestBuilder={requestIngredients}
+    >
+      {ingredients => (
+        <div>
+          <h4>Ingredients</h4>
+          <Button onClick={requestIngredients}>Change ingredients</Button>
+
+          <ol className={classes.list}>
+            {ingredients.map(ingredient => (
+              <li key={ingredient.id} className={classes.ingredient}>
+                <Ingredient ingredient={ingredient} />
+              </li>
+            ))}
+          </ol>
+        </div>
+      )}
+    </Extract>
   );
 }
-
-export function mapStateToProps(state) {
-  return {
-    ingredients: state.recipe.ingredients,
-    waitingForIngredients: state.browserExtension.waitingFor === "ingredients"
-  };
-}
-
-export function mapDispatchToProps(dispatch) {
-  return {
-    requestIngredients: () => dispatch(actions.requestIngredients())
-  };
-}
-
-export const ExtractIngredients = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UnconnectedExtractIngredients);

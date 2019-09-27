@@ -1,51 +1,23 @@
 import React from "react";
 import { connect } from "react-redux";
-import Button from "@material-ui/core/Button";
 import { Servings } from "../../components/Servings";
-import { requestServings as unconnectedRequestServings } from "../actions";
-import { scaleByServings as unconnectedScaleByServings } from "../../actions";
-import { Help } from "./Help";
+import { requestServings } from "../actions";
+import { Extract } from "./Extract";
 
-export function UnconnectedExtractServings({
-  servings,
-  requestServings,
-  waitingForServings,
-  scaleByServings
-}) {
-  if (waitingForServings) {
-    return <Help>Click on the recipe servings</Help>;
-  }
-  if (servings) {
-    return (
-      <div>
-        <Servings servings={servings} />
-        <Button onClick={requestServings}>Change servings</Button>
-      </div>
-    );
-  }
+export function UnconnectedExtractServings({ scaledServings }) {
   return (
-    <div>
-      <Button onClick={requestServings}>Set servings</Button>
-    </div>
+    <Extract property="servings" requestBuilder={requestServings}>
+      {servings => <Servings servings={scaledServings || servings} />}
+    </Extract>
   );
 }
 
 export function mapStateToProps(state) {
   return {
-    servings: state.recipe.scaledServings || state.recipe.servings,
-    waitingForServings: state.browserExtension.waitingFor === "servings"
+    scaledServings: state.recipe.scaledServings
   };
 }
 
-export function mapDispatchToProps(dispatch) {
-  return {
-    requestServings: () => dispatch(unconnectedRequestServings()),
-    scaleByServings: ({ target }) =>
-      dispatch(unconnectedScaleByServings(target.value))
-  };
-}
-
-export const ExtractServings = connect(
-  mapStateToProps,
-  mapDispatchToProps
-)(UnconnectedExtractServings);
+export const ExtractServings = connect(mapStateToProps)(
+  UnconnectedExtractServings
+);
