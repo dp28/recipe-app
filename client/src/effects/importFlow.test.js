@@ -2,11 +2,9 @@ import { put, call, takeLatest } from "redux-saga/effects";
 
 import { watchImportActions, startNextImportStep } from "./importFlow";
 import {
-  SET_RECIPE_URL,
   SET_RECIPE_TITLE,
   SET_RECIPE_SERVINGS,
   SET_RECIPE_INGREDIENTS,
-  setRecipeUrl,
   setRecipeTitle,
   setRecipeServings,
   setRecipeIngredients,
@@ -15,13 +13,24 @@ import {
   requestIngredients,
   requestMethod
 } from "../extensionInterface/actions";
+import { RECIPE_LOADED, recipeLoaded } from "../actions";
 
 describe("startNextImportStep", () => {
-  describe(`when ${SET_RECIPE_URL} is recieved`, () => {
-    it("should dispatch a requestTitle action", () => {
-      const generator = startNextImportStep(setRecipeUrl("example.com"));
-      generator.next();
-      expect(generator.next({}).value).toEqual(put(requestTitle()));
+  describe(`when ${RECIPE_LOADED} is recieved`, () => {
+    describe("without a recipe", () => {
+      it("should dispatch a requestTitle action", () => {
+        const generator = startNextImportStep(recipeLoaded(null));
+        generator.next();
+        expect(generator.next({}).value).toEqual(put(requestTitle()));
+      });
+    });
+
+    describe("with a recipe", () => {
+      it("should not dispatch any action", () => {
+        const generator = startNextImportStep(recipeLoaded({ id: "fake" }));
+        generator.next();
+        expect(generator.next({}).done).toEqual(true);
+      });
     });
   });
 
@@ -80,7 +89,7 @@ describe("watchImportActions", () => {
     expect(generator.next().value).toEqual(
       takeLatest(
         [
-          SET_RECIPE_URL,
+          RECIPE_LOADED,
           SET_RECIPE_TITLE,
           SET_RECIPE_SERVINGS,
           SET_RECIPE_INGREDIENTS

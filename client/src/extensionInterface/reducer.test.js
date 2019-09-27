@@ -8,7 +8,8 @@ import {
   setRecipeServings,
   setRecipeIngredients,
   setRecipeMethod
-} from "../extensionInterface/actions";
+} from "./actions";
+import { recipeLoaded } from "../actions";
 
 describe("browserExtension reducer", () => {
   const initialState = reducer(undefined, { type: "INIT" });
@@ -22,6 +23,16 @@ describe("browserExtension reducer", () => {
   describe("with an unknown action", () => {
     it("should return the passed-in state", () => {
       expect(reducer(initialState, { type: "FAKE_ACTION" })).toBe(initialState);
+    });
+  });
+
+  describe("with a recipeLoaded action", () => {
+    it("should set waitingFor to null", () => {
+      const state = reducer(
+        reducer(initialState, requestTitle()),
+        recipeLoaded({})
+      );
+      expect(state.waitingFor).toEqual(null);
     });
   });
 
