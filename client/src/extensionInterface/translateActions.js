@@ -47,16 +47,16 @@ export function translateMessageToActions(state, message) {
   if (message.type === REGISTER_URL) {
     return [setRecipeUrl(message.url), loadRecipeByURL(message.url)];
   }
-  const { waitingFor } = state.browserExtension;
-  if (!waitingFor) {
+  const { currentStep } = state.browserExtension;
+  if (!currentStep) {
     return [];
   }
   if (message.type === TEXT_RESPONSE) {
-    const actionCreator = ActionCreatorsForText[waitingFor];
+    const actionCreator = ActionCreatorsForText[currentStep];
     return actionCreator ? [actionCreator(message.text)] : [];
   }
   if (message.type === TEXT_LIST_RESPONSE) {
-    const actionCreator = ActionCreatorsForTextList[waitingFor];
+    const actionCreator = ActionCreatorsForTextList[currentStep];
     return actionCreator ? [actionCreator(message.list)] : [];
   }
   return [];

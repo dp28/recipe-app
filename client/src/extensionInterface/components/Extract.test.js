@@ -28,7 +28,7 @@ describe("mapStateToProps", () => {
       mapStateToProps(
         {
           recipe: {},
-          browserExtension: { waitingFor: "ingredients" }
+          browserExtension: { currentStep: "ingredients", waiting: true }
         },
         { property: "ingredients" }
       ).waiting
@@ -38,7 +38,10 @@ describe("mapStateToProps", () => {
   it("returns waiting as false if the state is not waiting for the property", () => {
     expect(
       mapStateToProps(
-        { recipe: {}, browserExtension: { waitingFor: null } },
+        {
+          recipe: {},
+          browserExtension: { currentStep: "ingredients", waiting: false }
+        },
         { property: "ingredients" }
       ).waiting
     ).toEqual(false);

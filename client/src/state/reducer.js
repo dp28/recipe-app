@@ -13,15 +13,24 @@ import { recipesReducer } from "./recipesReducer";
 import { metadataReducer } from "./metadataReducer";
 import { timerInstancesReducer } from "./timerInstancesReducer";
 
-export const reducer = combineReducers({
+const combinedReducer = combineReducers({
   meta: metadataReducer,
   ingredients: ingredientsReducer,
   categories: categoriesReducer,
   recipe: recipeReducer,
   recipes: recipesReducer,
-  browserExtension: browserExtensionReducer,
-  timerInstances: timerInstancesReducer
+  timerInstances: timerInstancesReducer,
+  browserExtension: (state = null) => state
 });
+
+export function reducer(state, action) {
+  const newState = combinedReducer(state, action);
+  const browserExtension = browserExtensionReducer(newState, action);
+  if (browserExtension && browserExtension !== newState.browserExtension) {
+    return { ...newState, browserExtension };
+  }
+  return newState;
+}
 
 function categoriesReducer(categories = [], action) {
   switch (action.type) {

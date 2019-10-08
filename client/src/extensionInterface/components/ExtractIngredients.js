@@ -1,6 +1,5 @@
 import React from "react";
 import { makeStyles } from "@material-ui/core/styles";
-import Button from "@material-ui/core/Button";
 import { Ingredient } from "../../components/Ingredient";
 import { requestIngredients } from "../actions";
 import { Extract } from "./Extract";
@@ -24,18 +23,13 @@ export function ExtractIngredients() {
       requestBuilder={requestIngredients}
     >
       {ingredients => (
-        <div>
-          <h4>Ingredients</h4>
-          <Button onClick={requestIngredients}>Change ingredients</Button>
-
-          <ol className={classes.list}>
-            {ingredients.map(ingredient => (
-              <li key={ingredient.id} className={classes.ingredient}>
-                <Ingredient ingredient={ingredient} />
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ol className={classes.list}>
+          {ingredients.map(ingredient => (
+            <li key={ingredient.id} className={classes.ingredient}>
+              <Ingredient ingredient={ingredient} />
+            </li>
+          ))}
+        </ol>
       )}
     </Extract>
   );

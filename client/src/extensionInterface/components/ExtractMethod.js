@@ -5,7 +5,8 @@ import { Extract } from "./Extract";
 
 const useMethodStyles = makeStyles(theme => ({
   list: {
-    listStyle: "decimal"
+    listStyle: "decimal",
+    paddingLeft: theme.spacing(2)
   },
   step: {
     marginBottom: theme.spacing(1)
@@ -21,19 +22,16 @@ export function ExtractMethod() {
       propertyName="steps"
       multiple={true}
       requestBuilder={requestMethod}
+      count={method => method.steps.length}
     >
       {method => (
-        <div>
-          <h4>Method</h4>
-
-          <ol className={classes.list}>
-            {method.steps.map(step => (
-              <li key={step.id} className={classes.step}>
-                {step.rawText}
-              </li>
-            ))}
-          </ol>
-        </div>
+        <ol className={classes.list}>
+          {method.steps.map(step => (
+            <li key={step.id} className={classes.step}>
+              {step.rawText}
+            </li>
+          ))}
+        </ol>
       )}
     </Extract>
   );

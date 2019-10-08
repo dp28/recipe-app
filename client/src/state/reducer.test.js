@@ -22,7 +22,7 @@ describe("reducer", () => {
         categories: [],
         recipe: {},
         recipes: [],
-        browserExtension: { waitingFor: null },
+        browserExtension: { waiting: false, loading: true, currentStep: null },
         timerInstances: {}
       });
     });

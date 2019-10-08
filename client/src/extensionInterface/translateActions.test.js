@@ -82,7 +82,7 @@ describe("translateMessageToActions", () => {
     it("should return an empty array", () => {
       expect(
         translateMessageToActions(
-          { browserExtension: { waitingFor: null } },
+          { browserExtension: { currentStep: null } },
           { type: "FAKE" }
         )
       ).toEqual([]);
@@ -113,7 +113,7 @@ describe("translateMessageToActions", () => {
       it("should return an empty array", () => {
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: null } },
+            { browserExtension: { currentStep: null } },
             { type: TEXT_RESPONSE }
           )
         ).toEqual([]);
@@ -125,7 +125,7 @@ describe("translateMessageToActions", () => {
         const text = "bla";
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: "title" } },
+            { browserExtension: { currentStep: "title" } },
             { type: TEXT_RESPONSE, text }
           )
         ).toEqual([setRecipeTitle(text)]);
@@ -137,7 +137,7 @@ describe("translateMessageToActions", () => {
         const text = "bla";
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: "servings" } },
+            { browserExtension: { currentStep: "servings" } },
             { type: TEXT_RESPONSE, text }
           )
         ).toEqual([setRecipeServings(text)]);
@@ -150,7 +150,7 @@ describe("translateMessageToActions", () => {
       it("should return an empty array", () => {
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: null } },
+            { browserExtension: { currentStep: null } },
             { type: TEXT_LIST_RESPONSE }
           )
         ).toEqual([]);
@@ -162,7 +162,7 @@ describe("translateMessageToActions", () => {
         const list = ["bla"];
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: "ingredients" } },
+            { browserExtension: { currentStep: "ingredients" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
         ).toEqual([importRecipeIngredients(list)]);
@@ -174,7 +174,7 @@ describe("translateMessageToActions", () => {
         const list = ["bla"];
         expect(
           translateMessageToActions(
-            { browserExtension: { waitingFor: "method" } },
+            { browserExtension: { currentStep: "method" } },
             { type: TEXT_LIST_RESPONSE, list }
           )
         ).toEqual([importRecipeMethod(list)]);

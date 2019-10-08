@@ -6,35 +6,71 @@ import {
   SET_RECIPE_TITLE,
   SET_RECIPE_SERVINGS,
   SET_RECIPE_INGREDIENTS,
-  SET_RECIPE_METHOD
+  SET_RECIPE_METHOD,
+  FINISH_CURRENT_EXTRACT_STEP
 } from "../extensionInterface/actions";
 import { RECIPE_LOADED } from "../actions";
+import { OrderedExtractionSteps } from "./extractionSteps";
 
-export function browserExtensionReducer(state = { waitingFor: null }, action) {
+const InitialState = { waiting: false, currentStep: null, loading: true };
+
+export function browserExtensionReducer(
+  { browserExtension, recipe } = {},
+  action
+) {
   switch (action.type) {
     case RECIPE_LOADED:
-      return stopWaiting(state);
+      return {
+        loading: false,
+        waiting: false,
+        currentStep: action.recipe ? null : "title"
+      };
     case REQUEST_TITLE:
-      return { ...state, waitingFor: "title" };
+      return { ...browserExtension, waiting: true };
     case SET_RECIPE_TITLE:
-      return stopWaiting(state);
+      return stopWaiting(browserExtension);
     case REQUEST_SERVINGS:
-      return { ...state, waitingFor: "servings" };
+      return { ...browserExtension, waiting: true };
     case SET_RECIPE_SERVINGS:
-      return stopWaiting(state);
+      return stopWaiting(browserExtension);
     case REQUEST_INGREDIENTS:
-      return { ...state, waitingFor: "ingredients" };
+      return { ...browserExtension, waiting: true };
     case SET_RECIPE_INGREDIENTS:
-      return stopWaiting(state);
+      return stopWaiting(browserExtension);
     case REQUEST_METHOD:
-      return { ...state, waitingFor: "method" };
+      return { ...browserExtension, waiting: true };
     case SET_RECIPE_METHOD:
-      return stopWaiting(state);
+      return stopWaiting(browserExtension);
+    case FINISH_CURRENT_EXTRACT_STEP:
+      return finishCurrentStep(browserExtension, recipe);
     default:
-      return state;
+      return browserExtension || InitialState;
   }
 }
 
 function stopWaiting(state) {
-  return { ...state, waitingFor: null };
+  return { ...state, waiting: false };
+}
+
+function finishCurrentStep(browserExtension, recipe) {
+  if (!browserExtension.currentStep) {
+    return browserExtension;
+  }
+
+  const currentStepIndex = OrderedExtractionSteps.findIndex(
+    ({ property }) => property === browserExtension.currentStep
+  );
+  const currentStep = OrderedExtractionSteps[currentStepIndex];
+  if (!currentStep.isFinished(recipe)) {
+    return browserExtension;
+  }
+
+  const nextStepIndex = currentStepIndex + 1;
+  if (nextStepIndex >= OrderedExtractionSteps.length) {
+    return { ...browserExtension, currentStep: null };
+  }
+  return {
+    ...browserExtension,
+    currentStep: OrderedExtractionSteps[nextStepIndex].property
+  };
 }
