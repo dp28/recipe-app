@@ -81,6 +81,12 @@ export function UnconnectedExtensionPage({
             </Step>
           );
         })}
+        <Step>
+          <StepLabel>Save the recipe</StepLabel>
+          <StepContent>
+            <SaveRecipeButton />
+          </StepContent>
+        </Step>
       </Stepper>
     </Loading>
   );
@@ -104,8 +110,12 @@ function mapDispatchToProps(dispatch) {
         dispatch(nextStep.buildRequest());
       }
     },
-    restartStep: stepIndex => () =>
-      dispatch(OrderedExtractionSteps[stepIndex].buildRequest())
+    restartStep: stepIndex => () => {
+      const step = OrderedExtractionSteps[stepIndex];
+      if (step) {
+        dispatch(step.buildRequest());
+      }
+    }
   };
 }
 
@@ -121,9 +131,22 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
 
 function getActiveStepIndex(state) {
   const { currentStep } = state.browserExtension;
-  return (
-    OrderedExtractionSteps.findIndex(step => step.property === currentStep) || 0
+  const extractStepIndex = OrderedExtractionSteps.findIndex(
+    step => step.property === currentStep
   );
+  if (extractStepIndex >= 0) {
+    return extractStepIndex;
+  }
+  if (
+    !state.browserExtension.loading &&
+    state.recipe &&
+    state.recipe.method &&
+    state.recipe.method.steps &&
+    state.recipe.method.steps.length
+  ) {
+    return OrderedExtractionSteps.length;
+  }
+  return 0;
 }
 
 export const ExtensionPage = connect(
