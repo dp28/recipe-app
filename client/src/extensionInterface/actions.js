@@ -12,6 +12,7 @@ export const SET_RECIPE_INGREDIENTS = "SET_RECIPE_INGREDIENTS";
 export const IMPORT_RECIPE_METHOD = "IMPORT_RECIPE_METHOD";
 export const SET_RECIPE_METHOD = "SET_RECIPE_METHOD";
 export const FINISH_CURRENT_EXTRACT_STEP = "FINISH_CURRENT_EXTRACT_STEP";
+export const START_EXTRACT_STEP = "START_EXTRACT_STEP";
 
 export const appLoaded = () => ({ type: APP_LOADED });
 export const requestTitle = () => ({ type: REQUEST_TITLE });
@@ -56,4 +57,9 @@ export const setRecipeMethod = method => ({
 
 export const finishCurrentExtractStep = () => ({
   type: FINISH_CURRENT_EXTRACT_STEP
+});
+
+export const startExtractStep = stepId => ({
+  type: START_EXTRACT_STEP,
+  stepId
 });

@@ -7,10 +7,11 @@ import {
   SET_RECIPE_SERVINGS,
   SET_RECIPE_INGREDIENTS,
   SET_RECIPE_METHOD,
-  FINISH_CURRENT_EXTRACT_STEP
+  FINISH_CURRENT_EXTRACT_STEP,
+  START_EXTRACT_STEP
 } from "../extensionInterface/actions";
 import { RECIPE_LOADED } from "../actions";
-import { OrderedExtractionSteps } from "./extractionSteps";
+import { OrderedExtractionSteps as Steps } from "./extractionSteps";
 
 const InitialState = { waiting: false, currentStep: null, loading: true };
 
@@ -26,23 +27,19 @@ export function browserExtensionReducer(
         currentStep: action.recipe ? null : "title"
       };
     case REQUEST_TITLE:
-      return { ...browserExtension, waiting: true };
-    case SET_RECIPE_TITLE:
-      return stopWaiting(browserExtension);
     case REQUEST_SERVINGS:
-      return { ...browserExtension, waiting: true };
-    case SET_RECIPE_SERVINGS:
-      return stopWaiting(browserExtension);
     case REQUEST_INGREDIENTS:
-      return { ...browserExtension, waiting: true };
-    case SET_RECIPE_INGREDIENTS:
-      return stopWaiting(browserExtension);
     case REQUEST_METHOD:
       return { ...browserExtension, waiting: true };
+    case SET_RECIPE_TITLE:
+    case SET_RECIPE_SERVINGS:
+    case SET_RECIPE_INGREDIENTS:
     case SET_RECIPE_METHOD:
       return stopWaiting(browserExtension);
     case FINISH_CURRENT_EXTRACT_STEP:
       return finishCurrentStep(browserExtension, recipe);
+    case START_EXTRACT_STEP:
+      return startStep(action.stepId, browserExtension, recipe);
     default:
       return browserExtension || InitialState;
   }
@@ -57,20 +54,43 @@ function finishCurrentStep(browserExtension, recipe) {
     return browserExtension;
   }
 
-  const currentStepIndex = OrderedExtractionSteps.findIndex(
-    ({ property }) => property === browserExtension.currentStep
-  );
-  const currentStep = OrderedExtractionSteps[currentStepIndex];
+  const currentStepIndex = getCurrentStepIndex(browserExtension.currentStep);
+  const currentStep = Steps[currentStepIndex];
   if (!currentStep.isFinished(recipe)) {
     return browserExtension;
   }
 
   const nextStepIndex = currentStepIndex + 1;
-  if (nextStepIndex >= OrderedExtractionSteps.length) {
+  if (nextStepIndex >= Steps.length) {
     return { ...browserExtension, currentStep: null };
   }
   return {
     ...browserExtension,
-    currentStep: OrderedExtractionSteps[nextStepIndex].property
+    currentStep: Steps[nextStepIndex].property
   };
+}
+
+function startStep(stepId, browserExtension, recipe) {
+  const index = getCurrentStepIndex(stepId);
+  const targetStepIndex = index >= 0 ? index : Steps.length;
+
+  const available = Steps.slice(0, targetStepIndex + 1).every(step =>
+    step.isFinished(recipe)
+  );
+
+  if (!available) {
+    return browserExtension;
+  }
+
+  const targetStep = Steps[targetStepIndex]
+    ? Steps[targetStepIndex].property
+    : null;
+  return {
+    ...browserExtension,
+    currentStep: targetStep
+  };
+}
+
+function getCurrentStepIndex(currentStep) {
+  return Steps.findIndex(({ property }) => property === currentStep);
 }

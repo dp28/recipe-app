@@ -8,7 +8,8 @@ import {
   setRecipeServings,
   setRecipeIngredients,
   setRecipeMethod,
-  finishCurrentExtractStep
+  finishCurrentExtractStep,
+  startExtractStep
 } from "./actions";
 import { recipeLoaded } from "../actions";
 
@@ -264,6 +265,112 @@ describe("browserExtension reducer", () => {
           );
           expect(badState.currentStep).toEqual("method");
         });
+      });
+    });
+  });
+
+  describe("with a startExtractStep action", () => {
+    function start({ state, stepId, recipe }) {
+      return reducer(toInput(state, recipe), startExtractStep(stepId));
+    }
+
+    describe("when in the 'title' step", () => {
+      const recipe = { title: "fake" };
+      const state = reduceFromInitialState([recipeLoaded()], recipe);
+
+      it("should not be possible to change the step forward without a title", () => {
+        expect(
+          start({ state, recipe, stepId: "servings" }).currentStep
+        ).toEqual("title");
+      });
+    });
+
+    describe("when in the 'servings' step", () => {
+      const recipe = { title: "fake", servings: 4 };
+      const state = reduceFromInitialState(
+        [recipeLoaded(), finishCurrentExtractStep()],
+        recipe
+      );
+
+      it("should be possible to go to the 'title' step", () => {
+        expect(start({ state, recipe, stepId: "title" }).currentStep).toEqual(
+          "title"
+        );
+      });
+
+      it("should not be possible to change the step forward without servings", () => {
+        expect(
+          start({ state, recipe, stepId: "ingredients" }).currentStep
+        ).toEqual("servings");
+      });
+    });
+
+    describe("when in the 'ingredients' step", () => {
+      const recipe = { title: "fake", servings: 4, ingredients: [{ id: "1" }] };
+      const state = reduceFromInitialState(
+        [
+          recipeLoaded(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep()
+        ],
+        recipe
+      );
+
+      it("should be possible to go to the 'servings' step", () => {
+        expect(
+          start({ state, recipe, stepId: "servings" }).currentStep
+        ).toEqual("servings");
+      });
+    });
+
+    describe("when in the 'method' step", () => {
+      const recipe = {
+        title: "fake",
+        servings: 4,
+        ingredients: [{ id: "1" }],
+        method: { steps: [{ id: "1" }] }
+      };
+
+      const state = reduceFromInitialState(
+        [
+          recipeLoaded(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep()
+        ],
+        recipe
+      );
+
+      it("should be possible to go to the 'ingredients' step", () => {
+        expect(
+          start({ state, recipe, stepId: "ingredients" }).currentStep
+        ).toEqual("ingredients");
+      });
+    });
+
+    describe("when in the finished step", () => {
+      const recipe = {
+        title: "fake",
+        servings: 4,
+        ingredients: [{ id: "1" }],
+        method: { steps: [{ id: "1" }] }
+      };
+
+      const state = reduceFromInitialState(
+        [
+          recipeLoaded(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep(),
+          finishCurrentExtractStep()
+        ],
+        recipe
+      );
+
+      it("should go to the 'method' step", () => {
+        expect(start({ state, recipe, stepId: "method" }).currentStep).toEqual(
+          "method"
+        );
       });
     });
   });

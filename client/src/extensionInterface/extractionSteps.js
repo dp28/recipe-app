@@ -19,12 +19,13 @@ export const OrderedExtractionSteps = [
   {
     property: "ingredients",
     buildRequest: requestIngredients,
-    isFinished: recipe => recipe.ingredients && recipe.ingredients.length > 0
+    isFinished: recipe =>
+      Boolean(recipe.ingredients && recipe.ingredients.length > 0)
   },
   {
     property: "method",
     buildRequest: requestMethod,
     isFinished: ({ method }) =>
-      method && method.steps && method.steps.length > 0
+      Boolean(method && method.steps && method.steps.length > 0)
   }
 ];

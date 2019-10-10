@@ -4,7 +4,7 @@ import { makeStyles } from "@material-ui/core/styles";
 import Button from "@material-ui/core/Button";
 import Stepper from "@material-ui/core/Stepper";
 import Step from "@material-ui/core/Step";
-import StepLabel from "@material-ui/core/StepLabel";
+import StepButton from "@material-ui/core/StepButton";
 import StepContent from "@material-ui/core/StepContent";
 import { ExtractTitle } from "./ExtractTitle";
 import { ExtractServings } from "./ExtractServings";
@@ -13,7 +13,7 @@ import { ExtractMethod } from "./ExtractMethod";
 import { SaveRecipeButton } from "./SaveRecipeButton";
 import { Loading } from "../../components/Loading";
 import { OrderedExtractionSteps } from "../extractionSteps";
-import { finishCurrentExtractStep } from "../actions";
+import { finishCurrentExtractStep, startExtractStep } from "../actions";
 
 const StepMap = {
   title: {
@@ -48,17 +48,25 @@ export function UnconnectedExtensionPage({
   restartStep,
   finishStep,
   loading,
-  waitingForExtraction
+  waitingForExtraction,
+  startStep,
+  completedSteps
 }) {
   const classes = useStyles();
   return (
     <Loading loading={loading}>
-      <Stepper activeStep={activeStepIndex} orientation="vertical">
-        {OrderedExtractionSteps.map(({ property, requestBuilder }) => {
+      <Stepper nonLinear activeStep={activeStepIndex} orientation="vertical">
+        {OrderedExtractionSteps.map(({ property, requestBuilder }, index) => {
           const { Component, label } = StepMap[property];
           return (
             <Step key={property}>
-              <StepLabel>{label}</StepLabel>
+              <StepButton
+                onClick={() => startStep(property)}
+                completed={completedSteps.has(property)}
+              >
+                {label}
+              </StepButton>
+
               <StepContent>
                 <Component />
 
@@ -82,7 +90,9 @@ export function UnconnectedExtensionPage({
           );
         })}
         <Step>
-          <StepLabel>Save the recipe</StepLabel>
+          <StepButton onClick={() => startStep(null)} completed={false}>
+            Save the recipe
+          </StepButton>
           <StepContent>
             <SaveRecipeButton />
           </StepContent>
@@ -96,17 +106,24 @@ function mapStateToProps(state) {
   const { waiting, loading } = state.browserExtension;
   return {
     loading,
+    recipe: state.recipe,
     waitingForExtraction: waiting,
-    activeStepIndex: getActiveStepIndex(state)
+    activeStepIndex: getActiveStepIndex(state),
+    completedSteps: new Set(
+      OrderedExtractionSteps.filter(step => step.isFinished(state.recipe)).map(
+        step => step.property
+      )
+    )
   };
 }
 
 function mapDispatchToProps(dispatch) {
   return {
-    finishStep: stepIndex => () => {
+    startStep: stepId => dispatch(startExtractStep(stepId)),
+    finishStep: (stepIndex, recipe) => () => {
       dispatch(finishCurrentExtractStep());
       const nextStep = OrderedExtractionSteps[stepIndex + 1];
-      if (nextStep) {
+      if (nextStep && !nextStep.isFinished(recipe)) {
         dispatch(nextStep.buildRequest());
       }
     },
@@ -124,7 +141,10 @@ function mergeProps(stateProps, dispatchProps, ownProps) {
     ...ownProps,
     ...stateProps,
     ...dispatchProps,
-    finishStep: dispatchProps.finishStep(stateProps.activeStepIndex),
+    finishStep: dispatchProps.finishStep(
+      stateProps.activeStepIndex,
+      stateProps.recipe
+    ),
     restartStep: dispatchProps.restartStep(stateProps.activeStepIndex)
   };
 }
