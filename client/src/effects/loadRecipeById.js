@@ -44,6 +44,7 @@ export const FullRecipeFragment = `
     }
 
     method {
+      id
       steps {
         id
         ordering
