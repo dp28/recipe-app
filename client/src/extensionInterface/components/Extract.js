@@ -53,9 +53,9 @@ export function UnconnectedExtract({
         <Typography>
           Click on the {propertyName}.
           {multiple && (
-            <Typography className={classes.helpMultiple}>
+            <span className={classes.helpMultiple}>
               Each one should be highlighted separately.
-            </Typography>
+            </span>
           )}
         </Typography>
       )}
