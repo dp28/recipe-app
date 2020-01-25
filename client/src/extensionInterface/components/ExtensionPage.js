@@ -40,6 +40,9 @@ const useStyles = makeStyles(theme => ({
   },
   actions: {
     marginTop: theme.spacing(2)
+  },
+  stepButton: {
+    textAlign: "left"
   }
 }));
 
@@ -63,6 +66,7 @@ export function UnconnectedExtensionPage({
               <StepButton
                 onClick={() => startStep(property)}
                 completed={completedSteps.has(property)}
+                className={classes.stepButton}
               >
                 {label}
               </StepButton>
