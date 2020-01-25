@@ -25,7 +25,6 @@ jobs:
           key: v2-server-dependencies-{{ checksum "package.json" }}
 
       - run: ENVIRONMENT=ci make test
-      - run: make lint
 
   test_client:
     docker:
@@ -50,7 +49,6 @@ jobs:
           key: v2-client-dependencies-{{ checksum "package.json" }}
 
       - run: make test
-      - run: make lint
 
   test_chrome_extension:
     docker:
@@ -75,7 +73,6 @@ jobs:
           key: v1-chrome-extension-dependencies-{{ checksum "package.json" }}
 
       - run: make test
-      - run: make lint
 
   deploy:
     docker:
